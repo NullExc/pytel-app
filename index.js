@@ -13,7 +13,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/test', function(request, response) {
-  response.send('Hello from github man!');
+  response.send('Hello from github man.');
 });
 
 app.listen(app.get('port'), function() {
