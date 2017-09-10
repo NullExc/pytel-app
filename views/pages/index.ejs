@@ -7,8 +7,7 @@
 
 <body>
 
-  <% include ../partials/nav.ejs %>
-
+  <% include ../partials/nav-in.ejs %>
 
     <div class="row">
       <div class="col s12">
@@ -29,13 +28,47 @@
             <div class="row">
               <div class="input-field col s12">
                 <input id="password" type="password">
-                <label for="password">Password</label>
+                <label for="password">Heslo</label>
               </div>
             </div>
+
+            <a class="waves-effect waves-light btn light-blue darken-4">prihlásiť sa</a>
+
           </form>
         </div>
       </div>
-      <div id="register" class="col s12">Test 2</div>
+      <div id="register" class="col s12">
+        <div class="row user-input">
+          <form class="col s10">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="email" type="text">
+                <label for="email">Meno</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="email" type="email">
+                <label for="email">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="password" type="password">
+                <label for="password">Heslo</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="passwordConf" type="password">
+                <label for="password">Zopakovať heslo</label>
+              </div>
+            </div>
+            <a class="waves-effect waves-light btn light-blue darken-4">registrovať sa</a>
+
+          </form>
+        </div>
+      </div>
     </div>
 
 </body>
