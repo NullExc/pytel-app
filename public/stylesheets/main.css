@@ -25,3 +25,9 @@
     .jumbotron .lang-logo img {
       max-width: 100%; }
 
+.btn-floating {
+  position:fixed;
+  right:0;
+  bottom:0;
+  margin: 10px;
+}
