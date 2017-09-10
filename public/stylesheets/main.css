@@ -31,3 +31,16 @@
   bottom:0;
   margin: 10px;
 }
+
+.tabs .indicator {
+    background-color: #01579b;
+}
+
+.navbar-inverse {
+    background-color: #01579b;
+    border-color: #01579b;
+}
+
+.user-input {
+  margin-top: 20px;
+}
