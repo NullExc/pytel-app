@@ -27,3 +27,7 @@
    border-bottom: 1px solid #03a9f4 !important;
    box-shadow: 0 1px 0 0 #03a9f4 !important
  }
+
+ .collection .collection-item.avatar {
+    padding-left: 20px;
+}

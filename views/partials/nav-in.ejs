@@ -1,3 +1,15 @@
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!" class="black-text">Hľadať</a></li>
+  <li class="divider"></li>
+  <li><a href="#!" class="black-text">Zoznam</a></li>
+</ul>
+
+<ul id="dropdown2" class="dropdown-content">
+  <li><a href="#!" class="black-text">Hľadať</a></li>
+  <li class="divider"></li>
+  <li><a href="#!" class="black-text">Zoznam</a></li>
+</ul>
+
 <nav class="light-blue darken-4">
     <div class="nav-wrapper">
         <a href="#!" class="brand-logo">PaP</a>
@@ -5,14 +17,14 @@
         <ul class="right hide-on-med-and-down">
             <li><a href="#">Domov</a></li>
             <li><a href="#">Zákazky</a></li>
-            <li><a href="#">Zákazníci</a></li>
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Zákazníci<i class="material-icons right">arrow_drop_down</i></a></li>
             <li><a href="#">Nastavenia</a></li>
         </ul>
-        <ul class="side-nav" id="mobile-demo">
-            <li><a href="#">Domov</a></li>
-            <li><a href="#">Zákazky</a></li>
-            <li><a href="#">Zákazníci</a></li>
-            <li><a href="#">Nastavenia</a></li>
+        <ul class="side-nav light-blue darken-4" id="mobile-demo">
+            <li><a href="#" class="white-text">Domov</a></li>
+            <li><a href="#" class="white-text">Zákazky</a></li>
+            <li><a class="dropdown-button white-text" href="#!" data-activates="dropdown2">Zákazníci<i class="material-icons right white-text">arrow_drop_down</i></a></li>
+            <li><a href="#" class="white-text">Nastavenia</a></li>
         </ul>
     </div>
 </nav>

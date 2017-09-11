@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+
+        <ul class="collection" style="margin-top: 0px;">
+            <% customers.forEach(function(customer) { %>
+                <li class="collection-item avatar black-text">
+                    <p class="title">
+                        <%= customer.name %>
+                    </p>
+                    <span>
+                <%= customer.email %>
+                </span>
+                <br>
+                <span>
+                    <%= customer.address %>
+                </span>
+                <a href="#!" class="secondary-content"><i class="material-icons">menu</i></a>
+            </li>
+        <% }); %>
+    </div>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large light-blue darken-4">
+            <i class="large material-icons">person_add</i>
+        </a>
+    </div>
+
+</body>
+
+</html>

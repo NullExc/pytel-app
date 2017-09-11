@@ -30,7 +30,33 @@ app.get('/', function (req, res) {
 });
 
 app.get('/customer', function (req, res) {
-  res.render('pages/customer');
+  res.render('pages/customer/customers', {
+    customers: [
+      {
+        name: 'Peter Zemianek',
+        address: 'Chalupkova 39 Poprad, 058 01',
+        email: 'Peter.Zemianek@sk.ibm.com'
+      },
+      {
+        name: 'Alexander Tuca',
+        address: 'Sturova 12 Kapusany, 058 01',
+        email: 'Alexander.Tuca@sk.ibm.com'
+      },
+      {
+        name: 'Adam Adamek',
+        address: 'Hanacka 5 Bratislava, 058 01',
+        email: 'Adam.Adamek@gmail.com'
+      }
+    ]
+  });
+});
+
+app.get('/customer/names', function (req, res) {
+  res.json({
+    'Peter Zemianek': null,
+    'Alexander Tuca': null,
+    'Adam Adamek': null
+  })
 })
 
 //user routes
