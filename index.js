@@ -2,7 +2,11 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
+
+//loading api modules
 var userApi = require('./server/api/userApi');
+var customerApi = require('./server/api/customerApi');
+
 var config = require('./config/config.js');
 
 var app = express();
@@ -29,35 +33,15 @@ app.get('/', function (req, res) {
   res.render('pages/index');
 });
 
-app.get('/customer', function (req, res) {
-  res.render('pages/customer/customers', {
-    customers: [
-      {
-        name: 'Peter Zemianek',
-        address: 'Chalupkova 39 Poprad, 058 01',
-        email: 'Peter.Zemianek@sk.ibm.com'
-      },
-      {
-        name: 'Alexander Tuca',
-        address: 'Sturova 12 Kapusany, 058 01',
-        email: 'Alexander.Tuca@sk.ibm.com'
-      },
-      {
-        name: 'Adam Adamek',
-        address: 'Hanacka 5 Bratislava, 058 01',
-        email: 'Adam.Adamek@gmail.com'
-      }
-    ]
-  });
-});
+app.get('/customer/all', customerApi.getAll);
+app.get('/customer-search', customerApi.search);
+app.get('/customer-new', customerApi.new);
+app.get('/customer/names', customerApi.getNames);
 
-app.get('/customer/names', function (req, res) {
-  res.json({
-    'Peter Zemianek': null,
-    'Alexander Tuca': null,
-    'Adam Adamek': null
-  })
-})
+app.post('/customer', customerApi.create);
+app.get('/customer/:id', customerApi.get);
+app.put('/customer/:id', customerApi.update);
+app.delete('/customer/:id', customerApi.delete);
 
 //user routes
 app.post('/register', userApi.register);

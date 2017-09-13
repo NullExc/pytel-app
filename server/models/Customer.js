@@ -17,13 +17,8 @@ var CustomerSchema = new mongoose.Schema({
         unique: false,
         required: false
     },
-    street: {
+    address: {
         type: String,
-        unique: false,
-        required: false
-    },
-    zipCode: {
-        type: Number,
         unique: false,
         required: false
     }

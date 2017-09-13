@@ -1,5 +1,11 @@
 $(document).ready(function () {
 
+    $("#delete").click(function () {
+
+    });
+
+    $('.modal').modal();
+
     $.ajax({
         url: '/customer/names',
         type: 'GET',
