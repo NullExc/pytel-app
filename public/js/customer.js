@@ -1,7 +1,16 @@
 $(document).ready(function () {
 
-    $("#delete").click(function () {
-
+    $("#deleteCustomer").click(function () {
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+        console.log(id);
+        $.ajax({
+            url: '/customer/' + id,
+            type: 'DELETE',
+            success: function (result) {
+                location.href = '/customer/all';
+            }
+        })
     });
 
     $('.modal').modal();

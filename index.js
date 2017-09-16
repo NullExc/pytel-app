@@ -47,7 +47,7 @@ app.delete('/customer/:id', customerApi.delete);
 app.post('/register', userApi.register);
 app.post('/login', userApi.login);
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 
   var token = req.body.token || req.query.token || req.headers['Authorization'];
 
@@ -69,7 +69,9 @@ app.use(function (req, res, next) {
       message: 'No token provided.'
     });
   }
-});
+});*/
+
+
 
 
 app.listen(app.get('port'), function () {
