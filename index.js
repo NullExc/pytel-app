@@ -47,6 +47,16 @@ app.delete('/customer/:id', customerApi.delete);
 app.post('/register', userApi.register);
 app.post('/login', userApi.login);
 
+app.use(function(req, res, next){
+  console.log('404 handled');
+  res.render('pages/not-found', { status: 404, url: req.url });
+});
+
+app.use(function (err, req, res, next) {
+  console.log('error handling! ');
+  res.status(500).render('pages/error', {error : err});
+})
+
 /*app.use(function (req, res, next) {
 
   var token = req.body.token || req.query.token || req.headers['Authorization'];

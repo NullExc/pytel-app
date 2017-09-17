@@ -16,6 +16,10 @@ var CustomerSchema = new mongoose.Schema({
         streetNumber: String,
         city: String,
         zipCode: String
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 });
 
