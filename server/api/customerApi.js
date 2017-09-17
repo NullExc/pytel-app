@@ -97,3 +97,19 @@ module.exports.search = function (req, res, next) {
 module.exports.new = function (req, res, next) {
     res.render('pages/customer/customer-new');
 }
+
+module.exports.edit = function (req, res, next) {
+    Customer.findById(req.params.id, function (err, customer) {
+        if (err) {
+            return next(err);
+        }
+        if (!customer) {
+            return res.status(404).json({
+                message: 'not found'
+            })
+        }
+        
+        res.render('pages/customer/customer-edit', { customer: customer });
+
+    })
+}

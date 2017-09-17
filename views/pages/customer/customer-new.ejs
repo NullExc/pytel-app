@@ -3,7 +3,7 @@
 
 <head>
         <% include ../../partials/header.ejs %>
-            <script type="text/javascript" src="/js/customer-new.js"></script>
+            <script type="text/javascript" src="/js/customer-input.js"></script>
             <link rel="stylesheet" type="text/css" href="/stylesheets/customer-new.css" />
 </head>
 
@@ -15,61 +15,12 @@
             <div class="row col s12 light-blue darken-4 white-text">
                 <h5>Vytvoriť zákazníka</h5>
             </div>
-            <form class="col s12" style="margin-top: 20px;">
-                <div class="panel-group">
-                    <div class="panel panel-primary">
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input id="name" type="text" class="validate">
-                                <label for="name">Meno</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Kontakt</div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input id="email" type="text" class="validate">
-                                <label for="email">E-mail</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input id="phone" type="text" class="validate">
-                                <label for="phone">Tel. číslo</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Adresa</div>
-                        <div class="row">
-                            <div class="input-field col s9">
-                                <input id="street" type="text" class="validate">
-                                <label for="street">Ulica</label>
-                            </div>
-                            <div class="input-field col s3">
-                                <input id="num" type="text" class="validate">
-                                <label for="num">Číslo</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s9">
-                                <input id="city" type="text" class="validate">
-                                <label for="city">Mesto</label>
-                            </div>
-                            <div class="input-field col s3">
-                                <input id="zip" type="text" class="validate">
-                                <label for="zip">PSČ</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <% include ./customer-input.ejs %>
         </div>
 
         <div class="fixed-action-btn">
-            <a id="save" class="btn-floating btn-large light-blue darken-4">
-                <i class="large material-icons">save</i>
+            <a class="btn-floating btn-large light-blue darken-4">
+                <i id="create" class="large material-icons">save</i>
             </a>
         </div>
 

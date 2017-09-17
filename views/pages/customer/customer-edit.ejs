@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript" src="/js/customer-input.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/customer-new.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text">
+                <h5>Upraviť zákazníka</h5>
+            </div>
+            <% include ./customer-input.ejs %>
+        </div>
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+                <i id="update" class="large material-icons">save</i>
+            </a>
+        </div>
+
+        <script>
+            window.onload = function () {
+
+                var customer = JSON.parse('<%- JSON.stringify(customer) %>');
+
+                localStorage.setItem('updateId', customer._id);
+
+                var name = document.getElementById('name');
+                var nameLabel = document.getElementById('name-label');
+                nameLabel.className = "active";
+                name.value = customer.name;
+
+                if (customer.contact) {
+                    if (customer.contact.email) {
+                        var email = document.getElementById('email');
+                        var emailLabel = document.getElementById('email-label');
+                        emailLabel.className = "active";
+                        email.value = customer.contact.email;
+                    }
+                    if (customer.contact.phone) {
+                        var phone = document.getElementById('phone');
+                        var phoneLabel = document.getElementById('phone-label');
+                        phoneLabel.className = "active";
+                        phone.value = customer.contact.phone;
+                    }
+                }
+                if (customer.address) {
+                    if (customer.address.street) {
+                        var street = document.getElementById('street');
+                        var streetLabel = document.getElementById('street-label');
+                        streetLabel.className = "active";
+                        street.value = customer.address.street;
+                    }
+                    if (customer.address.streetNumber) {
+                        var streetNumber = document.getElementById('num');
+                        var numLabel = document.getElementById('num-label');
+                        numLabel.className = "active";
+                        streetNumber.value = customer.address.streetNumber;
+                    }
+                    if (customer.address.city) {
+                        var city = document.getElementById('city');
+                        var cityLabel = document.getElementById('city-label');
+                        cityLabel.className = "active";
+                        city.value = customer.address.city;
+                    }
+                    if (customer.address.zipCode) {
+                        var zip = document.getElementById('zip');
+                        var zipLabel = document.getElementById('zip-label');
+                        zipLabel.className = "active";
+                        zip.value = customer.address.zipCode;
+                    }
+                }
+            }
+        </script>
+
+</body>
+
+</html>

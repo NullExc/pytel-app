@@ -13,6 +13,12 @@ $(document).ready(function () {
         })
     });
 
+    $("#edit").click(function () {
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+        location.href = '/customer-edit/' + id;
+    });
+
     $('.modal').modal();
 
     $.ajax({
