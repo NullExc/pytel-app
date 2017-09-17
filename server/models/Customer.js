@@ -7,20 +7,15 @@ var CustomerSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    phone: {
-        type: Number,
-        unique: false,
-        required: false
-    },
-    email: {
-        type: String,
-        unique: false,
-        required: false
+    contact: {
+        phone: String,
+        email: String
     },
     address: {
-        type: String,
-        unique: false,
-        required: false
+        street: String,
+        streetNumber: String,
+        city: String,
+        zipCode: String
     }
 });
 
