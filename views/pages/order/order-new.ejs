@@ -2,13 +2,58 @@
 <html>
 
 <head>
-    <% var title = 'Vytvoriť zákazníka'; %>
     <% include ../../partials/header.ejs %>
+        <script type="text/javascript">
+            var customers = JSON.parse('<%- JSON.stringify(customers) %>');
+        </script>
+        <script type="text/javascript" src="/js/order/order.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
 </head>
 
 <body>
 
     <% include ../../partials/nav-in.ejs %>
+        <div class="row col s12 light-blue darken-4 white-text header-layer">
+            <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
+        </div>
+
+        <div id="container" class="panel-group col s12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Zakazník</div>
+                <div class="row">
+                    <div id="find-customer" class="input-field">
+                        <input type="text" id="autocomplete-input" class="autocomplete">
+                        <label for="autocomplete-input">Hľadať</label>
+                    </div>
+
+                    <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons grey-text">people</i>Vybrať v zozname
+                            </div>
+                            <div class="collapsible-body">
+                                    <div class="collection" style="margin-top: 0px;">
+                                            <% customers.forEach(function(customer) { %>
+                                                <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">  
+                                                    <%= customer.name %>
+                                                </a>
+                                        <% }); %>
+                                            </div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+            <i id="create" class="large material-icons">save</i>
+        </a>
+        </div>
 
 </body>
 

@@ -1,0 +1,15 @@
+#container {
+    padding: 10px;
+}
+
+#find-customer {
+    margin: 20px 10px 10px 10px;
+}
+
+#select-customer {
+    margin: 10px;
+}
+
+.collapsible-body {
+    padding: 0;
+}

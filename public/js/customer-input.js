@@ -51,7 +51,9 @@ $(document).ready(function () {
                 data: customer,
                 success: function (result) {
                     console.log(JSON.stringify(result));
+                    var id = localStorage.getItem('updateId');
                     localStorage.removeItem('updateId');
+                    location.href = '/customer/' + id;
                 },
                 error: function (jqXhr, textStatus, errorThrown) {
                     console.log(errorThrown);

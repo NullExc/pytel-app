@@ -6,6 +6,8 @@ var jwt = require('jsonwebtoken');
 //loading api modules
 var userApi = require('./server/api/userApi');
 var customerApi = require('./server/api/customerApi');
+var settingsApi = require('./server/api/settingsApi');
+var orderApi = require('./server/api/orderApi');
 
 var config = require('./config/config.js');
 
@@ -33,6 +35,10 @@ app.get('/', function (req, res) {
   res.render('pages/index');
 });
 
+//order routes
+app.get('/order-new', orderApi.new);
+
+//customer routes
 app.get('/customer/all', customerApi.getAll);
 app.get('/customer-search', customerApi.search);
 app.get('/customer-new', customerApi.new);
@@ -43,6 +49,9 @@ app.post('/customer', customerApi.create);
 app.get('/customer/:id', customerApi.getProfile);
 app.put('/customer/:id', customerApi.update);
 app.delete('/customer/:id', customerApi.delete);
+
+//settings routes
+app.get('/settings', settingsApi.get);
 
 //user routes
 app.post('/register', userApi.register);
