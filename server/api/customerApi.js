@@ -47,6 +47,15 @@ module.exports.get = function (req, res, next) {
     })
 }
 
+module.exports.getProfile = function (req, res, next) {
+    Customer.findById(req.params.id, function (err, customer) {
+        if (err) {
+            return next(err);
+        }
+        return res.render('pages/customer/customer',{ customer: customer });
+    })
+}
+
 module.exports.getNames = function (req, res, next) {
     Customer.find({}, function (err, customers) {
         if (err) {

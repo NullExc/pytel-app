@@ -1,13 +1,131 @@
 <head>
     <% include ../../partials/header.ejs %>
         <script type="text/javascript" src="/js/customer.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/customer.css" />
 </head>
 
 <body>
 
     <% include ../../partials/nav-in.ejs %>
+
+        <% var name = customer.name %>
+        <% if (customer.contact) { %>
+            <% if (customer.contact.email) { %>
+                <% var email = customer.contact.email; %>
+            <% } %>
+            <% if (customer.contact.phone) { %>
+                <% var phone = customer.contact.phone; %>
+            <% } %>
+        <% } %>
+        <% if (customer.address) { %>
+            <% if (customer.address.street) { %>
+                <% var street = customer.address.street; %>
+            <% } %>
+            <% if (customer.address.streetNumber) { %>
+                <% var streetNumber = customer.address.streetNumber; %>
+            <% } %>
+            <% if (customer.address.city) { %>
+                <% var city = customer.address.city; %>
+            <% } %>
+            <% if (customer.address.zipCode) { %>
+                <% var zipCode = customer.address.zipCode; %>
+            <% } %>
+        <% } %>
+
+
+        <div class="row col s12 light-blue darken-4 white-text header-layer">
+            <h5 style="margin-left: 10px;"><%= name %></h5>
+        </div>
+
+        <section class="root">
+            <div id="all-info" class="panel-group col s12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Kontakt</div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <span class="label label-primary">E-mail</span>
+                            <h6 class="info"><%= email %></h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <span class="label label-primary">Tel. číslo</span>
+                            <h6 class="info"><%= phone %></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Adresa</div>
+                    <div class="row">
+                        <div class="input-field col s8">
+                            <span class="label label-primary">Ulica</span>
+                            <h6 class="info"><%= street %></h6>
+                        </div>
+                        <div class="input-field col s4">
+                            <span class="label label-primary">Číslo domu</span>
+                            <h6 class="info"><%= streetNumber %></h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s8">
+                            <span class="label label-primary">Mesto</span>
+                            <h6 class="info"><%= city %></h6>
+                        </div>
+                        <div class="input-field col s4">
+                            <span class="label label-primary">PSČ</span>
+                            <h6 class="info"><%= zipCode %></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="orders">
+
+                <ul class="collapsible panel panel-primary" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">build</i> Aktuálne zákazky
+                        </div>
+                        <div class="collapsible-body">
+                            
+                            <ul class="collection">
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                                <li class="collection-item">Alvin</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons green-text">done_all</i> Dokončené zákazky
+                        </div>
+                        <div class="collapsible-body">
+
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </section>
+
         <div style="margin-bottom: 24px; height: 70px;">
-            <div class="fixed-action-btn vertical click-to-toggle" style="position: absolute; right: 24px;">
+            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px;">
                 <a class="btn-floating btn-large light-blue darken-4">
                     <i class="material-icons">menu</i>
                 </a>

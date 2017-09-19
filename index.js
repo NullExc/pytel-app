@@ -40,7 +40,7 @@ app.get('/customer-edit/:id', customerApi.edit);
 app.get('/customer/names', customerApi.getNames);
 
 app.post('/customer', customerApi.create);
-app.get('/customer/:id', customerApi.get);
+app.get('/customer/:id', customerApi.getProfile);
 app.put('/customer/:id', customerApi.update);
 app.delete('/customer/:id', customerApi.delete);
 

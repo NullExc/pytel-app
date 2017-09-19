@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+    
+    var orders = document.getElementsByClassName('collapsible-body');
+    var allInfo = document.getElementById('all-info');
+
+    for (var i = 0; i < orders.length; i++) {
+        orders[i].style.maxHeight = $("#all-info").height() - (4 * ($(".collapsible-header").height()));
+    }
+
     $("#deleteCustomer").click(function () {
         var pathname = window.location.pathname.split("/");
         var id = pathname[pathname.length - 1];

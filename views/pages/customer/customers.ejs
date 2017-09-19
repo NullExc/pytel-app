@@ -3,7 +3,7 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-    <script type="text/javascript" src="/js/customer.js"></script>
+    <script type="text/javascript" src="/js/customers.js"></script>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
                         <%= customer.name %>
                     </p>
                     <span>
-                <%= customer.email %>
+                <%= customer.contact.email %>
                 </span>
                 <br>
                 <span>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="fixed-action-btn">
-        <a class="btn-floating btn-large light-blue darken-4">
+        <a id="add" class="btn-floating btn-large light-blue darken-4">
             <i class="large material-icons">person_add</i>
         </a>
     </div>
