@@ -6,6 +6,15 @@
     margin: 20px 10px 10px 10px;
 }
 
+#done-customer {
+    margin: 10px;
+}
+
+#done-span {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
 #select-customer {
     margin: 10px;
 }
@@ -13,3 +22,4 @@
 .collapsible-body {
     padding: 0;
 }
+

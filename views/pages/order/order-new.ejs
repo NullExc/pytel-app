@@ -32,16 +32,18 @@
                                 <i class="material-icons grey-text">people</i>Vybrať v zozname
                             </div>
                             <div class="collapsible-body">
-                                    <div class="collection" style="margin-top: 0px;">
-                                            <% customers.forEach(function(customer) { %>
-                                                <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">  
-                                                    <%= customer.name %>
-                                                </a>
+                                <div class="collection" style="margin-top: 0px;">
+                                    <% customers.forEach(function(customer) { %>
+                                        <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
+                                            <%= customer.name %>
+                                        </a>
                                         <% }); %>
-                                            </div>
+                                </div>
                             </div>
                         </li>
                     </ul>
+
+                    <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
 
 
                 </div>
