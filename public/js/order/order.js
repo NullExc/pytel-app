@@ -1,15 +1,77 @@
 $(document).ready(function () {
-    
+
     var names = {};
-    var selectedCustomer = {};
+    var selectedCustomer = null;
 
     for (var i = 0; i < customers.length; i++) {
         names[customers[i].name] = null;
     }
 
-    console.log(names);
+    var fillCustomerData = function () {
 
-    $('.selected').click(function(event) {
+        $("label").removeClass("active");
+
+        if (selectedCustomer) {
+            if (selectedCustomer.contact) {
+
+                if (selectedCustomer.contact.email) {
+                    $("#email").val(selectedCustomer.contact.email);
+                    $("#email-label").addClass('active');
+                } else $("#email").val('');
+
+                if (selectedCustomer.contact.phone) {
+                    $("#phone").val(selectedCustomer.contact.phone);
+                    $("#phone-label").addClass('active');
+                } else $("#phone").val('');
+            }
+            if (selectedCustomer.address) {
+
+                if (selectedCustomer.address.street) {
+                    $("#street").val(selectedCustomer.address.street);
+                    $("#street-label").addClass('active');
+                } else $("#street").val('');
+
+                if (selectedCustomer.address.streetNumber) {
+                    $("#num").val(selectedCustomer.address.streetNumber);
+                    $("#num-label").addClass('active');
+                } else $("#num").val('');
+
+                if (selectedCustomer.address.city) {
+                    $("#city").val(selectedCustomer.address.city);
+                    $("#city-label").addClass('active');
+                } else $("#city").val('');
+
+                if (selectedCustomer.address.zipCode) {
+                    $("#zip").val(selectedCustomer.address.zipCode);
+                    $("#zip-label").addClass('active');
+                } else $("#zip").val('');
+            }
+            if (selectedCustomer.billData) {
+
+                if (selectedCustomer.billData.ICO) {
+                    console.log('ICO', selectedCustomer.billData.ICO);
+                    $("#ico").val(selectedCustomer.billData.ICO);
+                    $("#ico-label").addClass('active');
+                } else $("#ico").val(' ');
+
+                if (selectedCustomer.billData.ICDPH) {
+                    $("#icdph").val(selectedCustomer.billData.ICDPH);
+                    $("#icdph-label").addClass('active');
+                } else $("#icdph").val(' ');
+
+                if (selectedCustomer.billData.DIC) {
+                    $("#dic").val(selectedCustomer.billData.DIC);
+                    $("#dic-label").addClass('active');
+                } else $("#dic").val(' ');
+            } else {
+                $("#ico").val(null);
+                $("#icdph").val(null);
+                $("#dic").val(null);
+            }
+        }
+    }
+
+    $('.selected').click(function (event) {
         var id = event.target.id;
         for (var i = 0; i < customers.length; i++) {
             if (id === customers[i]._id) {
@@ -17,13 +79,14 @@ $(document).ready(function () {
                 break;
             }
         }
-        var doneLabel = document.getElementById('done-customer');
-        doneLabel.innerText = selectedCustomer.name;
-        doneLabel.classList.remove('orange');
-        doneLabel.classList.remove('lighten-3');
-        doneLabel.classList.add('green');
-        doneLabel.classList.add('lighten-3');
-        console.log(JSON.stringify(selectedCustomer));
+
+        fillCustomerData();
+
+        var doneLabel = $("#done-customer");
+        doneLabel.text(selectedCustomer.name);
+        doneLabel.removeClass('orange');
+        doneLabel.addClass('green');
+
         $('.collapsible').collapsible('close', 0);
     })
 
@@ -37,10 +100,59 @@ $(document).ready(function () {
                     break;
                 }
             }
-            var doneLabel = document.getElementById('done-customer');
-            doneLabel.innerText = selectedCustomer.name;
-            console.log(JSON.stringify(selectedCustomer));
+
+            $("#autocomplete-input").val(null);
+
+            fillCustomerData();
+
+            var doneLabel = $("#done-customer");
+            doneLabel.text(selectedCustomer.name);
+            doneLabel.removeClass('orange');
+            doneLabel.addClass('green');
+
         },
         minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
     });
+
+    $('#create').click(function () {
+        var order = {};
+
+        order.name = $("#name").val();
+
+        var email = $("#email").val();
+        var phone = $("#phone").val();
+
+        if (email || phone) {
+            order.contact = {};
+        }
+        if (email) order.contact.email = email;
+        if (phone) order.contact.phone = phone;
+
+        var street = $("#street").val();
+        var streetNumber = $("#num").val();
+        var city = $("#city").val();
+        var zipCode = $("#zip").val();
+
+        if (street || streetNumber || city || zipCode) {
+            order.address = {};
+        }
+        if (street) order.address.street = street;
+        if (streetNumber) order.address.streetNumber = streetNumber;
+        if (city) order.address.city = city;
+        if (zipCode) order.address.zipCode = zipCode;
+
+        var ico = $("#ico").val();
+        var icdph = $("#icdph").val();
+        var dic = $("#dic").val();
+
+        if (ico || icdph || dic) {
+            order.billData = {};
+        }
+        if (ico) order.billData.ICO = ico;
+        if (icdph) order.billData.ICDPH = icdph;
+        if (dic) order.billData.DIC = dic;
+
+
+        
+    })
 })

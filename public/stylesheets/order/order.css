@@ -1,5 +1,8 @@
-#container {
-    padding: 10px;
+#right-container {
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-right: 5px solid #97BACE;
 }
 
 #find-customer {
@@ -21,5 +24,9 @@
 
 .collapsible-body {
     padding: 0;
+}
+
+.customer-input {
+    margin: 0 !important;
 }
 

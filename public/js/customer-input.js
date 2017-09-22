@@ -28,6 +28,17 @@ $(document).ready(function () {
         if (city) customer.address.city = city;
         if (zipCode) customer.address.zipCode = zipCode;
 
+        var ico = $("#ico").val();
+        var icdph = $("#icdph").val();
+        var dic = $("#dic").val();
+
+        if (ico || icdph || dic) {
+            customer.billData = {};
+        }
+        if (ico) customer.billData.ICO = ico;
+        if (icdph) customer.billData.ICDPH = icdph;
+        if (dic) customer.billData.DIC = dic;
+
 
         if (e.target.id === 'create') {
             $.ajax({
@@ -36,7 +47,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: customer,
                 success: function (result) {
-                    console.log(JSON.stringify(result));
+                    location.href = '/customer/' + result.id;
                 },
                 error: function (jqXhr, textStatus, errorThrown) {
                     console.log(errorThrown);

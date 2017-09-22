@@ -16,39 +16,104 @@
         <div class="row col s12 light-blue darken-4 white-text header-layer">
             <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
         </div>
+        <div class="row">
+            <div id="right-container" class="panel-group col s6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Priradenie zákazníka</div>
+                    <div class="row">
 
-        <div id="container" class="panel-group col s12">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Zakazník</div>
-                <div class="row">
-                    <div id="find-customer" class="input-field">
-                        <input type="text" id="autocomplete-input" class="autocomplete">
-                        <label for="autocomplete-input">Hľadať</label>
-                    </div>
+                        <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
 
-                    <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
-                        <li>
-                            <div class="collapsible-header">
-                                <i class="material-icons grey-text">people</i>Vybrať v zozname
-                            </div>
-                            <div class="collapsible-body">
-                                <div class="collection" style="margin-top: 0px;">
-                                    <% customers.forEach(function(customer) { %>
-                                        <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
-                                            <%= customer.name %>
-                                        </a>
-                                        <% }); %>
+                        <div id="find-customer" class="input-field">
+                            <input type="text" id="autocomplete-input" class="autocomplete" style="margin-top: 10px;">
+                            <label for="autocomplete-input" style="margin-top: 10px;">Hľadať</label>
+                        </div>
+
+                        <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons grey-text">people</i>Vybrať v zozname
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
-
+                                <div class="collapsible-body">
+                                    <div class="collection" style="margin-top: 0px;">
+                                        <% customers.forEach(function(customer) { %>
+                                            <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
+                                                <%= customer.name %>
+                                            </a>
+                                            <% }); %>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Kontakt na zákazníka</div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="email" class="customer-input" type="text">
+                            <label id="email-label" for="email">E-mail</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="phone" class="customer-input" type="text">
+                            <label id="phone-label" for="phone">Tel. číslo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Adresa zákazníka</div>
+                    <div class="row">
+                        <div class="input-field col s9">
+                            <input id="street" class="customer-input" type="text">
+                            <label id="street-label" for="street">Ulica</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="num" class="customer-input" type="text">
+                            <label id="num-label" for="num">Číslo</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s9">
+                            <input id="city" class="customer-input" type="text">
+                            <label id="city-label" for="city">Mesto</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="zip" class="customer-input" type="text">
+                            <label id="zip-label" for="zip">PSČ</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Fakturačné údaje zákazníka</div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="ico" class="customer-input" type="text">
+                            <label id="ico-label" for="ico">IČO</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="icdph" class="customer-input" type="text">
+                            <label id="icdph-label" for="icdph">IČ DPH</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="dic" type="text">
+                            <label id="dic-label" for="dic">DIČ</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="row">
 
                 </div>
             </div>
         </div>
+
 
 
         <div class="fixed-action-btn">

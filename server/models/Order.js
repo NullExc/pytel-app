@@ -2,11 +2,14 @@ var mongoose = require('mongoose');
 
 var OrderSchema = new mongoose.Schema({
     
+    description: {
+        type: String
+    },
     workType: {
         type: mongoose.Schema.Types.ObjectId
     },
     orderType: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     },
     price: {
         type: Number
@@ -14,9 +17,16 @@ var OrderSchema = new mongoose.Schema({
     state: {
         type: String
     },
-    pickDate: {
-        type: Date
+    arriveDate: {
+        type: Date,
+        default: Date.now
     },
+    pickDate: {
+        type: Date,
+    },
+    facilities: [{
+        type: String
+    }],
     contact: {
         email: {
             type: String
@@ -25,16 +35,33 @@ var OrderSchema = new mongoose.Schema({
             type: String
         }
     },
-    facilities: [{
-        type: String
-    }],
     address: {
-        type: String
+        street: String,
+        streetNumber: String,
+        city: String,
+        zipCode: String
+    },
+    billData: {
+        ICO: {
+            type: String
+        },
+        ICDPH: {
+            type: String
+        },
+        DIC: {
+            type: String
+        }
     },
     customerId: {
         type: mongoose.Schema.Types.ObjectId
     }
 });
+
+OrderSchema.statics.getDetail = function (id, callback) {
+    Order.findById(id, function (err, order) {
+        
+    })
+}
 
 var Order = mongoose.model("Order", OrderSchema);
 

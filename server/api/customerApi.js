@@ -21,11 +21,15 @@ module.exports.create = function (req, res, next) {
         customerData.address = req.body.address;
     }
 
+    if (req.body.billData) {
+        customerData.billData = req.body.billData;
+    }
+
     Customer.create(customerData, function (err, customer) {
         if (err) {
             return next(err);
         }
-        return res.json({ message: 'customer created' });
+        return res.json({ message: 'customer created', id: customer._id });
     });
 }
 
@@ -43,17 +47,20 @@ module.exports.get = function (req, res, next) {
         if (err) {
             return next(err);
         }
-        return res.render('pages/customer/customer',{ customer: customer });
+        return res.render('pages/customer/customer', { customer: customer });
     })
 }
 
 module.exports.getProfile = function (req, res, next) {
-    Customer.findById(req.params.id, function (err, customer) {
+
+    Customer.getProfile(req.params.id, function (err, profile) {
         if (err) {
             return next(err);
         }
-        return res.render('pages/customer/customer',{ customer: customer });
+        res.send({ profile: profile });
     })
+    //return res.render('pages/customer/customer',{ customer: customer });
+
 }
 
 module.exports.getNames = function (req, res, next) {
@@ -65,7 +72,7 @@ module.exports.getNames = function (req, res, next) {
         for (var i = 0; i < customers.length; i++) {
             names.push(customers[i].name);
         }
-        return res.json({names: names});
+        return res.json({ names: names });
     })
 }
 
@@ -117,7 +124,7 @@ module.exports.edit = function (req, res, next) {
                 message: 'not found'
             })
         }
-        
+
         res.render('pages/customer/customer-edit', { customer: customer });
 
     })

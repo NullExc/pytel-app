@@ -37,6 +37,11 @@ app.get('/', function (req, res) {
 
 //order routes
 app.get('/order-new', orderApi.new);
+app.get('/order/all', orderApi.getAll);
+
+app.post('/order', orderApi.create);
+app.get('/order/:id', orderApi.get);
+
 
 //customer routes
 app.get('/customer/all', customerApi.getAll);
@@ -46,9 +51,11 @@ app.get('/customer-edit/:id', customerApi.edit);
 app.get('/customer/names', customerApi.getNames);
 
 app.post('/customer', customerApi.create);
-app.get('/customer/:id', customerApi.getProfile);
+app.get('/customer/:id', customerApi.get);
 app.put('/customer/:id', customerApi.update);
 app.delete('/customer/:id', customerApi.delete);
+
+app.get('/customer/profile/:id', customerApi.getProfile);
 
 //settings routes
 app.get('/settings', settingsApi.get);
@@ -62,6 +69,9 @@ app.use(function(req, res, next){
 });
 
 app.use(function (err, req, res, next) {
+  if (err) {
+    console.info(err);
+  }
   res.status(500).render('pages/error', {error : err});
 })
 

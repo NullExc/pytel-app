@@ -76,6 +76,26 @@
                         zip.value = customer.address.zipCode;
                     }
                 }
+                if (customer.billData) {
+                    if (customer.billData.ICO) {
+                        var ico = document.getElementById('ico');
+                        var icoLabel = document.getElementById('ico-label');
+                        icoLabel.className = "active";
+                        ico.value = customer.billData.ICO;
+                    }
+                    if (customer.billData.ICDPH) {
+                        var icdph = document.getElementById('icdph');
+                        var icdphLabel = document.getElementById('icdph-label');
+                        icdphLabel.className = "active";
+                        icdph.value = customer.billData.ICDPH;
+                    }
+                    if (customer.billData.DIC) {
+                        var dic = document.getElementById('dic');
+                        var dicLabel = document.getElementById('dic-label');
+                        dicLabel.className = "active";
+                        dic.value = customer.billData.DIC;
+                    }
+                }
             }
         </script>
 

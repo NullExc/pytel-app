@@ -31,6 +31,17 @@
                 <% var zipCode = customer.address.zipCode; %>
             <% } %>
         <% } %>
+        <% if (customer.billData) { %>
+            <% if (customer.billData.ICO) { %>
+                <% var ico = customer.billData.ICO; %>
+            <% } %>
+            <% if (customer.billData.ICDPH) { %>
+                <% var icdph = customer.billData.ICDPH; %>
+            <% } %>
+            <% if (customer.billData.DIC) { %>
+                <% var dic = customer.billData.DIC; %>
+            <% } %>
+        <% } %>
 
 
         <div class="row col s12 light-blue darken-4 white-text header-layer">
@@ -74,6 +85,27 @@
                         <div class="input-field col s4">
                             <span class="label label-primary">PSČ</span>
                             <h6 class="info"><%= zipCode %></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Fakturačné údaje</div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <span class="label label-primary">IČO</span>
+                            <h6 class="info"><%= ico %></h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <span class="label label-primary">IČ DPH</span>
+                            <h6 class="info"><%= icdph %></h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <span class="label label-primary">DIČ</span>
+                            <h6 class="info"><%= dic %></h6>
                         </div>
                     </div>
                 </div>
