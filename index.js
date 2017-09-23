@@ -38,6 +38,7 @@ app.get('/', function (req, res) {
 //order routes
 app.get('/order-new', orderApi.new);
 app.get('/order/all', orderApi.getAll);
+app.get('/order/detail/:id', orderApi.getDetail);
 
 app.post('/order', orderApi.create);
 app.get('/order/:id', orderApi.get);

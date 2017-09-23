@@ -47,5 +47,10 @@ module.exports.getAll = function (req, res, next) {
 }
 
 module.exports.getDetail = function (req, res, next) {
-
+    Order.getDetail(req.params.id, function (err, result) {
+        if (err) {
+            return next(err);
+        }
+        res.send(result);
+    })
 }

@@ -17,7 +17,7 @@
             <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
         </div>
         <div class="row">
-            <div id="right-container" class="panel-group col s6">
+            <div id="right-container" class="panel-group col s5">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Priradenie zákazníka</div>
                     <div class="row">
@@ -107,9 +107,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col s6">
+            <div class="col s7">
                 <div class="row">
-
+                    <div class="input-field col s12">
+                        <input id="price" type="text">
+                        <label id="price-label" for="dic">Popis</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input id="price" type="number">
+                        <label id="price-label" for="price">Dohodnutá cena ( € )</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input type="text" class="datepicker" id="date">
+                        <label id="date-label" for="date">Date</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,6 +136,12 @@
             <i id="create" class="large material-icons">save</i>
         </a>
         </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker').datetimepicker();
+            });
+        </script>
 
 </body>
 

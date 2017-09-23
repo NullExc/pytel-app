@@ -1,5 +1,29 @@
 $(document).ready(function () {
 
+    $('.datepicker').pickadate({
+        selectMonths: true,//Creates a dropdown to control month
+        //The title label to use for the month nav buttons
+        labelMonthNext: 'Ďalší mesiac',
+        labelMonthPrev: 'Posledný mesiac',
+        //The title label to use for the dropdown selectors
+        labelMonthSelect: 'Vybrať mesiac',
+        labelYearSelect: 'Vybrať rok',
+        //Months and weekdays
+        monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Octóber', 'November', 'December'],
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+        weekdaysFull: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
+        weekdaysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Stv', 'Pia', 'Sob'],
+        //Materialize modified
+        weekdaysLetter: [ 'N', 'P', 'U', 'S', 'Š', 'P', 'S' ],
+        //Today and clear
+        today: 'Dnes',
+        clear: 'Vynulovať',
+        close: 'Zavrieť',
+
+        format: 'dd/mm/yyyy'
+    });
+
+
     var names = {};
     var selectedCustomer = null;
 
@@ -153,6 +177,6 @@ $(document).ready(function () {
         if (dic) order.billData.DIC = dic;
 
 
-        
+
     })
 })

@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 
-var Order = require('./Order');
-
 var CustomerSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -45,7 +43,7 @@ CustomerSchema.statics.getProfile = function (id, callback) {
             err.status = 401;
             return callback(err);
         }
-        Order.find( { customerId: customer._id }, function (err, orders) {
+        mongoose.model('Order').find( { customerId: customer._id }, function (err, orders) {
             if (err) {
                 return callback(err);
             }
