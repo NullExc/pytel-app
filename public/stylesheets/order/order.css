@@ -30,3 +30,22 @@
     margin: 0 !important;
 }
 
+@media only screen and (max-device-width: 480px) {
+    
+    #right-container {
+        border-right: none;
+    }
+
+    .row .col.s5 {
+        width: 100%;
+    }
+
+    .row .col.s7 {
+        width: 100%;
+    }
+
+    .label {
+        font-size: 50%;
+    }
+}
+

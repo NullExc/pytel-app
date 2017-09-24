@@ -23,6 +23,8 @@ $(document).ready(function () {
         format: 'dd/mm/yyyy'
     });
 
+    $("#date-label").addClass('active');
+
 
     var names = {};
     var selectedCustomer = null;
