@@ -5,6 +5,10 @@
     border-right: 5px solid #97BACE;
 }
 
+#left-container {
+    padding-top: 20px;
+}
+
 #find-customer {
     margin: 20px 10px 10px 10px;
 }
@@ -29,6 +33,8 @@
 .customer-input {
     margin: 0 !important;
 }
+
+
 
 @media only screen and (max-device-width: 480px) {
     

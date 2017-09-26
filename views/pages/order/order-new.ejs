@@ -18,9 +18,9 @@
             <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
         </div>
         <div class="row">
-            <div id="right-container" class="panel-group col s5">
+            <div id="right-container" class="panel-group col s6">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Priradenie zákazníka</div>
+                    <div class="panel-heading">Zákazník</div>
                     <div class="row">
 
                         <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
@@ -47,9 +47,6 @@
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Kontakt na zákazníka</div>
                     <div class="row">
                         <div class="input-field col s12">
                             <input id="email" class="customer-input" type="text">
@@ -62,9 +59,6 @@
                             <label id="phone-label" for="phone">Tel. číslo</label>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Adresa zákazníka</div>
                     <div class="row">
                         <div class="input-field col s9">
                             <input id="street" class="customer-input" type="text">
@@ -85,9 +79,6 @@
                             <label id="zip-label" for="zip">PSČ</label>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Fakturačné údaje zákazníka</div>
                     <div class="row">
                         <div class="input-field col s12">
                             <input id="ico" class="customer-input" type="text">
@@ -102,29 +93,32 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="dic" type="text">
+                            <input id="dic" class="customer-input" type="text">
                             <label id="dic-label" for="dic">DIČ</label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="left-container" class="col s7">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="price" type="text">
-                        <label id="price-label" for="dic">Popis</label>
+            <div id="left-container" class="panel-group col s6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Zákazka</div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="price" class="order-input" type="text">
+                            <label id="price-label" for="dic">Popis</label>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s4">
-                        <input id="price" type="number">
-                        <label id="price-label" for="price">Dohodnutá cena ( € )</label>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input id="price" class="order-input" type="number">
+                            <label id="price-label" for="price">Dohodnutá cena ( € )</label>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s4">
-                        <input type="text" class="datepicker" id="date">
-                        <label id="date-label" for="date">Dátum</label>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input type="text" class="datepicker order-input" id="date">
+                            <label id="date-label" for="date">Dátum</label>
+                        </div>
                     </div>
                 </div>
             </div>
