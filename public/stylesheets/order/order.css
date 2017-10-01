@@ -42,11 +42,11 @@
         border-right: none;
     }
 
-    .row .col.s5 {
-        width: 100%;
+    #left-container {
+        padding-top: 0;
     }
 
-    .row .col.s7 {
+    .row .col.s6 {
         width: 100%;
     }
 

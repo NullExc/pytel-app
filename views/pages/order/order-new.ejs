@@ -26,8 +26,9 @@
                         <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
 
                         <div id="find-customer" class="input-field">
+                            
                             <input type="text" id="autocomplete-input" class="autocomplete" style="margin-top: 10px;">
-                            <label for="autocomplete-input" style="margin-top: 10px;">Hľadať</label>
+                            <label for="autocomplete-input" style="margin-top: 10px;"><i class="material-icons prefix">search</i></label>
                         </div>
 
                         <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
@@ -110,14 +111,20 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s4">
-                            <input id="price" class="order-input" type="number">
-                            <label id="price-label" for="price">Dohodnutá cena ( € )</label>
+                            <i class="material-icons prefix grey-text">event</i>
+                            <input type="text" class="datepicker order-input" id="date">
+                            <label id="date-label" for="date">Dátum</label>
+                        </div>
+                        <div class="input-field col s4">
+                            <i class="material-icons prefix grey-text">schedule</i>
+                            <input type="text" class="timepicker" id="time">
+                            <label id="time-label" for="time">Čas</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s4">
-                            <input type="text" class="datepicker order-input" id="date">
-                            <label id="date-label" for="date">Dátum</label>
+                            <input id="price" class="order-input" type="number">
+                            <label id="price-label" for="price">Dohodnutá cena ( € )</label>
                         </div>
                     </div>
                 </div>

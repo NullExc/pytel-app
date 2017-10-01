@@ -43,6 +43,8 @@ app.get('/order/detail/:id', orderApi.getDetail);
 app.post('/order', orderApi.create);
 app.get('/order/:id', orderApi.get);
 
+app.get('/calendar', orderApi.calendar);
+
 
 //customer routes
 app.get('/customer/all', customerApi.getAll);
@@ -105,4 +107,6 @@ app.use(function (err, req, res, next) {
 
 app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));
+
+  console.log('env', process.env.HOMEPATH);
 });
