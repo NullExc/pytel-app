@@ -8,6 +8,14 @@ var userApi = require('./server/api/userApi');
 var customerApi = require('./server/api/customerApi');
 var settingsApi = require('./server/api/settingsApi');
 var orderApi = require('./server/api/orderApi');
+var worktypeApi = require('./server/api/worktypeApi');
+
+//boot mongoose models
+require('./server/models/Customer.js');
+require('./server/models/Order.js');
+require('./server/models/OrderType.js');
+require('./server/models/User.js');
+require('./server/models/WorkType.js');
 
 var config = require('./config/config.js');
 
@@ -34,6 +42,10 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
   res.render('pages/index');
 });
+
+//work type routes
+app.get('/worktype', worktypeApi.getAll);
+app.post('/worktype', worktypeApi.create);
 
 //order routes
 app.get('/order-new', orderApi.new);

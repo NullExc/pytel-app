@@ -50,6 +50,14 @@
         width: 100%;
     }
 
+    .row .col.s5 {
+        width: 50%;
+    }
+
+    #price-div {
+        width: 50%;
+    }
+
     .label {
         font-size: 50%;
     }

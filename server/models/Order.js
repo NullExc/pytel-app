@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-//var Customer = require('./Customer');
+var async = require('async');
 
 var OrderSchema = new mongoose.Schema({
     
@@ -58,6 +58,48 @@ var OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     }
 });
+
+OrderSchema.statics.getFormData = function (callback) {
+
+    function customerNames(result, callback) {
+        mongoose.model('Customer').find( {}, function (err, customers) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["customers"] = customers;
+                //result.push({customers: customers});
+                callback(null, result);
+            }
+        })
+    }
+
+    function workTypes(result, callback) {
+        mongoose.model('WorkType').find( {}, function (err, worktypes) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["worktypes"] = worktypes;
+                callback(null, result);
+            }
+        })
+    }
+
+    function orderTypes(result, callback) {
+        mongoose.model('OrderType').find( {}, function (err, ordertypes) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["ordertypes"] = ordertypes;
+                callback(null, result);
+            }
+        })
+    }
+
+    var prepareData = async.compose(orderTypes, workTypes, customerNames);
+    prepareData({}, function (err, result) {
+        callback(err, result);
+    })
+}
 
 OrderSchema.statics.getDetail = function (id, callback) {
     Order.findById(id, function (err, order) {

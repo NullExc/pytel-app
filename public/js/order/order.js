@@ -9,45 +9,45 @@ $(document).ready(function () {
         canceltext: 'Zavrieť', // Text for cancel-button
         autoclose: false, // automatic close timepicker
         ampmclickable: true, // make AM PM clickable
-        aftershow: function(){} //Function for after opening timepicker
-      });
+        aftershow: function () { } //Function for after opening timepicker
+    });
 
     $('.datepicker').pickadate({
-        selectMonths: true,//Creates a dropdown to control month
-        //The title label to use for the month nav buttons
+        selectMonths: true,
         labelMonthNext: 'Ďalší mesiac',
         labelMonthPrev: 'Posledný mesiac',
-        //The title label to use for the dropdown selectors
         labelMonthSelect: 'Vybrať mesiac',
         labelYearSelect: 'Vybrať rok',
-        //Months and weekdays
         monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Octóber', 'November', 'December'],
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
         weekdaysFull: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
         weekdaysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Stv', 'Pia', 'Sob'],
-        //Materialize modified
-        weekdaysLetter: [ 'N', 'P', 'U', 'S', 'Š', 'P', 'S' ],
-        //Today and clear
+        weekdaysLetter: ['N', 'P', 'U', 'S', 'Š', 'P', 'S'],
         today: 'Dnes',
         clear: 'Vynulovať',
         close: 'Zavrieť',
-
         format: 'dd/mm/yyyy'
     });
 
-    $("#date-label").addClass('active');
+    var date = new Date();
 
+    $("#date").val((date.getDay() + 1 >= 10 ? date.getDay() + 1 : ('0' + (date.getDay() + 1)))
+        + '/' + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : ('0' + (date.getMonth() + 1)))
+        + '/' + date.getFullYear());
+
+    $("#time").val((date.getHours() >= 10 ? date.getHours() : ('0' + date.getHours()))
+        + ':' + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + date.getMinutes())));
 
     var names = {};
     var selectedCustomer = null;
 
-    for (var i = 0; i < customers.length; i++) {
-        names[customers[i].name] = null;
-    }
+    customers.forEach(function (customer) {
+        names[customer.name] = null;
+    })
 
     var fillCustomerData = function () {
 
-        $("label").removeClass("active");
+        $(".customer-label").removeClass("active");
 
         if (selectedCustomer) {
             if (selectedCustomer.contact) {
@@ -125,7 +125,12 @@ $(document).ready(function () {
         doneLabel.removeClass('orange');
         doneLabel.addClass('green');
 
-        $('.collapsible').collapsible('close', 0);
+        $('#select-customer').collapsible('close', 0);
+    })
+
+    $('#drop-up').click(function (event) {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        $('#address-data').collapsible('close', 0);
     })
 
     $('input.autocomplete').autocomplete({
@@ -189,8 +194,5 @@ $(document).ready(function () {
         if (ico) order.billData.ICO = ico;
         if (icdph) order.billData.ICDPH = icdph;
         if (dic) order.billData.DIC = dic;
-
-
-
     })
 })

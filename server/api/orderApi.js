@@ -1,5 +1,4 @@
 var Order = require('../models/Order');
-var Customer = require('../models/Customer');
 
 var calendar = require('../google/calendar.js');
 
@@ -32,11 +31,11 @@ module.exports.calendar = function (req, res, next) {
 
 module.exports.new = function (req, res, next) {
 
-    Customer.find({}, function (err, customers) {
+    Order.getFormData(function (err, result) {
         if (err) {
             return next(err);
         }
-        res.render('pages/order/order-new', { customers: customers });
+        res.render('pages/order/order-new', {result: result});
     })
 }
 

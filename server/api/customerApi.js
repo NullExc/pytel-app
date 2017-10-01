@@ -2,8 +2,6 @@ var Customer = require('../models/Customer');
 
 module.exports.create = function (req, res, next) {
 
-    console.log('creating user ....');
-
     if (!req.body.name) {
         var err = new Error('Meno je povinný údaj pre vytvorenie zákazníka.');
         err.status = 400;
