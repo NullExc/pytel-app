@@ -1,5 +1,3 @@
-document.onload('https://apis.google.com/js/api.js?onload=loadPicker');
-
 var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
