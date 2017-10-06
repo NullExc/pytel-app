@@ -20,7 +20,7 @@
             <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
         </div>
         <div class="row">
-            <div id="right-container" class="panel-group col s6">
+            <div id="left-container" class="panel-group col s6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Zákazník</div>
                     <div class="row">
@@ -116,9 +116,17 @@
                             </div>
                         </li>
                     </ul>
+                    
+                    <!-- Google Drive Upload button TU NIEKDE SA MUSI ZAVOLAT PICKER ALE NETUSIM AKO TAKZE TAK-->
+                    <div id="result"></div>
+                    
+                       <!-- The Google API Loader script. -->
+                    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
+                      
+                    <!-- end of Google Drive Upload button -->
                 </div>
             </div>
-            <div id="left-container" class="panel-group col s6">
+            <div id="right-container" class="panel-group col s6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Zákazka</div>
                     <div class="row">

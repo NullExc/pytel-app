@@ -9,6 +9,7 @@ var customerApi = require('./server/api/customerApi');
 var settingsApi = require('./server/api/settingsApi');
 var orderApi = require('./server/api/orderApi');
 var worktypeApi = require('./server/api/worktypeApi');
+var googleDriveApi = require('./server/google/googledrive');
 
 //boot mongoose models
 require('./server/models/Customer.js');
