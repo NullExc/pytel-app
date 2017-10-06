@@ -1,12 +1,10 @@
-var WorkType = require('../models/WorkType');
+var OrderType = require('../models/OrderType');
 
 module.exports.create = function (req, res, next) {
 
-    var workType = req.body.worktype;
+    var orderType = req.body.ordertype;
 
-    console.log(workType);
-
-    WorkType.create( workType, function (err, workType) {
+    OrderType.create( orderType, function (err, orderType) {
         if (err) {
             return next(err);
         }
@@ -15,20 +13,20 @@ module.exports.create = function (req, res, next) {
 }
 
 module.exports.get = function (req, res, next) {
-    WorkType.findById(req.params.id, function (err, workType) {
+    OrderType.findById(req.params.id, function (err, orderType) {
         if (err) {
             return next(err);
         }
-        res.send({workType: workType});
+        res.send({orderType: orderType});
     })
 }
 
 module.exports.getAll = function (req, res, next) {
     
-    WorkType.find( {}, function (err, workTypes) {
+    OrderType.find( {}, function (err, orderTypes) {
         if (err) {
             return next(err);
         }
-        res.send({workTypes: workTypes});
+        res.send({orderTypes: orderTypes});
     })
 }

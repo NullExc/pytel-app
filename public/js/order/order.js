@@ -39,13 +39,31 @@ $(document).ready(function () {
         + ':' + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + date.getMinutes())));
 
     var names = {};
+    var workNames = {};
+    var orderNames = {};
+
     var selectedCustomer = null;
+    var selectedWork = null;
+    var selectedOrder = null;
 
     customers.forEach(function (customer) {
-        names[customer.name] = null;
+        names[customer.firstName + ' ' + customer.lastName] = null;
+    })
+
+    workTypes.forEach(function (worktype) {
+        workNames[worktype.name] = null;
+    })
+
+    orderTypes.forEach(function (ordertype) {
+        orderNames[ordertype.name] = null;
     })
 
     var fillCustomerData = function () {
+
+        var doneLabel = $("#done-customer");
+        doneLabel.text(selectedCustomer.firstName + ' ' + selectedCustomer.lastName);
+        doneLabel.removeClass('orange');
+        doneLabel.addClass('green');
 
         $(".customer-label").removeClass("active");
 
@@ -120,11 +138,6 @@ $(document).ready(function () {
 
         fillCustomerData();
 
-        var doneLabel = $("#done-customer");
-        doneLabel.text(selectedCustomer.name);
-        doneLabel.removeClass('orange');
-        doneLabel.addClass('green');
-
         $('#select-customer').collapsible('close', 0);
     })
 
@@ -133,7 +146,33 @@ $(document).ready(function () {
         $('#address-data').collapsible('close', 0);
     })
 
-    $('input.autocomplete').autocomplete({
+
+
+    $('#work').autocomplete({
+        data: workNames,
+        onAutocomplete: function (val) {
+            workTypes.forEach(function (worktype) {
+                if (val === worktype.name) {
+                    selectedWork = worktype;
+                }
+            })
+            console.info(JSON.stringify(selectedWork));
+        }
+    })
+
+    $('#order').autocomplete({
+        data: orderNames,
+        onAutocomplete: function (val) {
+            orderTypes.forEach(function (ordertype) {
+                if (val === ordertype.name) {
+                    selectedOrder = ordertype;
+                }
+            })
+            console.info(JSON.stringify(selectedOrder));
+        }
+    })
+
+    $('#autocomplete-input').autocomplete({
         data: names,
         limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
@@ -147,12 +186,6 @@ $(document).ready(function () {
             $("#autocomplete-input").val(null);
 
             fillCustomerData();
-
-            var doneLabel = $("#done-customer");
-            doneLabel.text(selectedCustomer.name);
-            doneLabel.removeClass('orange');
-            doneLabel.addClass('green');
-
         },
         minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
     });
@@ -160,7 +193,7 @@ $(document).ready(function () {
     $('#create').click(function () {
         var order = {};
 
-        order.name = $("#name").val();
+        order.description = $("#description").val();
 
         var email = $("#email").val();
         var phone = $("#phone").val();
@@ -191,8 +224,29 @@ $(document).ready(function () {
         if (ico || icdph || dic) {
             order.billData = {};
         }
+
         if (ico) order.billData.ICO = ico;
         if (icdph) order.billData.ICDPH = icdph;
         if (dic) order.billData.DIC = dic;
+
+        if (selectedCustomer) order.customerId = selectedCustomer._id;
+        if (selectedOrder) order.orderType = selectedOrder._id;
+        if (selectedWork) order.workType = selectedWork._id;
+
+        console.log(JSON.stringify(order));
+
+        $.ajax({
+            url: '/order',
+            type: 'POST',
+            dataType: 'json',
+            data: {order: order},
+            success: function (result) {
+                console.log(JSON.stringify(result));
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+
+        })
     })
 })

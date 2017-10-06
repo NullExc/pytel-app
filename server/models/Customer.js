@@ -1,9 +1,15 @@
 var mongoose = require('mongoose');
 
 var CustomerSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
-        unique: true,
+        unique: false,
+        required: true,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        unique: false,
         required: true,
         trim: true
     },

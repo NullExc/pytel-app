@@ -4,7 +4,8 @@ $(document).ready(function () {
 
         var customer = {};
 
-        customer.name = $("#name").val();
+        customer.firstName = $("#first").val();
+        customer.lastName = $("#last").val();
 
         var email = $("#email").val();
         var phone = $("#phone").val();
@@ -41,6 +42,7 @@ $(document).ready(function () {
 
 
         if (e.target.id === 'create') {
+            console.log(JSON.stringify(customer));
             $.ajax({
                 url: '/customer',
                 type: 'POST',

@@ -2,14 +2,17 @@ var Customer = require('../models/Customer');
 
 module.exports.create = function (req, res, next) {
 
-    if (!req.body.name) {
+    if (!req.body.firstName && !req.body.lastName) {
         var err = new Error('Meno je povinný údaj pre vytvorenie zákazníka.');
         err.status = 400;
         res.send('Meno je povinný údaj pre vytvorenie zákazníka.');
         return next(err);
     }
 
-    var customerData = { name: req.body.name };
+    var customerData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    };
 
     if (req.body.contact) {
         customerData.contact = req.body.contact;

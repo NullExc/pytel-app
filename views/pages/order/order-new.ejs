@@ -44,7 +44,7 @@
                                     <div class="collection" style="margin-top: 0px;">
                                         <% result.customers.forEach(function(customer) { %>
                                             <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
-                                                <%= customer.name %>
+                                                <%= customer.firstName + ' ' + customer.lastName %>
                                             </a>
                                             <% }); %>
                                     </div>
@@ -123,13 +123,13 @@
                     <div class="panel-heading">Zákazka</div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="price" class="order-input" type="text">
-                            <label id="price-label" for="dic">Popis</label>
+                            <input id="description" class="order-input" type="text">
+                            <label id="description-label" for="description">Popis</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="work" class="order-input" type="text">
+                            <input id="work" class="order-input autocomplete" type="text">
                             <label id="work-label" for="work">
                                 <i class="material-icons">search</i>
                                 Typ práce

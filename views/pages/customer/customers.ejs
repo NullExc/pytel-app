@@ -3,37 +3,60 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-    <script type="text/javascript" src="/js/customers.js"></script>
+        <script type="text/javascript">
+            var customers = JSON.parse('<%- JSON.stringify(customers) %>');
+        </script>
+        <script type="text/javascript" src="/js/customers.js"></script>
 </head>
 
 <body>
 
     <% include ../../partials/nav-in.ejs %>
 
-        <ul class="collection" style="margin-top: 0px;">
-            <% customers.forEach(function(customer) { %>
-                <li class="collection-item avatar black-text">
-                    <p class="title">
-                        <%= customer.name %>
-                    </p>
-                    <span>
-                <%= customer.contact.email %>
-                </span>
-                <br>
-                <span>
-                    <%= customer.address %>
-                </span>
-                <a href="/customer/<%= customer._id %>" class="secondary-content"><i class="material-icons">menu</i></a>
-            </li>
-        <% }); %>
-        </ul>
-    </div>
+        <div class="row">
+            <div class="input-field col s3" style="margin:20px;">
+                <select id="order-name">
+                    <option value="1">Vzostupne</option>
+                    <option value="2">Zostupne</option>
+                </select>
+                <label>Zoradiť podľa abecedy</label>
+            </div>
+            <div class="input-field col s3" style="margin:20px;">
+                <select id="order-name">
+                    <option value="1">Všetky</option>
+                    <option value="2">Prijaté</option>
+                    <option value="3">Prebiehajúce</option>
+                    <option value="4">Čakajúce na vyzdvihnutie</option>
+                    <option value="5">Vyzdvihnuté</option>
+                </select>
+                <label>Filtrovať podľa zákazky</label>
+            </div>
+        </div>
 
-    <div class="fixed-action-btn">
-        <a id="add" class="btn-floating btn-large light-blue darken-4">
-            <i class="large material-icons">person_add</i>
-        </a>
-    </div>
+        <div id="list-container">
+            <ul id="list" class="collection" style="margin-top: 0px;">
+                <% customers.forEach(function(customer) { %>
+                    <a href="/customer/<%= customer._id %>" class="customer-item collection-item avatar black-text">
+                        <p class="title">
+                            <%= customer.firstName + ' ' + customer.lastName %>
+                        </p>
+                        <span>
+                            <%= customer.contact.email %>
+                        </span>
+                        <br>
+                        <span>
+                            <%= customer.address %>
+                        </span>
+                    </a>
+                    <% }); %>
+            </ul>
+        </div>
+
+        <div class="fixed-action-btn">
+            <a id="add" class="btn-floating btn-large light-blue darken-4">
+                <i class="large material-icons">person_add</i>
+            </a>
+        </div>
 
 </body>
 

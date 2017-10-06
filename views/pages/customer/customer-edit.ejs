@@ -31,10 +31,17 @@
 
                 localStorage.setItem('updateId', customer._id);
 
-                var name = document.getElementById('name');
-                var nameLabel = document.getElementById('name-label');
-                nameLabel.className = "active";
-                name.value = customer.name;
+                var firstName = document.getElementById('first');
+                var firstLabel = document.getElementById('first-label');
+
+                var lastName = document.getElementById('last');
+                var lastLabel = document.getElementById('last-label');
+
+                firstLabel.className = "active";
+                lastLabel.className = "active";
+
+                firstName.value = customer.firstName;
+                lastName.value = customer.lastName;
 
                 if (customer.contact) {
                     if (customer.contact.email) {

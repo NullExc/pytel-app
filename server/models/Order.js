@@ -29,6 +29,9 @@ var OrderSchema = new mongoose.Schema({
     facilities: [{
         type: String
     }],
+    notes: {
+        type: String
+    },
     contact: {
         email: {
             type: String

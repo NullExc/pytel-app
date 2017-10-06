@@ -8,7 +8,8 @@
 
     <% include ../../partials/nav-in.ejs %>
 
-        <% var name = customer.name %>
+        <% var firstName = customer.firstName %>
+        <% var lastName = customer.lastName %>
         <% if (customer.contact) { %>
             <% if (customer.contact.email) { %>
                 <% var email = customer.contact.email; %>
@@ -45,7 +46,7 @@
 
 
         <div class="row col s12 light-blue darken-4 white-text header-layer">
-            <h5 style="margin-left: 10px;"><%= name %></h5>
+            <h5 style="margin-left: 10px;"><%= firstName + ' ' + lastName %></h5>
         </div>
 
         <section class="root">
