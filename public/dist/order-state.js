@@ -60,12 +60,45 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
+/***/ 34:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(8);
+
+
+
+$(document).ready(function () {
+
+    console.log('match', __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived, order.state);
+
+    if (order) {
+        if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
+            $('#end-state').addClass('disabled');
+            $('#pickup-state').addClass('disabled');
+        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+            $('#start-state').addClass('disabled');
+            $('#pickup-state').addClass('disabled');
+        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
+            $('#start-state').addClass('disabled');
+            $('#end-state').addClass('disabled');
+        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+            $('#start-state').addClass('disabled');
+            $('#end-state').addClass('disabled');
+            $('#pickup-state').addClass('disabled');
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 8:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -75,29 +108,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     working: 'working',
     done: 'done',
     pickUp: 'pickUp'
-});
-
-/***/ }),
-
-/***/ 5:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(0);
-
-
-
-$(document).ready(function () {
-
-    console.log('match', __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived, order.state);
-
-    if (order && order.state == __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
-        $('#end-state').addClass('disabled');
-        $('#pickup-state').addClass('disabled');
-
-        console.log('match', __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived);
-    }
 });
 
 /***/ })

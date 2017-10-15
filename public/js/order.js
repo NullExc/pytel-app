@@ -1,3 +1,6 @@
+import STATE from './state.js';
+import http from '../lib/http.js';
+
 $(document).ready(function () {
 
     $('.timepicker').pickatime({
@@ -241,20 +244,19 @@ $(document).ready(function () {
         if (selectedOrder) order.orderType = selectedOrder._id;
         if (selectedWork) order.workType = selectedWork._id;
 
-        console.log(JSON.stringify(order));
+        order.state = STATE.arrived;
 
-        $.ajax({
+        var options = {
+            method: 'post',
             url: '/order',
-            type: 'POST',
-            dataType: 'json',
-            data: { order: order },
-            success: function (result) {
-                console.log(JSON.stringify(result));
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                console.log(errorThrown);
+            data: {
+                order: order
             }
+        }
 
+        http.request(options, (err, response) => {
+            if (err) console.log(err);
+            else if (response) console.log(JSON.stringify(response.data));
         })
     })
 })

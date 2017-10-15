@@ -1,3 +1,5 @@
+import http from '../lib/http.js';
+
 $(document).ready(function () {
 
     $("#create, #update").click(function (e) {
@@ -40,37 +42,34 @@ $(document).ready(function () {
         if (icdph) customer.billData.ICDPH = icdph;
         if (dic) customer.billData.DIC = dic;
 
+        var options = {data: customer};
 
         if (e.target.id === 'create') {
-            console.log(JSON.stringify(customer));
-            $.ajax({
-                url: '/customer',
-                type: 'POST',
-                dataType: 'json',
-                data: customer,
-                success: function (result) {
-                    location.href = '/customer/' + result.id;
-                },
-                error: function (jqXhr, textStatus, errorThrown) {
-                    console.log(errorThrown);
+
+            options.url = '/customer';
+            options.method = 'post';
+
+            http.request(options, (err, response) => {
+                if (err) console.log(err);
+                else if (response) {
+                    location.href = '/customer/' + response.data.id;
                 }
             })
+
         } else if (e.target.id === 'update') {
 
-            $.ajax({
-                url: '/customer/' + localStorage.getItem('updateId'),
-                type: 'PUT',
-                dataType: 'json',
-                data: customer,
-                success: function (result) {
-                    console.log(JSON.stringify(result));
-                    var id = localStorage.getItem('updateId');
-                    localStorage.removeItem('updateId');
+            var id = localStorage.getItem('updateId');
+            options.url = '/customer/' + id;
+            options.method = 'put';
+
+            http.request(options, (err, response) => {
+
+                localStorage.removeItem('updateId');
+
+                if (err) {
+                    console.error(err);
+                } else if (response) {
                     location.href = '/customer/' + id;
-                },
-                error: function (jqXhr, textStatus, errorThrown) {
-                    console.log(errorThrown);
-                    localStorage.removeItem('updateId');
                 }
             })
         }

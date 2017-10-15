@@ -43,8 +43,6 @@ module.exports.create = function (req, res, next) {
 
     var order = req.body.order;
 
-    order.state = 'arrived';
-
     Order.create(order, function (err, order) {
         if (err) {
             return next(err);
