@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript">
+            var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+            var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+            var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+
+            var order = JSON.parse('<%- JSON.stringify(result.detail.order) %>');
+            var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
+            var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
+            var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
+
+            var edit = true;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-state.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text header-layer">
+                <h5 style="margin-left: 10px;">Upraviť zákazku</h5>
+            </div>
+
+            <div class="row col s12 white-text">
+                <div class="row">
+                    <a id="start-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">build</i>Začatie</a>
+                    <a id="end-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">done</i>Dokončenie</a>
+                    <a id="pickup-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">send</i>Odovzdanie</a>
+                </div>
+                <div class="row state-body black-text">
+                    <p>Zakazka</p>
+                </div>
+            </div>
+
+            <% include ./order-input.ejs %>
+        </div>
+
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+                <i id="create" class="large material-icons">save</i>
+            </a>
+        </div>
+
+        <script>
+            window.onload = function () {
+
+                if (customer) {
+                    var doneLabel = $("#done-customer");
+                    doneLabel.text(customer.firstName + ' ' + customer.lastName);
+                    doneLabel.removeClass('orange');
+                    doneLabel.addClass('green');
+                }
+
+                if (workType) {
+                    $("#work").val(workType.name);
+                    $("#work-label").addClass('active');
+                }
+
+                if (orderType) {
+                    $("#order").val(orderType.name);
+                    $("#order-label").addClass('active');
+                }
+
+                if (order) {
+
+                    var arriveDate = order.dates.arriveDate;
+
+                    if (order.description) {
+                        $("#description").val(order.description);
+                        $("#description-label").addClass('active');
+                    }
+                    if (order.contact) {
+                        if (order.contact.email) {
+                            $("#email").val(order.contact.email);
+                            $("#email-label").addClass('active');
+                        }
+                        if (order.contact.phone) {
+                            $("#phone").val(order.contact.phone);
+                            $("#phone-label").addClass('active');
+                        }
+                    }
+                    if (order.address) {
+                        if (order.address.street) {
+                            $("#street").val(order.address.street);
+                            $("#street-label").addClass('active');
+                        }
+                        if (order.address.streetNumber) {
+                            $("#num").val(order.address.streetNumber);
+                            $("#num-label").addClass('active');
+                        }
+                        if (order.address.city) {
+                            $("#city").val(order.address.city);
+                            $("#city-label").addClass('active');
+                        }
+                        if (order.address.zipCode) {
+                            $("#zip").val(order.address.zipCode);
+                            $("#zip-label").addClass('active');
+                        }
+                    }
+                    if (order.billData) {
+                        if (order.billData.ICO) {
+                            $("#ico").val(order.billData.ICO);
+                            $("#ico-label").addClass('active');
+                        }
+                        if (order.billData.ICDPH) {
+                            $("#icdph").val(order.billData.ICDPH);
+                            $("#icdph-label").addClass('active');
+                        }
+                        if (order.billData.DIC) {
+                            $("#dic").val(order.billData.DIC);
+                            $("#dic-label").addClass('active');
+                        }
+                    }
+                    if (order.price) {
+                        $("#price").val(order.price);
+                        $("#price-label").addClass('active');
+                    }
+                }
+
+
+
+
+
+                console.log(JSON.stringify(order), JSON.stringify(customer),
+                    JSON.stringify(workType), JSON.stringify(orderType)
+                );
+            }
+        </script>
+</body>
+
+</html>

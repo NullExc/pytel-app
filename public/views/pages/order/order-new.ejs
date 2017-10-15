@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript">
+            var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+            var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+            var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+
+            var edit = false;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+        <div class="row col s12 light-blue darken-4 white-text header-layer">
+            <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
+        </div>
+        
+        <% include ./order-input.ejs %>
+
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+            <i id="create" class="large material-icons">save</i>
+        </a>
+        </div>
+</body>
+
+</html>

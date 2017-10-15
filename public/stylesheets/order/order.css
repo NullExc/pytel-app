@@ -34,6 +34,10 @@
     margin: 0 !important;
 }
 
+.state-btn {
+    width: 20%;
+}
+
 
 
 @media only screen and (max-device-width: 480px) {

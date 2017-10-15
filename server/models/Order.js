@@ -19,12 +19,20 @@ var OrderSchema = new mongoose.Schema({
     state: {
         type: String
     },
-    arriveDate: {
-        type: Date,
-        default: Date.now
-    },
-    pickDate: {
-        type: Date,
+    dates: {
+        arriveDate: {
+            type: Date,
+            default: Date.now
+        },
+        pickDate: {
+            type: Date,
+        },
+        startDate: {
+            type: Date
+        },
+        endDate: {
+            type: Date
+        }
     },
     facilities: [{
         type: String
@@ -105,23 +113,82 @@ OrderSchema.statics.getFormData = function (callback) {
 }
 
 OrderSchema.statics.getDetail = function (id, callback) {
+
+    function getCustomers(result, callback) {
+        mongoose.model('Customer').find( {}, function (err, customers) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["customers"] = customers;
+                //result.push({customers: customers});
+                callback(null, result);
+            }
+        })
+    }
+
+    function getCustomer(result, callback) {
+        if (!result.customerId) {
+            result["customer"] = null;
+            return callback(null, result);
+        }
+        mongoose.model('Customer').findOne({_id: result.customerId}, function (err, customer) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["customer"] = customer;
+                callback(null, result);
+            }
+        })
+    }
+
+    function getWorkType(result, callback) {
+        if (!result.workType) {
+            result["workType"] = null;
+            return callback(null, result);
+        }
+        mongoose.model('WorkType').findOne({_id: result.workType}, function (err, workType) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["workType"] = workType;
+                callback(null, result);
+            }
+        })
+    }
+
+    function getOrderType(result, callback) {
+        if (!result.orderType) {
+            result["orderType"] = null;
+            return callback(null, result);
+        }
+        mongoose.model('OrderType').findOne({_id: result.orderType}, function (err, orderType) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["orderType"] = order;
+                callback(null, result);
+            }
+        })
+    }
+
     Order.findById(id, function (err, order) {
         if (err) {
             return callback(err);
-        }
-        if (order.customerId) {
-            mongoose.model('Customer').findOne({_id: order.customerId}, function (err, customer) {
-                if (err) {
-                    return callback(err);
-                }
-                if (customer) {
-                    return callback(err, {order: order, customer: customer});
-                } else {
-                    return callback(err, {order: order});
-                }
-            })
+        } else if (!order) {
+            return callback(new Error("No order was found."));
         } else {
-            return callback(err, {order: order});
+
+            var data = {};
+
+            if (order.customerId) data.customerId = order.customerId;
+            if (order.workType) data.workType = order.workType;
+            if (order.orderType) data.orderType = order.orderType;
+
+            var detail = async.compose(getOrderType, getWorkType, getCustomers, getCustomer);
+            detail(data, function (err, result) {
+                result["order"] = order;
+                callback(err, result);
+            })
         }
     })
 }

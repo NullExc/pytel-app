@@ -1,0 +1,155 @@
+<div class="row">
+    <div id="left-container" class="panel-group col s6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Zákazník</div>
+            <div class="row">
+
+                <h4><span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span></h4>
+
+                <div id="find-customer" class="input-field">
+
+                    <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
+                    <label for="customer-search" style="margin-top: 10px;">
+                        <i class="material-icons prefix">search</i>
+                    </label>
+                </div>
+
+                <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons grey-text">people</i>Vybrať v zozname
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="collection" style="margin-top: 0px;">
+                                <% result.form.customers.forEach(function(customer) { %>
+                                    <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
+                                        <%= customer.firstName + ' ' + customer.lastName %>
+                                    </a>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <ul id="address-data" class="collapsible panel panel-primary" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons grey-text">arrow_drop_down</i>Adresa a kontakt
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="email" class="customer-input" type="text">
+                                <label id="email-label" class="customer-label" for="email">E-mail</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="phone" class="customer-input" type="text">
+                                <label id="phone-label" class="customer-label" for="phone">Tel. číslo</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s9">
+                                <input id="street" class="customer-input" type="text">
+                                <label id="street-label" class="customer-label" for="street">Ulica</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="num" class="customer-input" type="text">
+                                <label id="num-label" class="customer-label" for="num">Číslo</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s9">
+                                <input id="city" class="customer-input" type="text">
+                                <label id="city-label" class="customer-label" for="city">Mesto</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="zip" class="customer-input" type="text">
+                                <label id="zip-label" class="customer-label" for="zip">PSČ</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="ico" class="customer-input" type="text">
+                                <label id="ico-label" class="customer-label" for="ico">IČO</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="icdph" class="customer-input" type="text">
+                                <label id="icdph-label" class="customer-label" for="icdph">IČ DPH</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="dic" class="customer-input" type="text">
+                                <label id="dic-label" class="customer-label" for="dic">DIČ</label>
+                            </div>
+                        </div>
+                        <div id="drop-up" class="row" style="cursor: pointer; cursor: hand;">
+                            <div class="col-sm-12" style="text-align:center;">
+                                <i class="material-icons grey-text" style="font-size: 40px;">arrow_drop_up</i>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- Google Drive Upload button TU NIEKDE SA MUSI ZAVOLAT PICKER ALE NETUSIM AKO TAKZE TAK-->
+            <!--<div id="result"></div>-->
+            
+               <!-- The Google API Loader script. -->
+            <!--<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>-->
+              
+            <!-- end of Google Drive Upload button -->
+        </div>
+    </div>
+    <div id="right-container" class="panel-group col s6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Zákazka</div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="description" class="order-input" type="text">
+                    <label id="description-label" for="description">Popis</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="work" class="order-input autocomplete" type="text">
+                    <label id="work-label" for="work">
+                        <i class="material-icons">search</i>
+                        Typ práce
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="order" class="order-input autocomplete" type="text">
+                    <label id="order-label" for="order">
+                            <i class="material-icons">search</i>
+                            Typ zákazky
+                        </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s5" id="input-date">
+                    <i class="material-icons prefix grey-text">event</i>
+                    <input type="text" class="datepicker order-input" id="date">
+                    <label id="date-label" for="date">Dátum prij.</label>
+                </div>
+                <div class="input-field col s5" id="input-time">
+                    <i class="material-icons prefix grey-text">schedule</i>
+                    <input type="text" class="timepicker" id="time">
+                    <label id="time-label" for="time">Čas prij.</label>
+                </div>
+            </div>
+            <div class="row">
+                <div id="price-div" class="input-field col s4">
+                    <input id="price" class="order-input" type="number">
+                    <label id="price-label" for="price">Cena</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

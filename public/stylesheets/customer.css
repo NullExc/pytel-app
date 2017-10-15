@@ -15,7 +15,7 @@
     margin-left: 20px;
     width: 50%;
     float: left;
-    max-height: 100px;
+    max-height: 50px;
 }
 
 .info {
@@ -24,6 +24,7 @@
 
 .collapsible-body {
     overflow-y: scroll;
+    max-height: 50px;
 }
 
 @media only screen and (max-device-width: 800px) {

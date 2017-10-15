@@ -29,14 +29,22 @@ $(document).ready(function () {
         format: 'dd/mm/yyyy'
     });
 
-    var date = new Date();
+    var date;// = new Date(order.dates.arriveDate);
 
-    $("#date").val((date.getDay() + 1 >= 10 ? date.getDay() + 1 : ('0' + (date.getDay() + 1)))
-        + '/' + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : ('0' + (date.getMonth() + 1)))
-        + '/' + date.getFullYear());
+    if (order) {
+        date = new Date('2018-10-14T22:05:01Z');
+        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+        console.log('arrive', utcDate.getDate() );
+    } else {
+        date = new Date();
+    }
+    
+    $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+        + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+        + '/' + utcDate.getFullYear());
 
-    $("#time").val((date.getHours() >= 10 ? date.getHours() : ('0' + date.getHours()))
-        + ':' + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + date.getMinutes())));
+    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+        + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
 
     var names = {};
     var workNames = {};
@@ -172,18 +180,18 @@ $(document).ready(function () {
         }
     })
 
-    $('#autocomplete-input').autocomplete({
+    $('#customer-search').autocomplete({
         data: names,
         limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
             for (var i = 0; i < customers.length; i++) {
-                if (val === customers[i].name) {
+                if (val === customers[i].firstName + ' ' + customers[i].lastName) {
                     selectedCustomer = customers[i];
                     break;
                 }
             }
 
-            $("#autocomplete-input").val(null);
+            $("#customer-search").val(null);
 
             fillCustomerData();
         },
@@ -239,7 +247,7 @@ $(document).ready(function () {
             url: '/order',
             type: 'POST',
             dataType: 'json',
-            data: {order: order},
+            data: { order: order },
             success: function (result) {
                 console.log(JSON.stringify(result));
             },

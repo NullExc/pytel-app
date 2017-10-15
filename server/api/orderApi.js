@@ -31,11 +31,11 @@ module.exports.calendar = function (req, res, next) {
 
 module.exports.new = function (req, res, next) {
 
-    Order.getFormData(function (err, result) {
+    Order.getFormData(function (err, form) {
         if (err) {
             return next(err);
         }
-        res.render('pages/order/order-new', {result: result});
+        res.render('pages/order/order-new', { result: {form: form} });
     })
 }
 
@@ -69,6 +69,21 @@ module.exports.getAll = function (req, res, next) {
             return next(err);
         }
         return res.render('pages/order/orders', { orders: orders });
+    })
+}
+
+module.exports.edit = function (req, res, next) {
+    Order.getDetail(req.params.id, function (err, detail) {
+        if (err) {
+            return next(err);
+        } else {
+            Order.getFormData(function (err, form) {
+                if (err) {
+                    return next(err);
+                }
+                return res.render('pages/order/order-edit', { result: { form: form, detail: detail } });
+            })
+        }
     })
 }
 

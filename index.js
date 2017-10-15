@@ -36,9 +36,9 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/public/views'));
 
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
@@ -51,6 +51,7 @@ app.post('/worktype', worktypeApi.create);
 
 //order routes
 app.get('/order-new', orderApi.new);
+app.get('/order-edit/:id', orderApi.edit);
 app.get('/order/all', orderApi.getAll);
 app.get('/order/detail/:id', orderApi.getDetail);
 
