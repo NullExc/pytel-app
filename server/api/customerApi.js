@@ -71,7 +71,7 @@ module.exports.getNames = function (req, res, next) {
         }
         var names = [];
         for (var i = 0; i < customers.length; i++) {
-            names.push(customers[i].name);
+            names.push(customers[i].lastName);
         }
         return res.json({ names: names });
     })

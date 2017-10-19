@@ -14,11 +14,6 @@ module.exports.calendar = function (req, res, next) {
             console.log('Error loading client secret file: ' + err);
             return next(err);
         }
-
-        //res.send(content);
-        // Authorize a client with the loaded credentials, then call the
-        // Google Calendar API.
-        //authorize(JSON.parse(content), listEvents);
         calendar.authorize(JSON.parse(content), function (authObject) {
             auth = authObject;
             calendar.addEvent(auth, function (result) {

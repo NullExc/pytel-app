@@ -12,6 +12,7 @@
             var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
             var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
             var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
+            
 
             var edit = true;
         </script>
@@ -31,9 +32,9 @@
 
             <div class="row col s12 white-text">
                 <div class="row">
-                    <a id="start-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">build</i>Začatie</a>
-                    <a id="end-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">done</i>Dokončenie</a>
-                    <a id="pickup-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">send</i>Odovzdanie</a>
+                    <a id="start-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">build</i>Začať</a>
+                    <a id="end-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">done</i>Dokončiť</a>
+                    <a id="pickup-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">send</i>Odovzdať</a>
                 </div>
                 <div class="row state-body black-text">
                     <p>Zakazka</p>
@@ -46,7 +47,7 @@
 
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large light-blue darken-4">
-                <i id="create" class="large material-icons">save</i>
+                <i id="update" class="large material-icons">save</i>
             </a>
         </div>
 
@@ -125,14 +126,6 @@
                         $("#price-label").addClass('active');
                     }
                 }
-
-
-
-
-
-                console.log(JSON.stringify(order), JSON.stringify(customer),
-                    JSON.stringify(workType), JSON.stringify(orderType)
-                );
             }
         </script>
 </body>

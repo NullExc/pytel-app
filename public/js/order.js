@@ -3,6 +3,20 @@ import http from '../lib/http.js';
 
 $(document).ready(function () {
 
+    var names = {};
+    var workNames = {};
+    var orderNames = {};
+
+    var selectedCustomer = edit ? customer : null;
+    var selectedWork = edit ? workType : null;
+    var selectedOrder = edit ? orderType : null;
+    var state = STATE.arrived;
+
+    //console.log(JSON.stringify(selectedCustomer), JSON.stringify(selectedWork), JSON.stringify(selectedOrder), state);
+
+    var date = new Date();
+    var utcDate;
+
     $('.timepicker').pickatime({
         default: 'now', // Set default time: 'now', '1:30AM', '16:30'
         fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
@@ -21,7 +35,7 @@ $(document).ready(function () {
         labelMonthPrev: 'Posledný mesiac',
         labelMonthSelect: 'Vybrať mesiac',
         labelYearSelect: 'Vybrať rok',
-        monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Octóber', 'November', 'December'],
+        monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
         weekdaysFull: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
         weekdaysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Stv', 'Pia', 'Sob'],
@@ -32,30 +46,17 @@ $(document).ready(function () {
         format: 'dd/mm/yyyy'
     });
 
-    var date;// = new Date(order.dates.arriveDate);
+    if (edit) {
+        date = new Date(order.arriveDate);
+    } 
+    utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
-    if (order) {
-        date = new Date('2018-10-14T22:05:01Z');
-        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-        console.log('arrive', utcDate.getDate() );
-    } else {
-        date = new Date();
-    }
-    
     $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
         + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
         + '/' + utcDate.getFullYear());
 
     $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
         + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
-
-    var names = {};
-    var workNames = {};
-    var orderNames = {};
-
-    var selectedCustomer = null;
-    var selectedWork = null;
-    var selectedOrder = null;
 
     customers.forEach(function (customer) {
         names[customer.firstName + ' ' + customer.lastName] = null;
@@ -116,7 +117,6 @@ $(document).ready(function () {
             if (selectedCustomer.billData) {
 
                 if (selectedCustomer.billData.ICO) {
-                    console.log('ICO', selectedCustomer.billData.ICO);
                     $("#ico").val(selectedCustomer.billData.ICO);
                     $("#ico-label").addClass('active');
                 } else $("#ico").val(' ');
@@ -146,9 +146,7 @@ $(document).ready(function () {
                 break;
             }
         }
-
         fillCustomerData();
-
         $('#select-customer').collapsible('close', 0);
     })
 
@@ -195,13 +193,12 @@ $(document).ready(function () {
             }
 
             $("#customer-search").val(null);
-
             fillCustomerData();
         },
         minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
     });
 
-    $('#create').click(function () {
+    $('#create, #update').click(function () {
         var order = {};
 
         order.description = $("#description").val();
@@ -244,7 +241,7 @@ $(document).ready(function () {
         if (selectedOrder) order.orderType = selectedOrder._id;
         if (selectedWork) order.workType = selectedWork._id;
 
-        order.state = STATE.arrived;
+        order.state = state;
 
         var options = {
             method: 'post',
@@ -253,7 +250,6 @@ $(document).ready(function () {
                 order: order
             }
         }
-
         http.request(options, (err, response) => {
             if (err) console.log(err);
             else if (response) console.log(JSON.stringify(response.data));

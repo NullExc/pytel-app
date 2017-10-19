@@ -1,6 +1,8 @@
+import http from '../lib/http.js';
+
 $(document).ready(function () {
 
-    
+
     var orders = document.getElementsByClassName('collapsible-body');
     var allInfo = document.getElementById('all-info');
 
@@ -29,14 +31,19 @@ $(document).ready(function () {
 
     $('.modal').modal();
 
-    $.ajax({
+    var options = {
         url: '/customer/names',
-        type: 'GET',
-        success: function (result) {
-            console.log(result);
+        method: 'get'
+    }
 
+    http.request(options, (err, response) => {
+        if (response && response.data) {
+            var names = {};
+            response.data.names.forEach(function (name) {
+                names[name] = null;
+            })
             $('input.autocomplete').autocomplete({
-                data: result,
+                data: names,
                 limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
                 onAutocomplete: function (val) {
                     console.log(val);
@@ -44,5 +51,5 @@ $(document).ready(function () {
                 minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
             });
         }
-    });
+    })
 })

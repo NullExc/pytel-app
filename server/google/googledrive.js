@@ -16,7 +16,7 @@ var TOKEN_PATH = TOKEN_DIR + 'drive-nodejs-quickstart.json';
 var GOOGLE_PICKER_API_KEY = 'AIzaSyAQAFRvXXwF69_9cOg8hcPMYmbDZTgg3_I';
 
 // Load client secrets from a local file.
-fs.readFile('././config/client_secret_GD.json', function processClientSecrets(err, content) {
+/*fs.readFile('././config/client_secret_GD.json', function processClientSecrets(err, content) {
     if (err) {
         console.log('Error loading client secret file: ' + err);
         return;
@@ -24,7 +24,7 @@ fs.readFile('././config/client_secret_GD.json', function processClientSecrets(er
     // Authorize a client with the loaded credentials, then call the
     // Drive API.
     authorize(JSON.parse(content), listFiles);
-});
+});*/
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the

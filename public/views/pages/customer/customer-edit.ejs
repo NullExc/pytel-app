@@ -45,62 +45,44 @@
 
                 if (customer.contact) {
                     if (customer.contact.email) {
-                        var email = document.getElementById('email');
-                        var emailLabel = document.getElementById('email-label');
-                        emailLabel.className = "active";
-                        email.value = customer.contact.email;
+                        $('#email-label').addClass('active');
+                        $('#email').val(customer.contact.email);
                     }
                     if (customer.contact.phone) {
-                        var phone = document.getElementById('phone');
-                        var phoneLabel = document.getElementById('phone-label');
-                        phoneLabel.className = "active";
-                        phone.value = customer.contact.phone;
+                        $('#phone-label').addClass('active');
+                        $('#phone').val(customer.contact.phone);
                     }
                 }
                 if (customer.address) {
                     if (customer.address.street) {
-                        var street = document.getElementById('street');
-                        var streetLabel = document.getElementById('street-label');
-                        streetLabel.className = "active";
-                        street.value = customer.address.street;
+                        $('#street-label').addClass('active');
+                        $('#street').val(customer.address.street);
                     }
                     if (customer.address.streetNumber) {
-                        var streetNumber = document.getElementById('num');
-                        var numLabel = document.getElementById('num-label');
-                        numLabel.className = "active";
-                        streetNumber.value = customer.address.streetNumber;
+                        $('#num-label').addClass('active');
+                        $('#num').val(customer.address.streetNumber);
                     }
                     if (customer.address.city) {
-                        var city = document.getElementById('city');
-                        var cityLabel = document.getElementById('city-label');
-                        cityLabel.className = "active";
-                        city.value = customer.address.city;
+                        $('#city-label').addClass('active');
+                        $('#city').val(customer.address.city);
                     }
                     if (customer.address.zipCode) {
-                        var zip = document.getElementById('zip');
-                        var zipLabel = document.getElementById('zip-label');
-                        zipLabel.className = "active";
-                        zip.value = customer.address.zipCode;
+                        $('#zip-label').addClass('active');
+                        $('#zip').val(customer.address.zipCode);
                     }
                 }
                 if (customer.billData) {
                     if (customer.billData.ICO) {
-                        var ico = document.getElementById('ico');
-                        var icoLabel = document.getElementById('ico-label');
-                        icoLabel.className = "active";
-                        ico.value = customer.billData.ICO;
+                        $('#ico-label').addClass('active');
+                        $('#ico').val(customer.billData.ICO);
                     }
                     if (customer.billData.ICDPH) {
-                        var icdph = document.getElementById('icdph');
-                        var icdphLabel = document.getElementById('icdph-label');
-                        icdphLabel.className = "active";
-                        icdph.value = customer.billData.ICDPH;
+                        $('#icdph-label').addClass('active');
+                        $('#icdph').val(customer.billData.ICDPH);
                     }
                     if (customer.billData.DIC) {
-                        var dic = document.getElementById('dic');
-                        var dicLabel = document.getElementById('dic-label');
-                        dicLabel.className = "active";
-                        dic.value = customer.billData.DIC;
+                        $('#dic-label').addClass('active');
+                        $('#dic').val(customer.billData.DIC);
                     }
                 }
             }

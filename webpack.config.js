@@ -19,6 +19,7 @@ module.exports = {
         publicPath: './',
         filename: '[name].js'
     },
+    watch: true,
     plugins: [
         new CleanWebpackPlugin(pathsToClean)
     ]
