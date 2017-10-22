@@ -3,16 +3,18 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-        <script type="text/javascript">
-            var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
-            var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
-            var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+    <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/file-picker.css" />
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript">
+        var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+        var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+        var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
 
-            var edit = false;
-        </script>
-        <script type="text/javascript" src="/dist/order.js"></script>
-        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
-        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+        var edit = false;
+    </script>
+    <script type="text/javascript" src="/dist/order.js"></script>
 </head>
 
 <body>
@@ -21,15 +23,21 @@
         <div class="row col s12 light-blue darken-4 white-text header-layer">
             <h5 style="margin-left: 10px;">Vytvoriť zákazku</h5>
         </div>
-        
+
+        <div class="row">
+            <a id="load-photo" class="waves-effect waves-light btn light-blue darken-4">
+                <i class="material-icons left">add_a_photo</i>nahrať
+            </a>
+        </div>
+
         <% include ./order-input.ejs %>
 
 
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large light-blue darken-4">
-            <i id="create" class="large material-icons">save</i>
-        </a>
-        </div>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large light-blue darken-4">
+                    <i id="create" class="large material-icons">save</i>
+                </a>
+            </div>
 </body>
 
 </html>

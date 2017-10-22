@@ -1,5 +1,8 @@
 import STATE from './state.js';
 import http from '../lib/http.js';
+import googleAuth from '../lib/google-auth';
+import calendar from '../lib/calendar.js';
+import picker from '../lib/picker.js';
 
 $(document).ready(function () {
 
@@ -199,6 +202,12 @@ $(document).ready(function () {
     });
 
     $('#create, #update').click(function () {
+
+        googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+            console.log(typeof GoogleApi);
+            calendar.setGoogleApi(GoogleApi);
+            calendar.listUpcomingEvents();
+        }); 
         var order = {};
 
         order.description = $("#description").val();
@@ -254,5 +263,16 @@ $(document).ready(function () {
             if (err) console.log(err);
             else if (response) console.log(JSON.stringify(response.data));
         })
+    })
+
+    $('#load-photo').click(function () {
+        console.log('loading picker');
+        googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+            console.log('picker ready to open', GoogleApi, TOKEN);
+            if (GoogleApi && TOKEN) {
+                picker.setGoogleApi(GoogleApi, TOKEN);
+                picker.loadPicker();
+            }
+        }); 
     })
 })

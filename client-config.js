@@ -8,6 +8,7 @@ module.exports = {
         'customers',
         'order-state',
         'order',
-        'state'
+        'state',
+        'settings'
     ]
 }
