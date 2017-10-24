@@ -80,6 +80,25 @@ module.exports.edit = function (req, res, next) {
     })
 }
 
+module.exports.update = function (req, res, next) {
+    Order.findById(req.params.id, function (err, order) {
+        if (err) {
+            return next(err);
+        }
+        if (!order) {
+            return res.status(404).json({
+                message: 'not found'
+            })
+        }
+        order.update(req.body, function (err, updated) {
+            if (err) {
+                return next(err);
+            }
+            return res.json(order);
+        })
+    })
+}
+
 module.exports.getDetail = function (req, res, next) {
     Order.getDetail(req.params.id, function (err, result) {
         if (err) {

@@ -20,6 +20,8 @@ $(document).ready(function () {
     var date = new Date();
     var utcDate;
 
+    $('.modal').modal();
+
     $('.timepicker').pickatime({
         default: 'now', // Set default time: 'now', '1:30AM', '16:30'
         fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
@@ -48,6 +50,10 @@ $(document).ready(function () {
         close: 'Zavrieť',
         format: 'dd/mm/yyyy'
     });
+
+    if (order && order.photoUrl) {
+        $('#photo-pic').attr('src', order.photoUrl);
+    }
 
     if (edit) {
         date = new Date(order.arriveDate);
@@ -201,7 +207,7 @@ $(document).ready(function () {
         minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
     });
 
-    $('#create, #update').click(function () {
+    $('#create, #update').click(function (e) {
 
         googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
             console.log(typeof GoogleApi);
@@ -251,14 +257,21 @@ $(document).ready(function () {
         if (selectedWork) order.workType = selectedWork._id;
 
         order.state = state;
+        order.photoUrl = picker.getPhotoUrl();
+
+        console.log('creating order with ', order.photoUrl);
+
 
         var options = {
-            method: 'post',
             url: '/order',
             data: {
-                order: order
+                order
             }
         }
+
+        if (e.target.id === 'create') options.method = 'post';
+        else options.method = 'put';
+
         http.request(options, (err, response) => {
             if (err) console.log(err);
             else if (response) console.log(JSON.stringify(response.data));

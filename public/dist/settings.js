@@ -65,7 +65,81 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 29:
+/***/ 30:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(8);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function listUpcomingEvents() {
+    GoogleApi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+    }).then(function (response) {
+        var events = response.result.items;
+
+        if (events.length > 0) {
+            for (var i = 0; i < events.length; i++) {
+                var event = events[i];
+                var when = event.start.dateTime;
+                if (!when) {
+                    when = event.start.date;
+                }
+                console.log(event.summary + ' (' + when + ')');
+            }
+        } else {
+            console.log('No upcoming events found.');
+        }
+    });
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(8);
+
+
+
+//$(document).ready(function(){
+
+    function startSignProcess() {
+        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function(GoogleApi) {
+            
+        });
+        console.log('in start sign process', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].GoogleApi);
+    }
+
+    startSignProcess();
+    //Code here
+// });
+
+
+
+
+
+
+/***/ }),
+
+/***/ 8:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -146,80 +220,6 @@ function handleSignoutClick(event) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
-
-/***/ }),
-
-/***/ 30:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(29);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function listUpcomingEvents() {
-    GoogleApi.client.calendar.events.list({
-        'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
-        'showDeleted': false,
-        'singleEvents': true,
-        'maxResults': 10,
-        'orderBy': 'startTime'
-    }).then(function (response) {
-        var events = response.result.items;
-
-        if (events.length > 0) {
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
-                var when = event.start.dateTime;
-                if (!when) {
-                    when = event.start.date;
-                }
-                console.log(event.summary + ' (' + when + ')');
-            }
-        } else {
-            console.log('No upcoming events found.');
-        }
-    });
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
-
-/***/ }),
-
-/***/ 39:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(29);
-
-
-
-//$(document).ready(function(){
-
-    function startSignProcess() {
-        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function(GoogleApi) {
-            
-        });
-        console.log('in start sign process', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].GoogleApi);
-    }
-
-    startSignProcess();
-    //Code here
-// });
-
-
-
-
-
 
 /***/ })
 

@@ -13,7 +13,7 @@
             var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
             var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
             var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
-            
+        
 
             var edit = true;
         </script>
@@ -28,7 +28,8 @@
     <% include ../../partials/nav-in.ejs %>
         <div class="row">
             <div class="row col s12 light-blue darken-4 white-text header-layer">
-                <h5 style="margin-left: 10px;">Upraviť zákazku</h5>
+                <h5 class="col s3" style="margin-left: 10px;">Upraviť zákazku</h5>
+                <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal"><i class="material-icons left">photo_camera</i>fotka</a>
             </div>
 
             <div class="row col s12 white-text">
@@ -43,6 +44,7 @@
             </div>
 
             <% include ./order-input.ejs %>
+            
         </div>
 
 

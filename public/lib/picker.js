@@ -2,7 +2,9 @@ import googleAuth from './google-auth.js';
 
 var GoogleApi;
 var TOKEN;
+var photoUrl;
 var pickerApiLoaded = false;
+
 
 function setGoogleApi(api, token) {
     GoogleApi = api;
@@ -42,8 +44,12 @@ function createPicker() {
 function pickerCallback(data) {
     if (data.action == google.picker.Action.PICKED) {
         var fileId = data.docs[0].id;
-        alert('The user selected: ' + fileId);
+        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
     }
 }
 
-export default { setGoogleApi, loadPicker, createPicker }
+function getPhotoUrl() {
+    return photoUrl;
+}
+
+export default { setGoogleApi, loadPicker, createPicker, getPhotoUrl }

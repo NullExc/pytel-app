@@ -7,6 +7,9 @@ var OrderSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    photoUrl: {
+        type: String
+    },
     workType: {
         type: mongoose.Schema.Types.ObjectId
     },

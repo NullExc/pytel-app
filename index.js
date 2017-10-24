@@ -56,6 +56,7 @@ app.get('/order/all', orderApi.getAll);
 app.get('/order/detail/:id', orderApi.getDetail);
 
 app.post('/order', orderApi.create);
+app.put('/order/:id', orderApi.update);
 app.get('/order/:id', orderApi.get);
 
 app.get('/calendar', orderApi.calendar);
