@@ -8,7 +8,10 @@ var readline = require('readline');
 
 var auth;
 
-module.exports.calendar = function (req, res, next) {
+module.exports = {
+
+
+calendar(req, res) {
     fs.readFile('config/client_secret.json', function processClientSecrets(err, content) {
         if (err) {
             console.log('Error loading client secret file: ' + err);
@@ -20,52 +23,68 @@ module.exports.calendar = function (req, res, next) {
                 res.send(result);
             });
         })
-    });
-
-}
-
-module.exports.new = function (req, res, next) {
-
-    Order.getFormData(function (err, form) {
-        if (err) {
-            return next(err);
-        }
-        res.render('pages/order/order-new', { result: {form: form} });
     })
-}
+},
 
-module.exports.create = function (req, res, next) {
+new(req, res) {
+    Order.getFormData() 
+        .then(form => {
+            return res.render('pages/order/order-new', { result: {form: form} });
+        })
+        .catch(err => {
+            return next(err);
+        })
+},
 
+create(req, res) {
     var order = req.body.order;
 
-    Order.create(order, function (err, order) {
-        if (err) {
+    Order.create(order)
+        .then(next => {
+            return res.send({ message: 'order created' });
+        })
+        .catch(err => {
             return next(err);
-        } else {
-            res.send({ message: 'order created' });
-        }
-    })
-}
+        })
+},
 
-module.exports.get = function (req, res, next) {
-    Order.findById(req.params.id, function (err, order) {
-        if (err) {
+get(req, res) {
+    Order.findById(req.params.id) 
+        .then(order => {
+            return res.render('pages/order/order', { order: order });
+        })
+        .catch(err => {
             return next(err);
-        }
-        return res.render('pages/order/order', { order: order });
-    })
-}
+        })
+},
 
-module.exports.getAll = function (req, res, next) {
-    Order.find({}, function (err, orders) {
-        if (err) {
+getAll(req, res) {
+    Order.find({})
+        .then(orders => {
+            return res.render('pages/order/orders', { orders: orders });
+        })
+        .catch(err => {
             return next(err);
-        }
-        return res.render('pages/order/orders', { orders: orders });
-    })
-}
+        })
+},
 
-module.exports.edit = function (req, res, next) {
+edit(req,res) {
+    Order.getDetail(req.params.id)
+        .then(detail => {
+            return Order.getFormData()
+                    .then(form => {
+                        return res.render('pages/order/order-edit', { result: { form: form, detail: detail } });
+                    })
+                    .catch(err => {
+                        return next(err);
+                    })
+        })
+        .catch(err => {
+            return next(err);
+        })
+},
+
+/*edit(req, res) {
     Order.getDetail(req.params.id, function (err, detail) {
         if (err) {
             return next(err);
@@ -78,32 +97,33 @@ module.exports.edit = function (req, res, next) {
             })
         }
     })
-}
+},*/
 
-module.exports.update = function (req, res, next) {
-    Order.findById(req.params.id, function (err, order) {
-        if (err) {
-            return next(err);
-        }
-        if (!order) {
-            return res.status(404).json({
-                message: 'not found'
-            })
-        }
-        order.update(req.body, function (err, updated) {
-            if (err) {
-                return next(err);
+update(req, res) {
+    Order.findById(req.params.id)
+        .then(order => {
+            if (!order) {
+                return res.status(404).json({
+                    message: 'not found'
+                })
             }
-            return res.json(order);
+            order.update(req.body) 
+                .then(updated => {
+                    return res.json(order);
+                })
         })
-    })
-}
-
-module.exports.getDetail = function (req, res, next) {
-    Order.getDetail(req.params.id, function (err, result) {
-        if (err) {
+        .catch(err => {
             return next(err);
-        }
-        res.send(result);
-    })
+        })
+},
+
+getDetail(req, res) {
+    Order.getDetail(req.params.id)
+        .then(result => {
+            return res.send(result);
+        }) 
+        .catch(err => {
+            return next(err);
+        })
 }
+};
