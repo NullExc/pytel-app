@@ -36,6 +36,12 @@ new(req, res, next) {
 create(req, res, next) {
     var order = req.body.order;
 
+    // Remove escapes (quotas) from JSON string
+    var escapeJSON = function(str) {
+        return str.replace(/\"/g,'\\\"');
+    };
+    order.description = escapeJSON(order.description); // Removes quotas from description
+
     Order.create(order)
         .then(next => {
             return res.send({ message: 'order created' });
