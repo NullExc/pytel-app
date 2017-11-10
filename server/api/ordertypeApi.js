@@ -5,9 +5,11 @@ module.exports = {
 create(req, res, next) {
     var orderType = req.body.ordertype;
 
+    console.log(orderType);
+
     OrderType.create(orderType)
         .then(orderType => {
-            return res.send({message: 'work type created'});
+            return res.send({message: 'order type created'});
         }) 
         .catch(err => {
             return next(err);
@@ -33,7 +35,7 @@ getAll(req, res, next) {
 },
 
 edit(req, res, next) {
-    OrderType.update({id: req.params.id}, {name: req.body.ordertype}, false, false)
+    OrderType.update({id: req.params.id}, {name: req.body.ordertype.name}, false, false)
         .then(workType => {
             res.send(200, {message: 'Work Type updated successfully'});
         })

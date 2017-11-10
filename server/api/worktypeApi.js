@@ -3,7 +3,6 @@ var WorkType = require('../models/WorkType');
 module.exports = {
 
 create(req, res, next) {
-
     var workType = req.body.worktype;
 
     console.log(workType);
@@ -36,7 +35,7 @@ getAll(req, res, next) {
 },
 
 edit(req, res, next) {
-    WorkType.update({id: req.params.id}, {name: req.body.worktype}, false, false)
+    WorkType.update({id: req.params.id}, {name: req.body.worktype.name}, false, false)
         .then(workType => {
             res.send(200, {message: 'Work Type updated successfully'});
         })
