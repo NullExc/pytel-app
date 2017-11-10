@@ -30,5 +30,15 @@ getAll(req, res, next) {
         }
         res.send({orderTypes: orderTypes});
     })
+},
+
+edit(req, res, next) {
+    OrderType.update({id: req.params.id}, {name: req.body.ordertype}, false, false)
+        .then(workType => {
+            res.send(200, {message: 'Work Type updated successfully'});
+        })
+        .catch(err => {
+            return next(err);
+        })
 }
 }

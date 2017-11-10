@@ -12,7 +12,7 @@ create(req, res, next) {
         if (err) {
             return next(err);
         }
-        res.send({message: 'work type created'});
+        res.send(200, {message: 'work type created'});
     })
 },
 
@@ -25,7 +25,7 @@ get(req, res, next) {
     })
 },
 
-getAll (req, res, next) {
+getAll(req, res, next) {
     
     WorkType.find( {}, function (err, workTypes) {
         if (err) {
@@ -35,9 +35,13 @@ getAll (req, res, next) {
     })
 },
 
-// edit(req, res) {
-//     WorkType.update({})
-//         .then()
-//         .catch()
-// }
+edit(req, res, next) {
+    WorkType.update({id: req.params.id}, {name: req.body.worktype}, false, false)
+        .then(workType => {
+            res.send(200, {message: 'Work Type updated successfully'});
+        })
+        .catch(err => {
+            return next(err);
+        })
+}
 }
