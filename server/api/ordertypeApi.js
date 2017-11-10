@@ -2,7 +2,7 @@ var OrderType = require('../models/OrderType');
 
 module.exports = {
     
-create(req, res) {
+create(req, res, next) {
     var orderType = req.body.ordertype;
 
     OrderType.create(orderType)
@@ -14,23 +14,21 @@ create(req, res) {
         })
 },
 
-get(req, res) {
-    OrderType.findById(req.params.id)
-        .then(orderType => {
-            return res.send({orderType: orderType});
-        })
-        .catch(err => {
+get(req, res, next) {
+    OrderType.findById(req.params.id, function (err, orderType) {
+        if (err) {
             return next(err);
-        })
+        }
+        res.send({orderType: orderType});
+    })
 },
 
-getAll(req, res) {    
-    OrderType.find({})
-        .then(orderTypes => {
-            return res.send({orderTypes: orderTypes});
-        })
-        .catch(err => {
+getAll(req, res, next) {    
+    OrderType.find( {}, function (err, orderTypes) {
+        if (err) {
             return next(err);
-        })
+        }
+        res.send({orderTypes: orderTypes});
+    })
 }
 }

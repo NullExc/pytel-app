@@ -1,6 +1,8 @@
 var WorkType = require('../models/WorkType');
 
-module.exports.create = function (req, res, next) {
+module.exports = {
+
+create(req, res, next) {
 
     var workType = req.body.worktype;
 
@@ -12,18 +14,18 @@ module.exports.create = function (req, res, next) {
         }
         res.send({message: 'work type created'});
     })
-}
+},
 
-module.exports.get = function (req, res, next) {
+get(req, res, next) {
     WorkType.findById(req.params.id, function (err, workType) {
         if (err) {
             return next(err);
         }
         res.send({workType: workType});
     })
-}
+},
 
-module.exports.getAll = function (req, res, next) {
+getAll (req, res, next) {
     
     WorkType.find( {}, function (err, workTypes) {
         if (err) {
@@ -31,4 +33,11 @@ module.exports.getAll = function (req, res, next) {
         }
         res.send({workTypes: workTypes});
     })
+},
+
+// edit(req, res) {
+//     WorkType.update({})
+//         .then()
+//         .catch()
+// }
 }
