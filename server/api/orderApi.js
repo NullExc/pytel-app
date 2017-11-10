@@ -65,23 +65,7 @@ getAll(req, res, next) {
         })
 },
 
-edit(req,res) {
-    Order.getDetail(req.params.id)
-        .then(detail => {
-            return Order.getFormData()
-                    .then(form => {
-                        return res.render('pages/order/order-edit', { result: { form: form, detail: detail } });
-                    })
-                    .catch(err => {
-                        return next(err);
-                    })
-        })
-        .catch(err => {
-            return next(err);
-        })
-},
-
-/*edit(req, res, next) {
+edit(req, res, next) {
     Order.getDetail(req.params.id, function (err, detail) {
         if (err) {
             return next(err);
@@ -94,7 +78,7 @@ edit(req,res) {
             })
         }
     })
-},*/
+},
 
 update(req, res, next) {
     Order.findById(req.params.id)
