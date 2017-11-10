@@ -35,7 +35,7 @@ getAll(req, res, next) {
 },
 
 edit(req, res, next) {
-    OrderType.update({id: req.params.id}, {name: req.body.ordertype.name}, false, false)
+    OrderType.update({id: req.params.id}, {name: req.body.name}, false, false)
         .then(workType => {
             res.send(200, {message: 'Work Type updated successfully'});
         })

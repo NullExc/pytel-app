@@ -8,6 +8,7 @@ var userApi = require('./server/api/userApi');
 var customerApi = require('./server/api/customerApi');
 var settingsApi = require('./server/api/settingsApi');
 var orderApi = require('./server/api/orderApi');
+var ordertypeApi = require('./server/api/ordertypeApi');
 var worktypeApi = require('./server/api/worktypeApi');
 var googleDriveApi = require('./server/google/googledrive');
 
@@ -47,7 +48,13 @@ app.get('/', function (req, res) {
 
 //work type routes
 app.get('/worktype', worktypeApi.getAll);
-app.post('/worktype', worktypeApi.create);
+app.post('/worktype-new', worktypeApi.create);
+app.post('/worktype/:id', worktypeApi.edit);
+
+//order types routes
+app.get('/ordertype', ordertypeApi.getAll);
+app.post('/ordertype-new', ordertypeApi.create);
+app.post('/ordertype-edit/:id', ordertypeApi.edit);
 
 //order routes
 app.get('/order-new', orderApi.new);

@@ -26,7 +26,7 @@ get(req, res, next) {
 
 getAll(req, res, next) {
     
-    WorkType.find( {}, function (err, workTypes) {
+    WorkType.find({}, function (err, workTypes) {
         if (err) {
             return next(err);
         }
@@ -35,7 +35,7 @@ getAll(req, res, next) {
 },
 
 edit(req, res, next) {
-    WorkType.update({id: req.params.id}, {name: req.body.worktype.name}, false, false)
+    WorkType.update({id: req.params.id}, {name: req.body.name}, false, false)
         .then(workType => {
             res.send(200, {message: 'Work Type updated successfully'});
         })
