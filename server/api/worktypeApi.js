@@ -34,6 +34,27 @@ getAll(req, res, next) {
     })
 },
 
+/**
+   * @api {post} /worktype/:id Edit worktype
+   * @apiName edit
+   * @apiGroup WorkType
+   * @apiVersion 0.1.0
+   * @apiPermission admin
+   * @apiSampleRequest /worktype/59d2af4f040f8f1efc5af296
+   *
+   * @apiSuccess {String} firstName First / given name.
+   * @apiSuccess {String} lastName  Last / family name.
+   * @apiSuccess {String} email     E-mail address.
+   * @apiSuccess {String} createdAt Date of registration.
+   * @apiSuccess {String} updatedAt Last profile update.
+   * @apiSuccess {String} id        User's identifier.
+   *
+   * @apiSuccessExample Success 200 
+   *     HTTP/1.1 200 OK
+   *     {
+   *        "message": "Work Type updated successfully"
+   *     }
+   */
 edit(req, res, next) {
     WorkType.update({id: req.params.id}, {name: req.body.name}, false, false)
         .then(workType => {
