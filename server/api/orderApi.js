@@ -9,8 +9,6 @@ var readline = require('readline');
 var auth;
 
 module.exports = {
-
-
 calendar(req, res) {
     fs.readFile('config/client_secret.json', function processClientSecrets(err, content) {
         if (err) {
@@ -27,13 +25,12 @@ calendar(req, res) {
 },
 
 new(req, res) {
-    Order.getFormData() 
-        .then(form => {
+    Order.getFormData(function(err, form) {
+        if (!err)
             return res.render('pages/order/order-new', { result: {form: form} });
-        })
-        .catch(err => {
+        else
             return next(err);
-        })
+    })
 },
 
 create(req, res) {

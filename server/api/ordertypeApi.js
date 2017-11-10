@@ -1,32 +1,36 @@
 var OrderType = require('../models/OrderType');
 
-module.exports.create = function (req, res, next) {
-
+module.exports = {
+    
+create(req, res) {
     var orderType = req.body.ordertype;
 
-    OrderType.create( orderType, function (err, orderType) {
-        if (err) {
+    OrderType.create(orderType)
+        .then(orderType => {
+            return res.send({message: 'work type created'});
+        }) 
+        .catch(err => {
             return next(err);
-        }
-        res.send({message: 'work type created'});
-    })
-}
+        })
+},
 
-module.exports.get = function (req, res, next) {
-    OrderType.findById(req.params.id, function (err, orderType) {
-        if (err) {
+get(req, res) {
+    OrderType.findById(req.params.id)
+        .then(orderType => {
+            return res.send({orderType: orderType});
+        })
+        .catch(err => {
             return next(err);
-        }
-        res.send({orderType: orderType});
-    })
-}
+        })
+},
 
-module.exports.getAll = function (req, res, next) {
-    
-    OrderType.find( {}, function (err, orderTypes) {
-        if (err) {
+getAll(req, res) {    
+    OrderType.find({})
+        .then(orderTypes => {
+            return res.send({orderTypes: orderTypes});
+        })
+        .catch(err => {
             return next(err);
-        }
-        res.send({orderTypes: orderTypes});
-    })
+        })
+}
 }
