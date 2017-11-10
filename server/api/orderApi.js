@@ -105,12 +105,10 @@ update(req, res, next) {
 },
 
 getDetail(req, res, next) {
-    Order.getDetail(req.params.id)
-        .then(result => {
-            return res.send(result);
-        }) 
-        .catch(err => {
-            return next(err);
-        })
+    Order.getDetail(req.params.id, function (err, result) {
+        if (err) return next(err);
+
+        return res.send(result);        
+    })
 }
 };
