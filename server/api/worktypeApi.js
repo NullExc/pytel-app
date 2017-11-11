@@ -56,9 +56,9 @@ getAll(req, res, next) {
    *     }
    */
 edit(req, res, next) {
-    WorkType.update({id: req.params.id}, {name: req.body.name}, false, false)
+    WorkType.update({_id: req.params.id}, {name: req.body.name}, { multi: false, upsert: false })
         .then(workType => {
-            res.send(200, {message: 'Work Type updated successfully'});
+            res.status(200,).send({message: 'Work Type updated successfully to ' + req.body.name});
         })
         .catch(err => {
             return next(err);
