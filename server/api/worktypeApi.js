@@ -49,8 +49,8 @@ getAll(req, res, next) {
    * @apiSuccess {String} updatedAt Last profile update.
    * @apiSuccess {String} id        User's identifier.
    *
-   * @apiSuccessExample Success 200 
-   *     HTTP/1.1 200 OK
+   * @apiSuccessExample Success 202 
+   *     HTTP/1.1 202 Accepted
    *     {
    *        "message": "Work Type updated successfully"
    *     }
@@ -58,7 +58,7 @@ getAll(req, res, next) {
 edit(req, res, next) {
     WorkType.update({_id: req.params.id}, {name: req.body.name}, { multi: false, upsert: false })
         .then(workType => {
-            res.status(200,).send({message: 'Work Type updated successfully to ' + req.body.name});
+            res.status(202).send({message: 'Work Type updated successfully to ' + req.body.name});
         })
         .catch(err => {
             return next(err);
