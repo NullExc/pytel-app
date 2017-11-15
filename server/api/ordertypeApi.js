@@ -31,6 +31,7 @@ getAll(req, res, next) {
             return next(err);
         }
         res.send({orderTypes: orderTypes});
+        return res.render('pages/settings/settings', {orderTypes: orderTypes});
     })
 },
 

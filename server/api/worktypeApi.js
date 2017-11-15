@@ -30,7 +30,8 @@ getAll(req, res, next) {
         if (err) {
             return next(err);
         }
-        res.send({workTypes: workTypes});
+        //res.send({workTypes: workTypes});
+        return res.render('pages/settings/settings', {workTypes: workTypes});
     })
 },
 

@@ -1,33 +1,45 @@
-<!--<head>
+<head>
     <% include ../../partials/header.ejs %>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript">      
+            var workTypes = JSON.parse('<%- JSON.stringify(workTypes) %>');
+            var edit = true;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-state.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
 </head>
 
 <body>
 
     <% include ../../partials/nav-in.ejs %>
-
-
-
-        <div class="row col s12 light-blue darken-4 white-text header-layer">
-            <h5 style="margin-left: 10px;">Nastavenia</h5>
+           <div class="row col s12 light-blue darken-4 white-text header-layer">
+            <h5 style="margin-left: 10px;">Nastavenia aplikácie</h5>
         </div>
 
-        <button id="authorize-button" style="display: none;">Authorize</button>
-        <button id="signout-button" style="display: none;">Sign Out</button>
+        <button id="authorize-button" style="display: none; margin: 10px;">Autorizovať</button>
+        <button id="signout-button" style="display: none; margin: 10px;">Odhlásiť sa</button>
 
         <div id="content">
-
+            <div id="list-container">
+                <ul id="list" class="collection" style="margin-top: 0px;">
+                    <% workTypes.forEach(function(workTypes) { %>
+                        <a href="/worktype/<%= workType._id %>" class="customer-item collection-item avatar black-text">
+                            <p class="title">
+                                <%= orderTypes.type %>
+                            </p>
+                        </a>
+                        <% }); %>
+                </ul>
+            </div>
         </div>
-
-        <img width="100" height="100" src="https://drive.google.com/file/d/0B3n_3IociMc4b3UwWUdId2NWTlk/view">
-        
+       
 
         <script src="https://apis.google.com/js/api.js"></script>
-        <script src="/dist/settings.js"></script>
 </body>
 
-</html>-->
-
+</html>
+<!--
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -111,8 +123,11 @@
   </head>
   <body>
     <div id="result"></div>
-
+  -->
     <!-- The Google API Loader script. -->
-    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
-  </body>
+    <!--<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
+    
+    </body>
 </html>
+    -->
+  
