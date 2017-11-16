@@ -7,6 +7,8 @@ module.exports = {
         'customer',
         'customers',
         'order-state',
+        'order-crud',
+        'order-edit',
         'order',
         'state',
         'settings'

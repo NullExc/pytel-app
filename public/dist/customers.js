@@ -60,17 +60,17 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 34);
+/******/ 	return __webpack_require__(__webpack_require__.s = 154);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 34:
+/***/ 154:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_ejs__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_ejs__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_ejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_ejs__);
 
 
@@ -86,40 +86,35 @@ $(document).ready(function () {
         location.href = '/customer-new';
     });
 
-    $('#order-name').change(function () {
-
-        var div = document.getElementById('list-container');
-
-        var ejsTest;
+    $('#sort-select').change(function () {
 
         if ($(this).val() === '1') {
 
-            ejsTest = __WEBPACK_IMPORTED_MODULE_0__lib_ejs___default.a.compile('<% var temp = customers; \
-            customers =[]; \
-            customers = temp.sort(function(a,b) {return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0);} ); %>');
+            location.href = "/customer/all?sort=ascending";
+
         } else if ($(this).val() === '2') {
-            ejsTest = __WEBPACK_IMPORTED_MODULE_0__lib_ejs___default.a.compile('<% var temp = customers; \
-            customers =[]; \
-            customers = temp.sort(function(a,b) {return (a.lastName > b.lastName) ? -1 : ((b.lastName > a.lastName) ? 1 : 0);} ); %>');
+
+            location.href = "/customer/all?sort=descending";
         }
+    })
 
-        ejsTest({});
+    $('#order-select').change(function () {
 
-        var output = __WEBPACK_IMPORTED_MODULE_0__lib_ejs___default.a.compile('<ul id="list" class="collection" style="margin-top: 0px;"> \
-                                    <% customers.forEach(function(customer) { %> \
-                                        <a href="/customer/<%= customer._id %>" class="customer-item collection-item avatar black-text"> \
-                                            <p class="title"><%= customer.firstName + " " + customer.lastName %></p> \
-                                            <span><%= customer.contact.email %></span> \
-                                            <br><span><%= customer.address %></span> \
-                                        </a><% }); %> \
-                                </ul>');
-        div.innerHTML = output();
+        if ($(this).val() === '1') {
+            location.href = "/customer/all?sort=ascending&order=all";
+        } else if ($(this).val() === '2') {
+            location.href = "/customer/all?sort=descending&order=arrived";
+        } else if ($(this).val() === '3') {
+            location.href = "/customer/all?sort=descending&order=working";
+        } else if ($(this).val() === '4') {
+            location.href = "/customer/all?sort=descending&order=done";
+        } 
     })
 })
 
 /***/ }),
 
-/***/ 35:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ejs = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){

@@ -12,33 +12,28 @@ $(document).ready(function () {
         location.href = '/customer-new';
     });
 
-    $('#order-name').change(function () {
-
-        var div = document.getElementById('list-container');
-
-        var ejsTest;
+    $('#sort-select').change(function () {
 
         if ($(this).val() === '1') {
 
-            ejsTest = ejs.compile('<% var temp = customers; \
-            customers =[]; \
-            customers = temp.sort(function(a,b) {return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0);} ); %>');
+            location.href = "/customer/all?sort=ascending";
+
         } else if ($(this).val() === '2') {
-            ejsTest = ejs.compile('<% var temp = customers; \
-            customers =[]; \
-            customers = temp.sort(function(a,b) {return (a.lastName > b.lastName) ? -1 : ((b.lastName > a.lastName) ? 1 : 0);} ); %>');
+
+            location.href = "/customer/all?sort=descending";
         }
+    })
 
-        ejsTest({});
+    $('#order-select').change(function () {
 
-        var output = ejs.compile('<ul id="list" class="collection" style="margin-top: 0px;"> \
-                                    <% customers.forEach(function(customer) { %> \
-                                        <a href="/customer/<%= customer._id %>" class="customer-item collection-item avatar black-text"> \
-                                            <p class="title"><%= customer.firstName + " " + customer.lastName %></p> \
-                                            <span><%= customer.contact.email %></span> \
-                                            <br><span><%= customer.address %></span> \
-                                        </a><% }); %> \
-                                </ul>');
-        div.innerHTML = output();
+        if ($(this).val() === '1') {
+            location.href = "/customer/all?sort=ascending&order=all";
+        } else if ($(this).val() === '2') {
+            location.href = "/customer/all?sort=descending&order=arrived";
+        } else if ($(this).val() === '3') {
+            location.href = "/customer/all?sort=descending&order=working";
+        } else if ($(this).val() === '4') {
+            location.href = "/customer/all?sort=descending&order=done";
+        } 
     })
 })

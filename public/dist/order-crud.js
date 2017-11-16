@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 152);
+/******/ 	return __webpack_require__(__webpack_require__.s = 159);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -618,88 +618,25 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ 152:
+/***/ 159:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(32);
+
+
+
+
 
 
 $(document).ready(function () {
 
-    $("#create, #update").click(function (e) {
-
-        var customer = {};
-
-        customer.firstName = $("#first").val();
-        customer.lastName = $("#last").val();
-
-        var email = $("#email").val();
-        var phone = $("#phone").val();
-
-        if (email || phone) {
-            customer.contact = {};
-        }
-        if (email) customer.contact.email = email;
-        if (phone) customer.contact.phone = phone;
-
-        var street = $("#street").val();
-        var streetNumber = $("#num").val();
-        var city = $("#city").val();
-        var zipCode = $("#zip").val();
-
-        if (street || streetNumber || city || zipCode) {
-            customer.address = {};
-        }
-        if (street) customer.address.street = street;
-        if (streetNumber) customer.address.streetNumber = streetNumber;
-        if (city) customer.address.city = city;
-        if (zipCode) customer.address.zipCode = zipCode;
-
-        var ico = $("#ico").val();
-        var icdph = $("#icdph").val();
-        var dic = $("#dic").val();
-
-        if (ico || icdph || dic) {
-            customer.billData = {};
-        }
-        if (ico) customer.billData.ICO = ico;
-        if (icdph) customer.billData.ICDPH = icdph;
-        if (dic) customer.billData.DIC = dic;
-
-        var options = {data: customer};
-
-        if (e.target.id === 'create') {
-
-            options.url = '/customer';
-            options.method = 'post';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-                if (err) console.log(err);
-                else if (response) {
-                    location.href = '/customer/' + response.data.id;
-                }
-            })
-
-        } else if (e.target.id === 'update') {
-
-            var id = localStorage.getItem('updateId');
-            options.url = '/customer/' + id;
-            options.method = 'put';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-
-                localStorage.removeItem('updateId');
-
-                if (err) {
-                    console.error(err);
-                } else if (response) {
-                    location.href = '/customer/' + id;
-                }
-            })
-        }
-    })
+    
 })
 
 /***/ }),
@@ -1508,6 +1445,127 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
+/***/ 30:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(9);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function listUpcomingEvents() {
+    GoogleApi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+    }).then(function (response) {
+        var events = response.result.items;
+
+        if (events.length > 0) {
+            for (var i = 0; i < events.length; i++) {
+                var event = events[i];
+                var when = event.start.dateTime;
+                if (!when) {
+                    when = event.start.date;
+                }
+                console.log(event.summary + ' (' + when + ')');
+            }
+        } else {
+            console.log('No upcoming events found.');
+        }
+    });
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(9);
+
+
+var GoogleApi;
+var TOKEN;
+var photoUrl;
+var pickerApiLoaded = false;
+
+
+function setGoogleApi(api, token) {
+    GoogleApi = api;
+    TOKEN = token;
+}
+
+function loadPicker() {
+    console.log('waiting for callback');
+    gapi.load('picker', { 'callback': onPickerApiLoad });
+}
+
+function onPickerApiLoad() {
+    pickerApiLoaded = true;
+    console.log('callback was called');
+    createPicker();
+}
+
+function createPicker() {
+    if (pickerApiLoaded && TOKEN) {
+        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
+            .setOAuthToken(TOKEN)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
+            .setCallback(pickerCallback)
+            .build();
+        picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+        var fileId = data.docs[0].id;
+        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+    }
+}
+
+function getPhotoUrl() {
+    return photoUrl;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
+
+/***/ }),
+
 /***/ 4:
 /***/ (function(module, exports) {
 
@@ -1951,6 +2009,90 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+function handleClientLoad(callback) {
+    if (GoogleApi) {
+        console.log('client was loaded before');
+        callback(GoogleApi, TOKEN);
+    } else {
+        console.log('client is loading ...');
+        gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+        
+            GoogleApi = gapi;
+        
+            gapi.client.init({
+                discoveryDocs: DISCOVERY_DOCS,
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                scope: SCOPES
+            }).then(function () {
+        
+                GoogleAuth = gapi.auth2.getAuthInstance();
+        
+                GoogleAuth.isSignedIn.listen(updateSigninStatus);
+        
+                updateSigninStatus(GoogleAuth.isSignedIn.get());
+        
+                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+
+                if (!GoogleAuth.isSignedIn.get()) {
+                    callback(null);
+                } else {
+                    callback(GoogleApi, TOKEN);
+                }
+        
+                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+            });
+        }
+}
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
 
 /***/ })
 

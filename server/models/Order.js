@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var async = require('async');
 
 var OrderSchema = new mongoose.Schema({
-    
+
     description: {
         type: String
     },
@@ -22,20 +22,18 @@ var OrderSchema = new mongoose.Schema({
     state: {
         type: String
     },
-    dates: {
-        arriveDate: {
-            type: Date,
-            default: Date.now
-        },
-        pickDate: {
-            type: Date,
-        },
-        startDate: {
-            type: Date
-        },
-        endDate: {
-            type: Date
-        }
+    arriveDate: {
+        type: Date,
+        default: Date.now
+    },
+    pickDate: {
+        type: Date,
+    },
+    startDate: {
+        type: Date
+    },
+    endDate: {
+        type: Date
     },
     facilities: [{
         type: String
@@ -76,7 +74,7 @@ var OrderSchema = new mongoose.Schema({
 OrderSchema.statics.getFormData = function (callback) {
 
     function customerNames(result, callback) {
-        mongoose.model('Customer').find( {}, function (err, customers) {
+        mongoose.model('Customer').find({}, function (err, customers) {
             if (err) {
                 callback(err, null);
             } else {
@@ -88,7 +86,7 @@ OrderSchema.statics.getFormData = function (callback) {
     }
 
     function workTypes(result, callback) {
-        mongoose.model('WorkType').find( {}, function (err, worktypes) {
+        mongoose.model('WorkType').find({}, function (err, worktypes) {
             if (err) {
                 callback(err, null);
             } else {
@@ -99,7 +97,7 @@ OrderSchema.statics.getFormData = function (callback) {
     }
 
     function orderTypes(result, callback) {
-        mongoose.model('OrderType').find( {}, function (err, ordertypes) {
+        mongoose.model('OrderType').find({}, function (err, ordertypes) {
             if (err) {
                 callback(err, null);
             } else {
@@ -118,7 +116,7 @@ OrderSchema.statics.getFormData = function (callback) {
 OrderSchema.statics.getDetail = function (id, callback) {
 
     function getCustomers(result, callback) {
-        mongoose.model('Customer').find( {}, function (err, customers) {
+        mongoose.model('Customer').find({}, function (err, customers) {
             if (err) {
                 callback(err, null);
             } else {
@@ -134,7 +132,7 @@ OrderSchema.statics.getDetail = function (id, callback) {
             result["customer"] = null;
             return callback(null, result);
         }
-        mongoose.model('Customer').findOne({_id: result.customerId}, function (err, customer) {
+        mongoose.model('Customer').findOne({ _id: result.customerId }, function (err, customer) {
             if (err) {
                 callback(err, null);
             } else {
@@ -149,7 +147,7 @@ OrderSchema.statics.getDetail = function (id, callback) {
             result["workType"] = null;
             return callback(null, result);
         }
-        mongoose.model('WorkType').findOne({_id: result.workType}, function (err, workType) {
+        mongoose.model('WorkType').findOne({ _id: result.workType }, function (err, workType) {
             if (err) {
                 callback(err, null);
             } else {
@@ -164,7 +162,7 @@ OrderSchema.statics.getDetail = function (id, callback) {
             result["orderType"] = null;
             return callback(null, result);
         }
-        mongoose.model('OrderType').findOne({_id: result.orderType}, function (err, orderType) {
+        mongoose.model('OrderType').findOne({ _id: result.orderType }, function (err, orderType) {
             if (err) {
                 callback(err, null);
             } else {

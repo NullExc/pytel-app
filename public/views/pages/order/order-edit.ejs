@@ -13,11 +13,12 @@
             var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
             var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
             var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
-        
+
 
             var edit = true;
         </script>
-        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-edit.js"></script>
+        <script type="text/javascript" src="/dist/order-crud.js"></script>
         <script type="text/javascript" src="/dist/order-state.js"></script>
         <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
         <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
@@ -29,14 +30,16 @@
         <div class="row">
             <div class="row col s12 light-blue darken-4 white-text header-layer">
                 <h5 class="col s3" style="margin-left: 10px;">Upraviť zákazku</h5>
-                <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal"><i class="material-icons left">photo_camera</i>fotka</a>
             </div>
 
             <div class="row col s12 white-text">
                 <div class="row">
-                    <a id="start-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">build</i>Začať</a>
-                    <a id="end-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">done</i>Dokončiť</a>
-                    <a id="pickup-state" class="waves-effect waves-light light-blue darken-4 btn state-btn"><i class="material-icons left">send</i>Odovzdať</a>
+                    <a class="start-state waves-effect waves-light light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">build</i>Začať</a>
+                    <a class="end-state waves-effect waves-light light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">done</i>Dokončiť</a>
+                    <a class="pickup-state waves-effect waves-light light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">send</i>Odovzdať</a>
                 </div>
                 <div class="row state-body black-text">
                     <p>Zakazka</p>
@@ -44,7 +47,7 @@
             </div>
 
             <% include ./order-input.ejs %>
-            
+
         </div>
 
 
@@ -76,7 +79,7 @@
 
                 if (order) {
 
-                    var arriveDate = order.dates.arriveDate;
+                    var arriveDate = order.arriveDate;
 
                     if (order.description) {
                         $("#description").val(order.description);

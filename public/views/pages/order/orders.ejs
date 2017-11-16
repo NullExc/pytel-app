@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript">
+            var orders = JSON.parse('<%- JSON.stringify(orders) %>');
+        </script>
+</head>
+
+<body>
+    <% include ../../partials/nav-in.ejs %>
+
+        <div class="fixed-action-btn">
+            <a id="add" class="btn-floating btn-large light-blue darken-4">
+                <i class="large material-icons">note_add</i>
+            </a>
+        </div>
+
+        <div id="list-container">
+            <ul id="list" class="collection" style="margin-top: 0px;">
+                <% orders.forEach(function(order) { %>
+                    <a href="/order/<%= order._id %>" class="customer-item collection-item avatar black-text">
+                        <p class="title">
+                            <%= order.description %>
+                        </p>
+                        <span>
+                            <%= order.contact.email %>
+                        </span>
+                    </a>
+                    <% }); %>
+            </ul>
+        </div>
+
+
+</body>
+
+</html>

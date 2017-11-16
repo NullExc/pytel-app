@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 152);
+/******/ 	return __webpack_require__(__webpack_require__.s = 160);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -618,92 +618,6 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ 152:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(10);
-
-
-$(document).ready(function () {
-
-    $("#create, #update").click(function (e) {
-
-        var customer = {};
-
-        customer.firstName = $("#first").val();
-        customer.lastName = $("#last").val();
-
-        var email = $("#email").val();
-        var phone = $("#phone").val();
-
-        if (email || phone) {
-            customer.contact = {};
-        }
-        if (email) customer.contact.email = email;
-        if (phone) customer.contact.phone = phone;
-
-        var street = $("#street").val();
-        var streetNumber = $("#num").val();
-        var city = $("#city").val();
-        var zipCode = $("#zip").val();
-
-        if (street || streetNumber || city || zipCode) {
-            customer.address = {};
-        }
-        if (street) customer.address.street = street;
-        if (streetNumber) customer.address.streetNumber = streetNumber;
-        if (city) customer.address.city = city;
-        if (zipCode) customer.address.zipCode = zipCode;
-
-        var ico = $("#ico").val();
-        var icdph = $("#icdph").val();
-        var dic = $("#dic").val();
-
-        if (ico || icdph || dic) {
-            customer.billData = {};
-        }
-        if (ico) customer.billData.ICO = ico;
-        if (icdph) customer.billData.ICDPH = icdph;
-        if (dic) customer.billData.DIC = dic;
-
-        var options = {data: customer};
-
-        if (e.target.id === 'create') {
-
-            options.url = '/customer';
-            options.method = 'post';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-                if (err) console.log(err);
-                else if (response) {
-                    location.href = '/customer/' + response.data.id;
-                }
-            })
-
-        } else if (e.target.id === 'update') {
-
-            var id = localStorage.getItem('updateId');
-            options.url = '/customer/' + id;
-            options.method = 'put';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-
-                localStorage.removeItem('updateId');
-
-                if (err) {
-                    console.error(err);
-                } else if (response) {
-                    location.href = '/customer/' + id;
-                }
-            })
-        }
-    })
-})
-
-/***/ }),
-
 /***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -735,6 +649,343 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
+
+/***/ }),
+
+/***/ 160:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(32);
+
+
+
+
+
+
+$(document).ready(function () {
+
+    $('.timepicker').pickatime({
+        default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+        fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+        twelvehour: false, // Use AM/PM or 24-hour format
+        donetext: 'OK', // text for done-button
+        cleartext: 'Vynulovať', // text for clear-button
+        canceltext: 'Zavrieť', // Text for cancel-button
+        autoclose: false, // automatic close timepicker
+        ampmclickable: true, // make AM PM clickable
+        aftershow: function () { } //Function for after opening timepicker
+    });
+
+    $('.datepicker').pickadate({
+        selectMonths: true,
+        labelMonthNext: 'Ďalší mesiac',
+        labelMonthPrev: 'Posledný mesiac',
+        labelMonthSelect: 'Vybrať mesiac',
+        labelYearSelect: 'Vybrať rok',
+        monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+        weekdaysFull: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
+        weekdaysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Stv', 'Pia', 'Sob'],
+        weekdaysLetter: ['N', 'P', 'U', 'S', 'Š', 'P', 'S'],
+        today: 'Dnes',
+        clear: 'Vynulovať',
+        close: 'Zavrieť',
+        format: 'dd/mm/yyyy'
+    });
+
+    var names = {};
+    var workNames = {};
+    var orderNames = {};
+
+    var selectedCustomer = edit ? customer : null;
+    var selectedWork = edit ? workType : null;
+    var selectedOrder = edit ? orderType : null;
+    var state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived;
+
+    var date = new Date();
+    var utcDate;
+
+    if (edit) {
+        date = new Date(order.arriveDate);
+        state = order.state;
+    }
+    utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+    $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+        + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+        + '/' + utcDate.getFullYear());
+
+    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+        + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+
+    customers.forEach(function (customer) {
+        names[customer.firstName + ' ' + customer.lastName] = null;
+    })
+
+    workTypes.forEach(function (worktype) {
+        workNames[worktype.name] = null;
+    })
+
+    orderTypes.forEach(function (ordertype) {
+        orderNames[ordertype.name] = null;
+    })
+
+    var fillCustomerData = function () {
+
+        var doneLabel = $("#done-customer");
+        doneLabel.text(selectedCustomer.firstName + ' ' + selectedCustomer.lastName);
+        doneLabel.removeClass('orange');
+        doneLabel.addClass('green');
+
+        $(".customer-label").removeClass("active");
+
+        if (selectedCustomer) {
+            if (selectedCustomer.contact) {
+
+                if (selectedCustomer.contact.email) {
+                    $("#email").val(selectedCustomer.contact.email);
+                    $("#email-label").addClass('active');
+                } else $("#email").val('');
+
+                if (selectedCustomer.contact.phone) {
+                    $("#phone").val(selectedCustomer.contact.phone);
+                    $("#phone-label").addClass('active');
+                } else $("#phone").val('');
+            }
+            if (selectedCustomer.address) {
+
+                if (selectedCustomer.address.street) {
+                    $("#street").val(selectedCustomer.address.street);
+                    $("#street-label").addClass('active');
+                } else $("#street").val('');
+
+                if (selectedCustomer.address.streetNumber) {
+                    $("#num").val(selectedCustomer.address.streetNumber);
+                    $("#num-label").addClass('active');
+                } else $("#num").val('');
+
+                if (selectedCustomer.address.city) {
+                    $("#city").val(selectedCustomer.address.city);
+                    $("#city-label").addClass('active');
+                } else $("#city").val('');
+
+                if (selectedCustomer.address.zipCode) {
+                    $("#zip").val(selectedCustomer.address.zipCode);
+                    $("#zip-label").addClass('active');
+                } else $("#zip").val('');
+            }
+            if (selectedCustomer.billData) {
+
+                if (selectedCustomer.billData.ICO) {
+                    $("#ico").val(selectedCustomer.billData.ICO);
+                    $("#ico-label").addClass('active');
+                } else $("#ico").val(' ');
+
+                if (selectedCustomer.billData.ICDPH) {
+                    $("#icdph").val(selectedCustomer.billData.ICDPH);
+                    $("#icdph-label").addClass('active');
+                } else $("#icdph").val(' ');
+
+                if (selectedCustomer.billData.DIC) {
+                    $("#dic").val(selectedCustomer.billData.DIC);
+                    $("#dic-label").addClass('active');
+                } else $("#dic").val(' ');
+            } else {
+                $("#ico").val(null);
+                $("#icdph").val(null);
+                $("#dic").val(null);
+            }
+        }
+    }
+
+    $('.selected').click(function (event) {
+        var id = event.target.id;
+        for (var i = 0; i < customers.length; i++) {
+            if (id === customers[i]._id) {
+                selectedCustomer = customers[i];
+                break;
+            }
+        }
+        fillCustomerData();
+        $('#select-customer').collapsible('close', 0);
+    })
+
+    $('#drop-up').click(function (event) {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        $('#address-data').collapsible('close', 0);
+    })
+
+
+
+    $('#work').autocomplete({
+        data: workNames,
+        onAutocomplete: function (val) {
+            workTypes.forEach(function (worktype) {
+                if (val === worktype.name) {
+                    selectedWork = worktype;
+                }
+            })
+            console.info(JSON.stringify(selectedWork));
+        }
+    })
+
+    $('#order').autocomplete({
+        data: orderNames,
+        onAutocomplete: function (val) {
+            orderTypes.forEach(function (ordertype) {
+                if (val === ordertype.name) {
+                    selectedOrder = ordertype;
+                }
+            })
+            console.info(JSON.stringify(selectedOrder));
+        }
+    })
+
+    $('#customer-search').autocomplete({
+        data: names,
+        limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+        onAutocomplete: function (val) {
+            for (var i = 0; i < customers.length; i++) {
+                if (val === customers[i].firstName + ' ' + customers[i].lastName) {
+                    selectedCustomer = customers[i];
+                    break;
+                }
+            }
+
+            $("#customer-search").val(null);
+            fillCustomerData();
+        },
+        minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
+
+    $('#load-photo').click(function () {
+        console.log('loading picker');
+        __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+            console.log('picker ready to open', GoogleApi, TOKEN);
+            if (GoogleApi && TOKEN) {
+                __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].setGoogleApi(GoogleApi, TOKEN);
+                __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].loadPicker();
+            }
+        });
+    })
+
+    $('#create, #update').click(function (e) {
+
+        __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+            console.log(typeof GoogleApi);
+            __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
+            __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].listUpcomingEvents();
+        });
+        var order = {};
+
+        order.description = $("#description").val();
+
+        var email = $("#email").val();
+        var phone = $("#phone").val();
+
+        if (email || phone) {
+            order.contact = {};
+        }
+        if (email) order.contact.email = email;
+        if (phone) order.contact.phone = phone;
+
+        var street = $("#street").val();
+        var streetNumber = $("#num").val();
+        var city = $("#city").val();
+        var zipCode = $("#zip").val();
+
+        if (street || streetNumber || city || zipCode) {
+            order.address = {};
+        }
+        if (street) order.address.street = street;
+        if (streetNumber) order.address.streetNumber = streetNumber;
+        if (city) order.address.city = city;
+        if (zipCode) order.address.zipCode = zipCode;
+
+        var ico = $("#ico").val();
+        var icdph = $("#icdph").val();
+        var dic = $("#dic").val();
+
+        if (ico || icdph || dic) {
+            order.billData = {};
+        }
+
+        if (ico) order.billData.ICO = ico;
+        if (icdph) order.billData.ICDPH = icdph;
+        if (dic) order.billData.DIC = dic;
+
+        if (selectedCustomer) order.customerId = selectedCustomer._id;
+        if (selectedOrder) order.orderType = selectedOrder._id;
+        if (selectedWork) order.workType = selectedWork._id;
+
+        order.state = state;
+
+        var help = new Date();
+
+        date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth() + 1, help.getUTCDate(), help.getUTCHours(), help.getUTCMinutes(), help.getUTCSeconds()));
+
+        console.log(date);
+        //date.setUTCMonth(date.getMonth() + 1);
+
+        if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+            order.startDate = date;
+        //    order.startDate.
+        } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
+            order.endDate = date;
+        } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+            order.pickDate = date;
+        }
+        order.photoUrl = __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].getPhotoUrl();
+
+        console.log('creating order with ', order.photoUrl);
+
+
+        var options = {
+            url: '/order',
+            data: {
+                order
+            }
+        }
+
+        if (e.target.id === 'create') options.method = 'post';
+        else {
+            var pathname = window.location.pathname.split("/");
+            var id = pathname[pathname.length - 1];
+            options.method = 'put';
+            options.url = '/order/' + id
+        }
+
+        console.log(JSON.stringify(options));
+
+        __WEBPACK_IMPORTED_MODULE_1__lib_http_js__["a" /* default */].request(options, (err, response) => {
+            if (err) console.log("error", err);
+            else if (response) {
+                console.log(response);
+            }
+        })
+    })
+
+    $('.start-state').click(function () {
+        console.log("start");
+        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
+    })
+
+    $('.end-state').click(function () {
+        console.log("done");
+        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done;
+    })
+
+    $('.pickup-state').click(function () {
+        console.log("picked up");
+        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
+    })
+})
 
 /***/ }),
 
@@ -1508,6 +1759,127 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
+/***/ 30:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(9);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function listUpcomingEvents() {
+    GoogleApi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+    }).then(function (response) {
+        var events = response.result.items;
+
+        if (events.length > 0) {
+            for (var i = 0; i < events.length; i++) {
+                var event = events[i];
+                var when = event.start.dateTime;
+                if (!when) {
+                    when = event.start.date;
+                }
+                console.log(event.summary + ' (' + when + ')');
+            }
+        } else {
+            console.log('No upcoming events found.');
+        }
+    });
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(9);
+
+
+var GoogleApi;
+var TOKEN;
+var photoUrl;
+var pickerApiLoaded = false;
+
+
+function setGoogleApi(api, token) {
+    GoogleApi = api;
+    TOKEN = token;
+}
+
+function loadPicker() {
+    console.log('waiting for callback');
+    gapi.load('picker', { 'callback': onPickerApiLoad });
+}
+
+function onPickerApiLoad() {
+    pickerApiLoaded = true;
+    console.log('callback was called');
+    createPicker();
+}
+
+function createPicker() {
+    if (pickerApiLoaded && TOKEN) {
+        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
+            .setOAuthToken(TOKEN)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
+            .setCallback(pickerCallback)
+            .build();
+        picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+        var fileId = data.docs[0].id;
+        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+    }
+}
+
+function getPhotoUrl() {
+    return photoUrl;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
+
+/***/ }),
+
 /***/ 4:
 /***/ (function(module, exports) {
 
@@ -1951,6 +2323,90 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+function handleClientLoad(callback) {
+    if (GoogleApi) {
+        console.log('client was loaded before');
+        callback(GoogleApi, TOKEN);
+    } else {
+        console.log('client is loading ...');
+        gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+        
+            GoogleApi = gapi;
+        
+            gapi.client.init({
+                discoveryDocs: DISCOVERY_DOCS,
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                scope: SCOPES
+            }).then(function () {
+        
+                GoogleAuth = gapi.auth2.getAuthInstance();
+        
+                GoogleAuth.isSignedIn.listen(updateSigninStatus);
+        
+                updateSigninStatus(GoogleAuth.isSignedIn.get());
+        
+                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+
+                if (!GoogleAuth.isSignedIn.get()) {
+                    callback(null);
+                } else {
+                    callback(GoogleApi, TOKEN);
+                }
+        
+                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+            });
+        }
+}
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
 
 /***/ })
 

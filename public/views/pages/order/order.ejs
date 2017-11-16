@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript">
+
+            var order = JSON.parse('<%- JSON.stringify(detail.order) %>');
+            var customer = JSON.parse('<%- JSON.stringify(detail.customer) %>');
+            var workType = JSON.parse('<%- JSON.stringify(detail.workType) %>');
+            var orderType = JSON.parse('<%- JSON.stringify(detail.orderType) %>');
+
+            var edit = true;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-state.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text header-layer">
+                <h5 class="col s3" style="margin-left: 10px;">
+                    <%= detail.order.description %>
+                </h5>
+                <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal">
+                    <i class="material-icons left">photo_camera</i>fotka</a>
+            </div>
+
+            <div class="row col s12 white-text">
+
+                <div class="row state-body black-text">
+                    <div class="col l3 m6 s12">
+                        <div class="card teal lighten-4">
+                            <div class="card-content black-text">
+                                <span class="card-title">Prijatie</span>
+                                <p>Zákazka bola prijatá o :
+                                    <br>
+                                    <span id="arrive-date"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="start-body" class="col l3 m6 s12">
+                        <div class="card teal lighten-4">
+                            <div class="card-content black-text">
+                                <span class="card-title">Začatie</span>
+                                <p id="work-progress">Na zákazke sa pracuje.</p>
+                                <p>Čas začatia práce: <span id="start-date"></span></p>
+                                <h5 id="diff-time"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="end-body" class="col l3 m6 s12">
+                        <div class="card teal lighten-4">
+                            <div class="card-content black-text">
+                                <span class="card-title">Ukončenie</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pick-body" class="col l3 m6 s12">
+                        <div class="card teal lighten-4">
+                            <div class="card-content black-text">
+                                <span class="card-title">Vyzdvihnutie</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="photo-modal" class="modal">
+            <div class="modal-content">
+                <img id="photo-pic" src="" style="max-width: 100%; max-height: 100%;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 24px; height: 70px;">
+            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px;">
+                <a class="btn-floating btn-large light-blue darken-4">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    <li>
+                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="edit" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="height: 35%;" id="modal1" class="modal">
+            <div style="margin: 20px;">
+                <h5>Vymazať zákazku</h5>
+                <p>Potvrdením natrvalo vymažete zákazku zo systému.</p>
+            </div>
+            <div style="float: right;">
+                <a id="deleteOrder" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+                <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+            </div>
+        </div>
+
+        <script>
+            window.onload = function () {
+
+                if (customer) {
+                    var doneLabel = $("#done-customer");
+                    doneLabel.text(customer.firstName + ' ' + customer.lastName);
+                    doneLabel.removeClass('orange');
+                    doneLabel.addClass('green');
+                }
+
+                if (workType) {
+                    $("#work").val(workType.name);
+                    $("#work-label").addClass('active');
+                }
+
+                if (orderType) {
+                    $("#order").val(orderType.name);
+                    $("#order-label").addClass('active');
+                }
+
+                if (order) {
+
+                    var arriveDate = order.arriveDate;
+
+                    if (order.description) {
+                        $("#description").val(order.description);
+                        $("#description-label").addClass('active');
+                    }
+                    if (order.contact) {
+                        if (order.contact.email) {
+                            $("#email").val(order.contact.email);
+                            $("#email-label").addClass('active');
+                        }
+                        if (order.contact.phone) {
+                            $("#phone").val(order.contact.phone);
+                            $("#phone-label").addClass('active');
+                        }
+                    }
+                    if (order.address) {
+                        if (order.address.street) {
+                            $("#street").val(order.address.street);
+                            $("#street-label").addClass('active');
+                        }
+                        if (order.address.streetNumber) {
+                            $("#num").val(order.address.streetNumber);
+                            $("#num-label").addClass('active');
+                        }
+                        if (order.address.city) {
+                            $("#city").val(order.address.city);
+                            $("#city-label").addClass('active');
+                        }
+                        if (order.address.zipCode) {
+                            $("#zip").val(order.address.zipCode);
+                            $("#zip-label").addClass('active');
+                        }
+                    }
+                    if (order.billData) {
+                        if (order.billData.ICO) {
+                            $("#ico").val(order.billData.ICO);
+                            $("#ico-label").addClass('active');
+                        }
+                        if (order.billData.ICDPH) {
+                            $("#icdph").val(order.billData.ICDPH);
+                            $("#icdph-label").addClass('active');
+                        }
+                        if (order.billData.DIC) {
+                            $("#dic").val(order.billData.DIC);
+                            $("#dic-label").addClass('active');
+                        }
+                    }
+                    if (order.price) {
+                        $("#price").val(order.price);
+                        $("#price-label").addClass('active');
+                    }
+                }
+            }
+        </script>
+</body>
+
+</html>

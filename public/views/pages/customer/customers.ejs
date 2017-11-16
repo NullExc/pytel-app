@@ -15,19 +15,18 @@
 
         <div class="row">
             <div class="input-field col s3" style="margin:20px;">
-                <select id="order-name">
+                <select id="sort-select">
                     <option value="1">Vzostupne</option>
                     <option value="2">Zostupne</option>
                 </select>
                 <label>Zoradiť podľa abecedy</label>
             </div>
             <div class="input-field col s3" style="margin:20px;">
-                <select id="order-name">
+                <select id="order-select">
                     <option value="1">Všetky</option>
                     <option value="2">Prijaté</option>
                     <option value="3">Prebiehajúce</option>
                     <option value="4">Čakajúce na vyzdvihnutie</option>
-                    <option value="5">Vyzdvihnuté</option>
                 </select>
                 <label>Filtrovať podľa zákazky</label>
             </div>
@@ -57,7 +56,16 @@
                 <i class="large material-icons">person_add</i>
             </a>
         </div>
-
+        <script type="text/javascript">
+       
+            var sortOption = JSON.parse('<%- JSON.stringify(sortOption) %>');
+            console.log(sortOption);
+            if (sortOption === 1) {
+                $("#sort-select option[value='1']").attr("selected","selected");
+            } else if (sortOption === 2) {
+                $("#sort-select option[value='2']").attr("selected","selected");
+            }
+        </script>
 </body>
 
 </html>
