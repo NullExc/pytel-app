@@ -52,7 +52,7 @@ app.post('/worktype-new', worktypeApi.create);
 app.post('/worktype/:id', worktypeApi.edit);
 
 //order types routes
-app.get('/ordertype', ordertypeApi.getAll);
+app.get('/ordertype/all', ordertypeApi.getAll);
 app.post('/ordertype-new', ordertypeApi.create);
 app.post('/ordertype-edit/:id', ordertypeApi.edit);
 
