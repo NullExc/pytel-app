@@ -8,6 +8,7 @@
         </script>
         <script type="text/javascript" src="/dist/orders.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
 </head>
 
 <body>
@@ -20,7 +21,7 @@
         </div>
 
         <div class="row">
-            <div class="input-field col l3 m3 s12" style="margin:20px;">
+            <div class="input-field col l3 m3 s12" style="margin-top:20px;">
                 <select id="order-select">
                     <option value="1">Všetky</option>
                     <option value="2">Prijaté</option>
@@ -30,22 +31,61 @@
                 <label>Filtrovať podľa zákazky</label>
             </div>
 
-            <div class="input-field col l3 m3 s12" style="margin:20px;">
-                <input id="from-date" type="text" readonly>
-                <label for="from-date">Od</label>
+
+            <div class="col l3 m3 s12">
+                <div class="input-field col l12 s12" style="margin-top:20px;">
+                    <select id="date-select">
+                        <option value="1"></option>
+                        <option value="2">Dátum prijatia</option>
+                        <option value="3">Dátum začatia práce</option>
+                        <option value="4">Dátum ukončenia</option>
+                        <option value="5">Dátum vyzvihnutia</option>
+                    </select>
+                    <label>Filtrovať podľa datumu</label>
+                </div>
+                <div class="input-field col l6 s6">
+                        <input id="from-date" type="text" readonly>
+                        <label for="from-date">Od</label>
+                    </div>
+                    <div class="input-field col l6 s6">
+                        <input id="to-date" type="text" readonly>
+                        <label for="to-date">Do</label>
+                </div>
             </div>
+
         </div>
 
         <div id="list-container">
             <ul id="list" class="collection" style="margin-top: 0px;">
                 <% orders.forEach(function(order) { %>
-                    <a href="/order/<%= order._id %>" class="customer-item collection-item avatar black-text">
-                        <p class="title">
-                            <%= order.description %>
-                        </p>
-                        <span>
-                            <%= order.contact.email %>
-                        </span>
+                    <li onclick=" if (window.innerWidth <= 600) location.href='/order/<%= order._id %>'" class="item collection-item avatar black-text">
+                        <div>
+                            <p class="title">
+                                <%= order.description %>
+                            </p>
+                            <span>
+                                <%= order.contact.email %>
+                            </span> 
+
+                            <div class="right">
+                                <% if(order.state === 'arrived') { %>
+                                    <span class="new badge grey" data-badge-caption="">Prijatá</span>
+                                <% } %>
+                                <% if(order.state === 'working') { %>
+                                    <span class="new badge blue" data-badge-caption="">Pracuje sa</span>
+                                <% } %>
+                                <% if(order.state === 'done') { %>
+                                    <span class="new badge red" data-badge-caption="">Čaká na vyzdvihnutie</span>
+                                <% } %>
+                                <% if(order.state === 'pickUp') { %>
+                                    <span class="new badge green" data-badge-caption="">Vyzdvihnutá</span>
+                                <% } %>
+                            </div>
+
+                            <a href="/order-edit/<%= order._id %>" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;"><i class="material-icons">edit</i></a>
+                            <!--<a href="/order/<%= order._id %>" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;"><i class="material-icons">visibility</i></a>-->
+
+                        </div>
                     </a>
                     <% }); %>
             </ul>

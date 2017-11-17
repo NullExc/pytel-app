@@ -1,0 +1,7 @@
+@media only screen and (max-width: 600px) {
+
+    .item:hover {
+        background-color: #efebe9;
+        cursor: pointer;
+    }
+}

@@ -74,4 +74,6 @@ $(document).ready(function () {
 
     $("#from-date").datepicker($.datepicker.regional["sk"]);
 
+    $("#to-date").datepicker($.datepicker.regional["sk"]);
+
 })
