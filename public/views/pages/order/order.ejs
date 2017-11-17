@@ -35,7 +35,7 @@
 
                 <div class="row state-body black-text">
                     <div class="col l3 m6 s12">
-                        <div class="card teal lighten-4">
+                        <div id="arrive-body" class="card teal lighten-4 z-depth-3">
                             <div class="card-content black-text">
                                 <span class="card-title">Prijatie</span>
                                 <p>Zákazka bola prijatá o :
@@ -45,8 +45,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="start-body" class="col l3 m6 s12">
-                        <div class="card teal lighten-4">
+                    <div class="col l3 m6 s12">
+                        <div id="start-body" class="card teal lighten-4 z-depth-3">
                             <div class="card-content black-text">
                                 <span class="card-title">Začatie</span>
                                 <p id="work-progress">Na zákazke sa pracuje.</p>
@@ -55,20 +55,34 @@
                             </div>
                         </div>
                     </div>
-                    <div id="end-body" class="col l3 m6 s12">
-                        <div class="card teal lighten-4">
+                    <div class="col l3 m6 s12">
+                        <div id="end-body" class="card teal lighten-4 z-depth-3">
                             <div class="card-content black-text">
                                 <span class="card-title">Ukončenie</span>
+                                <p>Zákazka bola dokončená o : 
+                                    <br>
+                                    <span id="end-date"></span>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div id="pick-body" class="col l3 m6 s12">
-                        <div class="card teal lighten-4">
+                    <div class="col l3 m6 s12">
+                        <div id="pick-body" class="card teal lighten-4 z-depth-3">
                             <div class="card-content black-text">
                                 <span class="card-title">Vyzdvihnutie</span>
+                                <p>Zákazka bola vyzdvihnutá o :
+                                    <br>
+                                    <span id="pickup-date"></span>
+                                </p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="row col s12 white-text">
+                <div class="section">
+
                 </div>
             </div>
         </div>

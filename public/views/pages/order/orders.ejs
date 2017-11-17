@@ -6,6 +6,8 @@
         <script type="text/javascript">
             var orders = JSON.parse('<%- JSON.stringify(orders) %>');
         </script>
+        <script type="text/javascript" src="/dist/orders.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -15,6 +17,23 @@
             <a id="add" class="btn-floating btn-large light-blue darken-4">
                 <i class="large material-icons">note_add</i>
             </a>
+        </div>
+
+        <div class="row">
+            <div class="input-field col l3 m3 s12" style="margin:20px;">
+                <select id="order-select">
+                    <option value="1">Všetky</option>
+                    <option value="2">Prijaté</option>
+                    <option value="3">Prebiehajúce</option>
+                    <option value="4">Čakajúce na vyzdvihnutie</option>
+                </select>
+                <label>Filtrovať podľa zákazky</label>
+            </div>
+
+            <div class="input-field col l3 m3 s12" style="margin:20px;">
+                <input id="from-date" type="text">
+                <label for="from-date">Od</label>
+            </div>
         </div>
 
         <div id="list-container">

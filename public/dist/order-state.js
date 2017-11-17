@@ -16064,13 +16064,23 @@ $(document).ready(function () {
 
         var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate);
 
+        var id;
+
         $('#arrive-date').text(arriveDate.format('DD.MM.YYYY h:mm:ss'));
 
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
             $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY h:mm:ss'));
         }
 
+        if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+            $("#work-progress").text("Práca na zákazke je ukončená.");
+            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
+        }
+
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
+
+            id = "#arrive-body";
 
             $('.end-state').addClass('disabled');
             $('.pickup-state').addClass('disabled');
@@ -16080,41 +16090,67 @@ $(document).ready(function () {
             $('#pick-body').addClass('hide');
 
         } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+
+            id = "#start-body";
+
             $('.start-state').addClass('disabled');
             $('.pickup-state').addClass('disabled');
 
             $('#end-body').addClass('hide');
             $('#pick-body').addClass('hide');
 
-            var startDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate);
 
-            var now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(Date.now());               
-
-            var workingTime = now.diff(startDate);
-
-            var days = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('D');
-            var minutes = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('m');
-            var hours = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('H');
-            var string = hours + " hodín, " + minutes + " minút.";
-
-            var daysNumber = parseInt(days);
-
-            string = daysNumber + " dní, " + string;
-            
-            $("#diff-time").text(string);
+            $("#diff-time").text(getDiffTime(order.startDate, null));
 
         } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
+
+            id = "#end-body";
+
             $('.start-state').addClass('disabled');
             $('.end-state').addClass('disabled');
 
             $('#pick-body').addClass('hide');
         } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+
+            id = "#pick-body";
+
             $('.start-state').addClass('disabled');
             $('.end-state').addClass('disabled');
             $('.pickup-state').addClass('disabled');
+
+            $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY h:mm:ss'));
         }
+
+        $(id).removeClass("teal");
+        $(id).removeClass("lighten-4");
+        $(id).addClass("green");
+        $(id).addClass("lighten-1");
     }
 });
+
+function getDiffTime(fromDate, toDate) {
+
+    var startDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(fromDate);
+
+    var now;
+
+    if (toDate) now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(toDate);
+
+    else now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(Date.now());
+
+    var workingTime = now.diff(startDate);
+
+    var days = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('D');
+    var minutes = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('m');
+    var hours = __WEBPACK_IMPORTED_MODULE_1_moment___default()(workingTime).utc().format('H');
+    var string = hours + " hodín, " + minutes + " minút.";
+
+    var daysNumber = parseInt(days) - 1;
+
+    string = daysNumber + " dní, " + string;
+
+    return string;
+}
 
 /***/ }),
 /* 157 */

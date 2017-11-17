@@ -966,7 +966,14 @@ $(document).ready(function () {
         __WEBPACK_IMPORTED_MODULE_1__lib_http_js__["a" /* default */].request(options, (err, response) => {
             if (err) console.log("error", err);
             else if (response) {
-                console.log(response);
+                console.log("response", response.data);
+                if (response.data.id) {
+                    location.href = "/order/" + response.data.id;
+                } else {
+                    var pathname = window.location.pathname.split("/");
+                    var id = pathname[pathname.length - 1];
+                    location.href = "/order/" + id;
+                }
             }
         })
     })

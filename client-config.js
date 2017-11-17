@@ -10,6 +10,7 @@ module.exports = {
         'order-crud',
         'order-edit',
         'order',
+        'orders',
         'state',
         'settings'
     ]

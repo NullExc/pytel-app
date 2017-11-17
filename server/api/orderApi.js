@@ -43,8 +43,8 @@ module.exports = {
         order.description = escapeJSON(order.description); // Removes quotas from description
 
         Order.create(order)
-            .then(next => {
-                return res.send({ message: 'order created' });
+            .then(created => {
+                return res.send({ message: 'order created', id: created._id });
             })
             .catch(err => {
                 return next(err);
