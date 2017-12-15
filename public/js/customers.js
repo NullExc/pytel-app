@@ -1,39 +1,65 @@
-import ejs from '../lib/ejs';
+import STATE from './state';
 
-$(document).ready(function () {
+var app = angular.module('Customers', ['ui.materialize']);
 
-    $('select').material_select();
+app.controller('CustomersCtrl', function ($scope, $http, $filter) {
 
-    $('.caret').each(function (caret) {
-        $(this).text(' ');
-    })
+    $scope.customers = window.customers;
 
-    $("#add").click(function () {
-        location.href = '/customer-new';
-    });
+    $scope.sortSelect = {
+        value: 'Vzostupne',
+        choices: ['Vzostupne', 'Zostupne']
+    };
 
-    $('#sort-select').change(function () {
+    $scope.orderSelect = {
+        value: 'Všetky',
+        choices: ['Všetky', 'Prijaté', 'Prebiehajúce', 'Čakajúce na vyzdvihnutie', 'Vyzdvihnuté']
+    }
 
-        if ($(this).val() === '1') {
+    //ng-click="if (window.innerWidth <= 600) location.href='/customer/{{customer._id}}'"
 
-            location.href = "/customer/all?sort=ascending";
+    $scope.sortChange = function () {
 
-        } else if ($(this).val() === '2') {
+        if ($scope.sortSelect.value == $scope.sortSelect.choices[0]) {
 
-            location.href = "/customer/all?sort=descending";
+            $scope.customers = $filter('orderBy')($scope.customers, 'search', false);
+
+        } else if ($scope.sortSelect.value == $scope.sortSelect.choices[1]) {
+
+            $scope.customers = $filter('orderBy')($scope.customers, 'search', true);
         }
-    })
+    }
 
-    $('#order-select').change(function () {
+    $scope.orderChange = function () {
 
-        if ($(this).val() === '1') {
-            location.href = "/customer/all?sort=ascending&order=all";
-        } else if ($(this).val() === '2') {
-            location.href = "/customer/all?sort=descending&order=arrived";
-        } else if ($(this).val() === '3') {
-            location.href = "/customer/all?sort=descending&order=working";
-        } else if ($(this).val() === '4') {
-            location.href = "/customer/all?sort=descending&order=done";
-        } 
-    })
+        if ($scope.orderSelect.value == $scope.orderSelect.choices[0]) {
+            $scope.customers = window.customers;
+
+        } else if ($scope.orderSelect.value == $scope.orderSelect.choices[1]) {
+            orderRequest(STATE.arrived);
+
+        } else if ($scope.orderSelect.value == $scope.orderSelect.choices[2]) {
+            orderRequest(STATE.working);
+
+        } else if ($scope.orderSelect.value == $scope.orderSelect.choices[3]) {
+            orderRequest(STATE.done);
+
+        } else if ($scope.orderSelect.value == $scope.orderSelect.choices[4]) {
+            orderRequest(STATE.pickUp);
+
+        }
+    }
+
+    var orderRequest = function (order) {
+        console.log(order);
+
+        $http.post('/customer/sort', {
+            customers: window.customers,
+            order: order
+        }).success(function (data) {
+            console.log('arrived', JSON.stringify(data));
+            $scope.customers = data;
+        })
+    }
+
 })

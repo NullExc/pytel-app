@@ -1,10 +1,14 @@
 var Order = require('../models/Order');
+var OrderType = require('../models/OrderType');
+var WorkType = require('../models/WorkType');
 
 var calendar = require('../google/calendar.js');
 
 var async = require('async');
 var fs = require('fs');
 var readline = require('readline');
+
+var moment = require('moment');
 
 var auth;
 
@@ -63,7 +67,7 @@ module.exports = {
     },
 
     get(req, res, next) {
-        Order.getDetail(req.params.id, function (err, detail) {
+        Order.getDetail(req.params.id, false, function (err, detail) {
             if (err) {
                 return next(err);
             } else {
@@ -83,7 +87,7 @@ module.exports = {
     },
 
     edit(req, res, next) {
-        Order.getDetail(req.params.id, function (err, detail) {
+        Order.getDetail(req.params.id, false, function (err, detail) {
             if (err) {
                 return next(err);
             } else {
@@ -109,10 +113,107 @@ module.exports = {
     },
 
     getDetail(req, res, next) {
-        Order.getDetail(req.params.id, function (err, result) {
+        Order.getDetail(req.params.id, false, function (err, result) {
             if (err) return next(err);
 
             return res.send(result);
+        })
+    },
+
+    getStats(req, res, next) {
+        var totalCount = 0;
+        var totalSum = 0;
+        var workTypes = [];
+        var orderTypes = [];
+        console.log(JSON.stringify(req.body));
+        Order.getStats(req.body.from, req.body.to, function (err, orders) {
+            if (err) return next(err);
+            else {
+                /*OrderType.find({}, function (err, orderTypes) {
+                    if (err) return next(err);
+                    WorkType.find({}, function (err, workTypes) {
+                        if (err) return next(err);
+
+                    })
+                })*/
+                totalCount = orders.length;
+                orders.forEach(function (order) {
+                    totalSum += order.price ? order.price : 0;
+                    if (order.workType) workTypes.push(order.workType);
+                    if (order.orderType) orderTypes.push(order.orderType);
+                })
+                var groupWork = workTypes.reduce(function (rv, x) {
+                    (rv[x["name"]] = rv[x["name"]] || []).push(x);
+                    return rv;
+                }, {});
+                var groupOrder = orderTypes.reduce(function (rv, x) {
+                    (rv[x["name"]] = rv[x["name"]] || []).push(x);
+                    return rv;
+                }, {});
+                var workSum = {};
+                var orderSum = {};
+                for (var key in groupWork) {
+                    if (groupWork.hasOwnProperty(key)) {
+                        orders.forEach(function (order) {
+                            if (order.workType && order.workType.name == key && order.order.price) {
+                                //console.log("work", key);
+                                if (!workSum[order.workType.name]) {
+                                    workSum[order.workType.name] = {};
+                                    workSum[order.workType.name].sum = 0;
+                                    workSum[order.workType.name].count = 0;
+                                    workSum[order.workType.name].time = 0;
+                                }
+                                workSum[order.workType.name].sum += order.order.price;
+                                workSum[order.workType.name].count += 1;
+
+                                if (order.order.startDate && order.order.endDate) {
+                                    var start = moment.utc(order.order.startDate);
+                                    var end = moment.utc(order.order.endDate);
+
+                                    workSum[order.workType.name].time += end.diff(start);
+
+                                    //console.log("start", moment(workingTime).utc().format('H'), moment(workingTime).utc().format('m'), order.order.description);
+                                }
+                            }
+                        })
+                    }
+                }
+                for (var key in groupOrder) {
+                    if (groupOrder.hasOwnProperty(key)) {
+                        orders.forEach(function (order) {
+                            if (order.orderType && order.orderType.name == key && order.order.price) {
+                                //console.log("order", order.order.description);
+                                if (!orderSum[order.orderType.name]) {
+                                    orderSum[order.orderType.name] = {};
+                                    orderSum[order.orderType.name].sum = 0;
+                                    orderSum[order.orderType.name].count = 0;
+                                    orderSum[order.orderType.name].time = 0;
+                                }
+                                orderSum[order.orderType.name].sum += order.order.price;
+                                orderSum[order.orderType.name].count += 1;
+
+                                if (order.order.startDate && order.order.endDate) {
+                                    var start = moment.utc(order.order.startDate);
+                                    var end = moment.utc(order.order.endDate);
+
+                                    orderSum[order.orderType.name].time += end.diff(start);
+
+                                    //console.log("start", moment(workingTime).utc().format('H'), moment(workingTime).utc().format('m'), order.order.description);
+                                }
+                            }
+                        })
+                    }
+                }
+                //console.log(workSum);
+                res.send({
+                    totalCount: totalCount,
+                    totalSum: totalSum,
+                    orders: orders,
+                    workSum: workSum,
+                    orderSum: orderSum
+                })
+                // res.send(orders);
+            }
         })
     }
 };

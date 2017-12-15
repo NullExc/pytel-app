@@ -6,92 +6,82 @@
         <script type="text/javascript">
             var orders = JSON.parse('<%- JSON.stringify(orders) %>');
         </script>
-        <script type="text/javascript" src="/dist/orders.js"></script>
+
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
 </head>
 
-<body>
+<body ng-app="Orders" ng-controller="OrdersCtrl">
     <% include ../../partials/nav-in.ejs %>
 
+        <div class="row">
+
+            <div class="section col l3 m3 s12">
+                <div input-field>
+                    <select ng-model="typeSelect.value" ng-change="typeChange()" material-select>
+                        <option ng-repeat="option in typeSelect.choices">{{option}}</option>
+                    </select>
+                    <label>Filtrovať podľa zákazky.</label>
+                </div>
+            </div>
+
+            <div class="col l3 m3 s12">
+                <div class="section col s12">
+                    <div input-field>
+                        <select ng-model="dateSelect.value" ng-change="dateChange()" material-select>
+                            <option ng-repeat="option in dateSelect.choices">{{option}}</option>
+                        </select>
+                        <label>Filtrovať podľa datumu</label>
+                    </div>
+                </div>
+                <div input-field class="col l6 s6">
+                    <input id="from-date" type="text" readonly>
+                    <label for="from-date">Od</label>
+                </div>
+                <div input-field class="col l6 s6">
+                    <input id="to-date" type="text" readonly>
+                    <label for="to-date">Do</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="list-container" class="col s12">
+                <ul id="list" class="collection" style="margin-top: 0px;">
+
+                    <li class="item collection-item avatar black-text" ng-repeat="order in orders">
+                        <div>
+                            <p class="title">
+                                {{order.description}}
+                            </p>
+                            <span>
+                                {{order.arriveDate}}
+                            </span>
+
+                            <div class="right">
+                                <span ng-if="order.state === 'arrived'" class="new badge grey" data-badge-caption="">Prijatá</span>
+                                <span ng-if="order.state === 'working'" class="new badge blue" data-badge-caption="">Pracuje sa</span>
+                                <span ng-if="order.state === 'done'" class="new badge red" data-badge-caption="">Čaká na vyzdvihnutie</span>
+                                <span ng-if="order.state === 'pickUp'" class="new badge green" data-badge-caption="">Vyzdvihnutá</span>
+                            </div>
+
+                            <a href="/order-edit/{{order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
+                                <i class="material-icons">visibility</i>
+                            </a>
+                        </div>
+                    </liv>
+                </ul>
+            </div>
+        </div>
         <div class="fixed-action-btn">
             <a id="add" class="btn-floating btn-large light-blue darken-4">
                 <i class="large material-icons">note_add</i>
             </a>
         </div>
 
-        <div class="row">
-            <div class="input-field col l3 m3 s12" style="margin-top:20px;">
-                <select id="order-select">
-                    <option value="1">Všetky</option>
-                    <option value="2">Prijaté</option>
-                    <option value="3">Prebiehajúce</option>
-                    <option value="4">Čakajúce na vyzdvihnutie</option>
-                </select>
-                <label>Filtrovať podľa zákazky</label>
-            </div>
-
-
-            <div class="col l3 m3 s12">
-                <div class="input-field col l12 s12" style="margin-top:20px;">
-                    <select id="date-select">
-                        <option value="1"></option>
-                        <option value="2">Dátum prijatia</option>
-                        <option value="3">Dátum začatia práce</option>
-                        <option value="4">Dátum ukončenia</option>
-                        <option value="5">Dátum vyzvihnutia</option>
-                    </select>
-                    <label>Filtrovať podľa datumu</label>
-                </div>
-                <div class="input-field col l6 s6">
-                        <input id="from-date" type="text" readonly>
-                        <label for="from-date">Od</label>
-                    </div>
-                    <div class="input-field col l6 s6">
-                        <input id="to-date" type="text" readonly>
-                        <label for="to-date">Do</label>
-                </div>
-            </div>
-
-        </div>
-
-        <div id="list-container">
-            <ul id="list" class="collection" style="margin-top: 0px;">
-                <% orders.forEach(function(order) { %>
-                    <li onclick=" if (window.innerWidth <= 600) location.href='/order/<%= order._id %>'" class="item collection-item avatar black-text">
-                        <div>
-                            <p class="title">
-                                <%= order.description %>
-                            </p>
-                            <span>
-                                <%= order.contact.email %>
-                            </span> 
-
-                            <div class="right">
-                                <% if(order.state === 'arrived') { %>
-                                    <span class="new badge grey" data-badge-caption="">Prijatá</span>
-                                <% } %>
-                                <% if(order.state === 'working') { %>
-                                    <span class="new badge blue" data-badge-caption="">Pracuje sa</span>
-                                <% } %>
-                                <% if(order.state === 'done') { %>
-                                    <span class="new badge red" data-badge-caption="">Čaká na vyzdvihnutie</span>
-                                <% } %>
-                                <% if(order.state === 'pickUp') { %>
-                                    <span class="new badge green" data-badge-caption="">Vyzdvihnutá</span>
-                                <% } %>
-                            </div>
-
-                            <a href="/order-edit/<%= order._id %>" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;"><i class="material-icons">edit</i></a>
-                            <!--<a href="/order/<%= order._id %>" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;"><i class="material-icons">visibility</i></a>-->
-
-                        </div>
-                    </a>
-                    <% }); %>
-            </ul>
-        </div>
-
-
+        <script type="text/javascript" src="/dist/orders.js"></script>
 </body>
 
 </html>

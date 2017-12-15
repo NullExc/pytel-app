@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 160);
+/******/ 	return __webpack_require__(__webpack_require__.s = 161);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -71,8 +71,8 @@
 "use strict";
 
 
-var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(13);
+var bind = __webpack_require__(4);
+var isBuffer = __webpack_require__(14);
 
 /*global toString:true*/
 
@@ -380,7 +380,91 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(11);
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+function handleClientLoad(callback) {
+    if (GoogleApi) {
+        console.log('client was loaded before');
+        callback(GoogleApi, TOKEN);
+    } else {
+        console.log('client is loading ...');
+        gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+        
+            GoogleApi = gapi;
+        
+            gapi.client.init({
+                discoveryDocs: DISCOVERY_DOCS,
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                scope: SCOPES
+            }).then(function () {
+        
+                GoogleAuth = gapi.auth2.getAuthInstance();
+        
+                GoogleAuth.isSignedIn.listen(updateSigninStatus);
+        
+                updateSigninStatus(GoogleAuth.isSignedIn.get());
+        
+                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+
+                if (!GoogleAuth.isSignedIn.get()) {
+                    callback(null);
+                } else {
+                    callback(GoogleApi, TOKEN);
+                }
+        
+                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+            });
+        }
+}
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
+
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
@@ -409,22 +493,22 @@ module.exports = {
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(13);
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(3);
-var Axios = __webpack_require__(14);
+var bind = __webpack_require__(4);
+var Axios = __webpack_require__(15);
 var defaults = __webpack_require__(2);
 
 /**
@@ -458,15 +542,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(28);
-axios.isCancel = __webpack_require__(7);
+axios.Cancel = __webpack_require__(9);
+axios.CancelToken = __webpack_require__(29);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(29);
+axios.spread = __webpack_require__(30);
 
 module.exports = axios;
 
@@ -476,7 +560,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports) {
 
 /*!
@@ -504,7 +588,7 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -512,10 +596,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(23);
-var dispatchRequest = __webpack_require__(24);
-var isAbsoluteURL = __webpack_require__(26);
-var combineURLs = __webpack_require__(27);
+var InterceptorManager = __webpack_require__(24);
+var dispatchRequest = __webpack_require__(25);
+var isAbsoluteURL = __webpack_require__(27);
+var combineURLs = __webpack_require__(28);
 
 /**
  * Create a new instance of Axios
@@ -598,7 +682,70 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 15:
+/***/ 151:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(10);
+
+
+var GoogleApi;
+var TOKEN;
+var photoUrl;
+var pickerApiLoaded = false;
+
+
+function setGoogleApi(api, token) {
+    GoogleApi = api;
+    TOKEN = token;
+}
+
+function loadPicker() {
+    console.log('waiting for callback');
+    gapi.load('picker', { 'callback': onPickerApiLoad });
+}
+
+function onPickerApiLoad() {
+    pickerApiLoaded = true;
+    console.log('callback was called');
+    createPicker();
+}
+
+function createPicker() {
+    if (pickerApiLoaded && TOKEN) {
+        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
+            .setOAuthToken(TOKEN)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
+            .setCallback(pickerCallback)
+            .build();
+        picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+        var fileId = data.docs[0].id;
+        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+    }
+}
+
+function getPhotoUrl() {
+    return photoUrl;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
+
+/***/ }),
+
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -618,55 +765,27 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var createError = __webpack_require__(6);
-
-/**
- * Resolve or reject a Promise based on response status.
- *
- * @param {Function} resolve A function that resolves the promise.
- * @param {Function} reject A function that rejects the promise.
- * @param {object} response The response.
- */
-module.exports = function settle(resolve, reject, response) {
-  var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
-  if (!response.status || !validateStatus || validateStatus(response.status)) {
-    resolve(response);
-  } else {
-    reject(createError(
-      'Request failed with status code ' + response.status,
-      response.config,
-      null,
-      response.request,
-      response
-    ));
-  }
-};
-
-
-/***/ }),
-
-/***/ 160:
+/***/ 161:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(151);
 
 
 
 
 
+
+var app = angular.module('OrderInput', ['ui.materialize']);
+
+app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
+
+})
 
 $(document).ready(function () {
 
@@ -709,7 +828,7 @@ $(document).ready(function () {
     var state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived;
 
     var date = new Date();
-    var utcDate;
+    var utcDate = new Date();
 
     if (edit) {
         date = new Date(order.arriveDate);
@@ -721,11 +840,11 @@ $(document).ready(function () {
         + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
         + '/' + utcDate.getFullYear());
 
-    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() + 1 : ('0' + utcDate.getHours()))
         + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
 
     customers.forEach(function (customer) {
-        names[customer.firstName + ' ' + customer.lastName] = null;
+        names[customer.fullName] = null;
     })
 
     workTypes.forEach(function (worktype) {
@@ -739,67 +858,97 @@ $(document).ready(function () {
     var fillCustomerData = function () {
 
         var doneLabel = $("#done-customer");
-        doneLabel.text(selectedCustomer.firstName + ' ' + selectedCustomer.lastName);
+        doneLabel.text(selectedCustomer.fullName);
         doneLabel.removeClass('orange');
         doneLabel.addClass('green');
 
         $(".customer-label").removeClass("active");
 
+        var email, phone, street, number, city, zipCode, ico, icdph, dic;
+
         if (selectedCustomer) {
-            if (selectedCustomer.contact) {
 
-                if (selectedCustomer.contact.email) {
-                    $("#email").val(selectedCustomer.contact.email);
-                    $("#email-label").addClass('active');
-                } else $("#email").val('');
+            if (selectedCustomer.person) {
+                var person = selectedCustomer.person;
 
-                if (selectedCustomer.contact.phone) {
-                    $("#phone").val(selectedCustomer.contact.phone);
-                    $("#phone-label").addClass('active');
-                } else $("#phone").val('');
+                if (person.phone) phone = person.phone;
+                if (person.email) email = person.email;
+
+                if (person.address) {
+                    var address = person.address;
+                    if (address.street) street = address.street;
+                    if (address.streetNumber) number = address.streetNumber;
+                    if (address.city) city = address.city;
+                    if (address.zipCode) zipCode = address.zipCode;
+                }
+
+                ico = "neuvedené (FO)";
+                icdph = "neuvedené (FO)";
+                dic = "neuvedené (FO)";
+
             }
-            if (selectedCustomer.address) {
 
-                if (selectedCustomer.address.street) {
-                    $("#street").val(selectedCustomer.address.street);
-                    $("#street-label").addClass('active');
-                } else $("#street").val('');
+            if (selectedCustomer.company) {
+                var company = selectedCustomer.company;
 
-                if (selectedCustomer.address.streetNumber) {
-                    $("#num").val(selectedCustomer.address.streetNumber);
-                    $("#num-label").addClass('active');
-                } else $("#num").val('');
+                if (company.contactPerson) {
+                    var contactPerson = company.contactPerson;
 
-                if (selectedCustomer.address.city) {
-                    $("#city").val(selectedCustomer.address.city);
-                    $("#city-label").addClass('active');
-                } else $("#city").val('');
+                    if (contactPerson.phone) phone = contactPerson.phone;
+                    if (contactPerson.email) email = contactPerson.email;
+                }
+                if (company.address) {
+                    var address = company.address;
 
-                if (selectedCustomer.address.zipCode) {
-                    $("#zip").val(selectedCustomer.address.zipCode);
-                    $("#zip-label").addClass('active');
-                } else $("#zip").val('');
+                    if (address.street) street = address.street;
+                    if (address.streetNumber) number = address.streetNumber;
+                    if (address.city) city = address.city;
+                    if (address.zipCode) zipCode = address.zipCode;
+                }
+                if (company.billData) {
+                    var billData = company.billData;
+
+                    if (billData.ICO) ico = billData.ICO;
+                    if (billData.ICDPH) icdph = billData.ICDPH;
+                    if (billData.DIC) dic = billData.DIC;
+                }
             }
-            if (selectedCustomer.billData) {
 
-                if (selectedCustomer.billData.ICO) {
-                    $("#ico").val(selectedCustomer.billData.ICO);
-                    $("#ico-label").addClass('active');
-                } else $("#ico").val(' ');
-
-                if (selectedCustomer.billData.ICDPH) {
-                    $("#icdph").val(selectedCustomer.billData.ICDPH);
-                    $("#icdph-label").addClass('active');
-                } else $("#icdph").val(' ');
-
-                if (selectedCustomer.billData.DIC) {
-                    $("#dic").val(selectedCustomer.billData.DIC);
-                    $("#dic-label").addClass('active');
-                } else $("#dic").val(' ');
-            } else {
-                $("#ico").val(null);
-                $("#icdph").val(null);
-                $("#dic").val(null);
+            if (email) {
+                $("#email").val(email);
+                $("#email-label").addClass('active');
+            }
+            if (phone) {
+                $("#phone").val(phone);
+                $("#phone-label").addClass('active');
+            }
+            if (street) {
+                $("#street").val(street);
+                $("#street-label").addClass('active');
+            }
+            if (number) {
+                $("#num").val(number);
+                $("#num-label").addClass('active');
+            }
+            if (city) {
+                $("#city").val(city);
+                $("#city-label").addClass('active');
+            }
+            if (zipCode) {
+                $("#zip").val(zipCode);
+                $("#zip-label").addClass('active');
+            }
+            if (ico) {
+                $("#ico").val(ico);
+                $("#ico-label").addClass('active');
+            }
+            if (icdph) {
+                $("#icdph").val(icdph);
+                $("#icdph-label").addClass('active');
+            }
+            if (dic) {
+                $("#dic").val(dic);
+                $("#dic-label").addClass('active');
             }
         }
     }
@@ -852,7 +1001,7 @@ $(document).ready(function () {
         limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
             for (var i = 0; i < customers.length; i++) {
-                if (val === customers[i].firstName + ' ' + customers[i].lastName) {
+                if (val === customers[i].fullName) {
                     selectedCustomer = customers[i];
                     break;
                 }
@@ -876,18 +1025,16 @@ $(document).ready(function () {
     })
 
     $('#create, #update').click(function (e) {
-
-        __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-            console.log(typeof GoogleApi);
-            __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
-            __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].listUpcomingEvents();
-        });
+        
         var order = {};
 
         order.description = $("#description").val();
 
         var email = $("#email").val();
         var phone = $("#phone").val();
+        var price = $("#price").val();
+
+        if (price) order.price = price;
 
         if (email || phone) {
             order.contact = {};
@@ -930,21 +1077,17 @@ $(document).ready(function () {
 
         date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth() + 1, help.getUTCDate(), help.getUTCHours(), help.getUTCMinutes(), help.getUTCSeconds()));
 
-        console.log(date);
         //date.setUTCMonth(date.getMonth() + 1);
 
         if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
             order.startDate = date;
-        //    order.startDate.
+            //    order.startDate.
         } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
             order.endDate = date;
         } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
             order.pickDate = date;
         }
         order.photoUrl = __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].getPhotoUrl();
-
-        console.log('creating order with ', order.photoUrl);
-
 
         var options = {
             url: '/order',
@@ -953,26 +1096,37 @@ $(document).ready(function () {
             }
         }
 
-        if (e.target.id === 'create') options.method = 'post';
+        if (e.target.id === 'create') {
+
+            options.method = 'post';
+
+            utcDate.setUTCHours(utcDate.getUTCHours() + 2);
+            options.data.order.arriveDate = utcDate;
+        }
         else {
+
+            __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+                console.log(typeof GoogleApi);
+                __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
+                __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
+            });
+
             var pathname = window.location.pathname.split("/");
             var id = pathname[pathname.length - 1];
             options.method = 'put';
             options.url = '/order/' + id
         }
 
-        console.log(JSON.stringify(options));
-
         __WEBPACK_IMPORTED_MODULE_1__lib_http_js__["a" /* default */].request(options, (err, response) => {
             if (err) console.log("error", err);
             else if (response) {
                 console.log("response", response.data);
                 if (response.data.id) {
-                    location.href = "/order/" + response.data.id;
+                    //location.href = "/order/" + response.data.id;
                 } else {
                     var pathname = window.location.pathname.split("/");
                     var id = pathname[pathname.length - 1];
-                    location.href = "/order/" + id;
+                    //location.href = "/order/" + id;
                 }
             }
         })
@@ -980,23 +1134,64 @@ $(document).ready(function () {
 
     $('.start-state').click(function () {
         console.log("start");
+        $('.start-state').removeClass('light-blue');
+        $('.start-state').addClass('light-green');
         state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
     })
 
     $('.end-state').click(function () {
         console.log("done");
+        $('.end-state').removeClass('light-blue');
+        $('.end-state').addClass('light-green');
         state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done;
     })
 
     $('.pickup-state').click(function () {
         console.log("picked up");
+        $('.pickup-state').removeClass('light-blue');
+        $('.pickup-state').addClass('light-green');
         state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
     })
 })
 
+
 /***/ }),
 
 /***/ 17:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__(7);
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  // Note: status is not exposed by XDomainRequest
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response.request,
+      response
+    ));
+  }
+};
+
+
+/***/ }),
+
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1025,7 +1220,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1101,51 +1296,6 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(1);
-
-/**
- * Parse headers into an object
- *
- * ```
- * Date: Wed, 27 Aug 2014 08:58:49 GMT
- * Content-Type: application/json
- * Connection: keep-alive
- * Transfer-Encoding: chunked
- * ```
- *
- * @param {String} headers Headers needing to be parsed
- * @returns {Object} Headers parsed into an object
- */
-module.exports = function parseHeaders(headers) {
-  var parsed = {};
-  var key;
-  var val;
-  var i;
-
-  if (!headers) { return parsed; }
-
-  utils.forEach(headers.split('\n'), function parser(line) {
-    i = line.indexOf(':');
-    key = utils.trim(line.substr(0, i)).toLowerCase();
-    val = utils.trim(line.substr(i + 1));
-
-    if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
-    }
-  });
-
-  return parsed;
-};
-
-
-/***/ }),
-
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1153,7 +1303,7 @@ module.exports = function parseHeaders(headers) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(15);
+var normalizeHeaderName = __webpack_require__(16);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -1169,10 +1319,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -1243,11 +1393,56 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
 /***/ 20:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(1);
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1323,7 +1518,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1367,7 +1562,7 @@ module.exports = btoa;
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1428,7 +1623,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1488,15 +1683,15 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(25);
-var isCancel = __webpack_require__(7);
+var transformData = __webpack_require__(26);
+var isCancel = __webpack_require__(8);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1575,7 +1770,7 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1603,7 +1798,7 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1625,7 +1820,7 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 27:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1647,13 +1842,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(8);
+var Cancel = __webpack_require__(9);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1712,7 +1907,21 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ 29:
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
+
+/***/ }),
+
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1747,7 +1956,61 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
+
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1766,128 +2029,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 30:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
-
-/***/ }),
-
-/***/ 31:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(9);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function listUpcomingEvents() {
-    GoogleApi.client.calendar.events.list({
-        'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
-        'showDeleted': false,
-        'singleEvents': true,
-        'maxResults': 10,
-        'orderBy': 'startTime'
-    }).then(function (response) {
-        var events = response.result.items;
-
-        if (events.length > 0) {
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
-                var when = event.start.dateTime;
-                if (!when) {
-                    when = event.start.date;
-                }
-                console.log(event.summary + ' (' + when + ')');
-            }
-        } else {
-            console.log('No upcoming events found.');
-        }
-    });
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
-
-/***/ }),
-
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(9);
-
-
-var GoogleApi;
-var TOKEN;
-var photoUrl;
-var pickerApiLoaded = false;
-
-
-function setGoogleApi(api, token) {
-    GoogleApi = api;
-    TOKEN = token;
-}
-
-function loadPicker() {
-    console.log('waiting for callback');
-    gapi.load('picker', { 'callback': onPickerApiLoad });
-}
-
-function onPickerApiLoad() {
-    pickerApiLoaded = true;
-    console.log('callback was called');
-    createPicker();
-}
-
-function createPicker() {
-    if (pickerApiLoaded && TOKEN) {
-        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
-        var view = new google.picker.View(google.picker.ViewId.DOCS);
-        view.setMimeTypes("image/png,image/jpeg,image/jpg");
-        var picker = new google.picker.PickerBuilder()
-            .enableFeature(google.picker.Feature.NAV_HIDDEN)
-            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
-            .setOAuthToken(TOKEN)
-            .addView(view)
-            .addView(new google.picker.DocsUploadView())
-            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
-            .setCallback(pickerCallback)
-            .build();
-        picker.setVisible(true);
-    }
-}
-
-function pickerCallback(data) {
-    if (data.action == google.picker.Action.PICKED) {
-        var fileId = data.docs[0].id;
-        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
-    }
-}
-
-function getPhotoUrl() {
-    return photoUrl;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
-
-/***/ }),
-
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2078,19 +2220,19 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(16);
-var buildURL = __webpack_require__(18);
-var parseHeaders = __webpack_require__(19);
-var isURLSameOrigin = __webpack_require__(20);
-var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(21);
+var settle = __webpack_require__(17);
+var buildURL = __webpack_require__(19);
+var parseHeaders = __webpack_require__(20);
+var isURLSameOrigin = __webpack_require__(21);
+var createError = __webpack_require__(7);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -2187,7 +2329,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(22);
+      var cookies = __webpack_require__(23);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -2263,17 +2405,17 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(17);
+var enhanceError = __webpack_require__(18);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -2293,7 +2435,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2306,7 +2448,7 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2330,90 +2472,6 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
-
-var DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-];
-
-var SCOPES = "https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
-
-var PROJECT_ID = "594621902662";
-
-
-var TOKEN = null;
-var GoogleAuth;
-var GoogleApi;
-var isClientSigned = false;
-
-function handleClientLoad(callback) {
-    if (GoogleApi) {
-        console.log('client was loaded before');
-        callback(GoogleApi, TOKEN);
-    } else {
-        console.log('client is loading ...');
-        gapi.load('client:auth2', initClient);
-    }
-
-    function initClient() {
-        
-            GoogleApi = gapi;
-        
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                scope: SCOPES
-            }).then(function () {
-        
-                GoogleAuth = gapi.auth2.getAuthInstance();
-        
-                GoogleAuth.isSignedIn.listen(updateSigninStatus);
-        
-                updateSigninStatus(GoogleAuth.isSignedIn.get());
-        
-                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-
-                if (!GoogleAuth.isSignedIn.get()) {
-                    callback(null);
-                } else {
-                    callback(GoogleApi, TOKEN);
-                }
-        
-                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });
-        }
-}
-
-function updateSigninStatus(isSignedIn) {
-    if (!isSignedIn) {
-        isClientSigned = false;
-        GoogleAuth.signIn();
-    } else {
-        isSignedIn = true;
-    }
-    console.log('status change', isSignedIn);
-}
-
-function handleAuthClick(event) {
-    GoogleAuth.signIn();
-}
-
-function handleSignoutClick(event) {
-    GoogleAuth.signOut();
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
 
 /***/ })
 

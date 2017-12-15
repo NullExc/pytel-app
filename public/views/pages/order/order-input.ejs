@@ -1,39 +1,38 @@
 <div class="row">
-    <div id="left-container" class="panel-group col s6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Zákazník</div>
-            <div class="row">
+    <div class="col s12 l6 offset-l3">
+        <div class="panel z-depth-4">
 
-                <h4>
-                    <span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span>
-                </h4>
 
-                <div id="find-customer" class="input-field">
+            <h4>
+                <span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span>
+            </h4>
 
-                    <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
-                    <label for="customer-search" style="margin-top: 10px;">
-                        <i class="material-icons prefix">search</i>
-                    </label>
-                </div>
+            <div id="find-customer" class="input-field">
 
-                <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header">
-                            <i class="material-icons grey-text">people</i>Vybrať v zozname
-                        </div>
-                        <div class="collapsible-body">
-                            <div class="collection" style="margin-top: 0px;">
-                                <% result.form.customers.forEach(function(customer) { %>
-                                    <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
-                                        <%= customer.firstName + ' ' + customer.lastName %>
-                                    </a>
-                                    <% }); %>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
+                <label for="customer-search" style="margin-top: 10px;">
+                    <i class="material-icons prefix">search</i>
+                </label>
             </div>
-            <ul id="address-data" class="collapsible panel panel-primary" data-collapsible="accordion">
+
+            <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons grey-text">people</i>Vybrať v zozname
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="collection" style="margin-top: 0px;">
+                            <% result.form.customers.forEach(function(customer) { %>
+                                <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
+                                    <%= customer.fullName %>
+                                </a>
+                                <% }); %>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <ul id="address-data" class="collapsible panel panel-primary" data-collapsible="accordion" style="margin-left: 10px; margin-right: 10px;">
                 <li>
                     <div class="collapsible-header">
                         <i class="material-icons grey-text">arrow_drop_down</i>Adresa a kontakt
@@ -97,11 +96,12 @@
                     </div>
                 </li>
             </ul>
+
+
         </div>
     </div>
-    <div id="right-container" class="panel-group col s6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Zákazka</div>
+    <div class="col s12 l6 offset-l3">
+        <div class="panel z-depth-4">
             <div class="row">
                 <div class="input-field col s12">
                     <input id="description" class="order-input" type="text">

@@ -12,6 +12,7 @@ module.exports = {
         'order',
         'orders',
         'state',
-        'settings'
+        'settings',
+        'stats'
     ]
 }

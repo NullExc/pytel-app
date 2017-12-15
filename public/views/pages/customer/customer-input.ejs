@@ -1,79 +1,162 @@
-<form class="" style="margin-top: 20px;">
-    <div id="wrapper" class="panel-group">
-        <div id="left-container">
-            <div class="panel panel-primary">
-                <div class="row input-row">
-                    <div class="input-field col s6">
-                        <input id="first" type="text">
-                        <label id="first-label" for="first">Meno</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="last" type="text">
-                        <label id="last-label" for="last">Priezvisko</label>
-                    </div>
+<form id="person-form" class="" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col l6 s12 offset-l3">
+            <div class="col s12 panel z-depth-4">
+                <h5>Názov fyzickej osoby</h5>
+                <div class="input-field col s6">
+                    <input id="first" type="text">
+                    <label id="first-label" for="first">Meno</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="last" type="text">
+                    <label id="last-label" for="last">Priezvisko</label>
                 </div>
             </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading">Kontakt</div>
-                <div class="row input-row">
-                    <div class="input-field">
-                        <input id="email" type="text">
-                        <label id="email-label" for="email">E-mail</label>
-                    </div>
+
+            <div class="col s12 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Kontakt</h5>
                 </div>
-                <div class="row input-row">
-                    <div class="input-field">
-                        <input id="phone" type="text">
-                        <label id="phone-label" for="phone">Tel. číslo</label>
-                    </div>
+                <div class="input-field col s6">
+                    <input id="email" type="text">
+                    <label id="email-label" for="email">E-mail</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="phone" type="text">
+                    <label id="phone-label" for="phone">Mobil</label>
                 </div>
             </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading">Adresa</div>
-                <div class="row input-row">
-                    <div class="input-field col s9">
-                        <input id="street" type="text">
-                        <label id="street-label" for="street">Ulica</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="num" type="text">
-                        <label id="num-label" for="num">Číslo</label>
+
+            <div class="col s12 panel z-depth-4">
+                <div class="col s12" style="margin-top: 20px;">
+                    <h5>Adresa</h5>
+                </div>
+
+                <div class="col s9">
+                    <div class="input-field">
+                        <input id="person-street" type="text">
+                        <label id="person-street-label" for="person-street">Ulica</label>
                     </div>
                 </div>
-                <div class="row input-row">
-                    <div class="input-field col s9">
-                        <input id="city" type="text">
-                        <label id="city-label" for="city">Mesto</label>
+                <div class="col s3">
+                    <div class="input-field">
+                        <input id="person-num" type="text">
+                        <label id="person-num-label" for="person-num">Číslo</label>
                     </div>
-                    <div class="input-field col s3">
-                        <input id="zip" type="text">
-                        <label id="zip-label" for="zip">PSČ</label>
+                </div>
+
+                <div class="col s9">
+                    <div class="input-field">
+                        <input id="person-city" type="text">
+                        <label id="person-city-label" for="person-city">Mesto</label>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="input-field">
+                        <input id="person-zip" type="text">
+                        <label id="person-zip-label" for="person-zip">PSČ</label>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="right-container">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Fakturačné údaje</div>
-                <div class="row input-row">
+    </div>
+</form>
+
+<form id="company-form" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col l6 s12">
+            <div class="col s12 panel z-depth-4">
+                <h5>Názov právnickej osoby</h5>
+                <div class="input-field">
+                    <input id="name" type="text">
+                    <label id="name-label" for="name">Názov</label>
+                </div>
+            </div>
+
+            <div class="col s12 panel z-depth-4">
+                <div class="col s12" style="margin-top: 20px;">
+                    <h5>Adresa</h5>
+                </div>
+
+                <div class="col s9">
+                    <div class="input-field">
+                        <input id="company-street" type="text">
+                        <label id="company-street-label" for="company-street">Ulica</label>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="input-field">
+                        <input id="company-num" type="text">
+                        <label id="company-num-label" for="company-num">Číslo</label>
+                    </div>
+                </div>
+
+                <div class="col s9">
+                    <div class="input-field">
+                        <input id="company-city" type="text">
+                        <label id="company-city-label" for="company-city">Mesto</label>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="input-field">
+                        <input id="company-zip" type="text">
+                        <label id="company-zip-label" for="company-zip">PSČ</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 panel z-depth-4">
+                <div class="col s12" style="margin-top: 20px;">
+                    <h5>Fakturačné údaje</h5>
+                </div>
+
+                <div class="col s12">
                     <div class="input-field">
                         <input id="ico" type="text">
                         <label id="ico-label" for="ico">IČO</label>
                     </div>
                 </div>
-                <div class="row input-row">
+
+                <div class="col s12">
                     <div class="input-field">
                         <input id="icdph" type="text">
                         <label id="icdph-label" for="icdph">IČ DPH</label>
                     </div>
                 </div>
-                <div class="row input-row">
+
+                <div class="col s12">
                     <div class="input-field">
                         <input id="dic" type="text">
                         <label id="dic-label" for="dic">DIČ</label>
                     </div>
                 </div>
             </div>
+
+        </div>
+
+        <div class="col l6 s12">
+            <div class="col s12 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Kontaktná osoba</h5>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-first" type="text">
+                    <label id="contact-first-label" for="contact-first">Meno</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-last" type="text">
+                    <label id="contact-last-label" for="contact-last">Priezvisko</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-email" type="text">
+                    <label id="contact-email-label" for="contact-email">E-mail</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-phone" type="text">
+                    <label id="contact-phone-label" for="contact-phone">Mobil</label>
+                </div>
+            </div>
+
         </div>
     </div>
 </form>

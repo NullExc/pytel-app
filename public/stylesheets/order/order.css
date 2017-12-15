@@ -1,13 +1,3 @@
-#right-container {
-    padding-right: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-right: 5px solid #97BACE;
-}
-
-#left-container {
-    padding-top: 20px;
-}
 
 #find-customer {
     margin: 20px 10px 10px 10px;
@@ -26,10 +16,6 @@
     margin: 10px;
 }
 
-.collapsible-body {
-    padding: 0;
-}
-
 .customer-input {
     margin: 0 !important;
 }
@@ -41,22 +27,6 @@
 
 
 @media only screen and (max-device-width: 480px) {
-    
-    #right-container {
-        border-right: none;
-    }
-
-    #left-container {
-        padding-top: 0;
-    }
-
-    .row .col.s6 {
-        width: 100%;
-    }
-
-    .row .col.s5 {
-        width: 50%;
-    }
 
     #price-div {
         width: 50%;

@@ -1,6 +1,45 @@
 import http from '../lib/http.js';
+import STATE from './state.js';
+import $ from 'jquery';
 
-$(document).ready(function () {
+var app = angular.module('Customer', ['ui.materialize']);
+
+app.controller('CustomerCtrl', function ($scope, $http, $filter) {
+
+    $scope.customer = window.customer;
+
+    $scope.orders = window.orders;
+
+    $scope.STATE = STATE;
+
+    $scope.person = $scope.customer.person ? true : false;
+
+    $scope.deleteCustomer = function () {
+
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+
+        console.log(id);
+
+        $http.delete('/customer/' + id)
+            .success(function (data) {
+                location.href = '/customer/all';
+            })
+    }
+
+    $scope.editCustomer = function () {
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+        location.href = '/customer-edit/' + id;
+    }
+
+    
+
+
+
+})
+
+/*$(document).ready(function () {
 
 
     var orders = document.getElementsByClassName('collapsible-body');
@@ -52,4 +91,4 @@ $(document).ready(function () {
             });
         }
     })
-})
+})*/

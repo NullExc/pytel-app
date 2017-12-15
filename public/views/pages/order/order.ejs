@@ -19,7 +19,7 @@
         <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
 </head>
 
-<body>
+<body ng-app="Order" ng-controller="OrderCtrl">
 
     <% include ../../partials/nav-in.ejs %>
         <div class="row">
@@ -50,7 +50,9 @@
                             <div class="card-content black-text">
                                 <span class="card-title">Začatie</span>
                                 <p id="work-progress">Na zákazke sa pracuje.</p>
-                                <p>Čas začatia práce: <span id="start-date"></span></p>
+                                <p>Čas začatia práce:
+                                    <span id="start-date"></span>
+                                </p>
                                 <h5 id="diff-time"></h5>
                             </div>
                         </div>
@@ -59,7 +61,7 @@
                         <div id="end-body" class="card teal lighten-4 z-depth-3">
                             <div class="card-content black-text">
                                 <span class="card-title">Ukončenie</span>
-                                <p>Zákazka bola dokončená o : 
+                                <p>Zákazka bola dokončená o :
                                     <br>
                                     <span id="end-date"></span>
                                 </p>
@@ -80,10 +82,83 @@
                 </div>
             </div>
 
-            <div class="row col s12 white-text">
-                <div class="section">
 
+            <div class="col s8 offset-l2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Zákazka</h5>
                 </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Cena</h6>
+                        <p>{{order.price}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Typ práce</h6>
+                        <p>{{workType.name}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Typ zákazky</h6>
+                        <p>{{orderType.name}}</p>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Poznámky</h6>
+                        <p>{{order.notes}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s8 offset-l2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Zákazník</h5>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Meno</h6>
+                        <p>{{customer.fullName}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Mobil</h6>
+                        <p>{{order.contact.phone}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">E-mail</h6>
+                        <p>{{order.contact.email}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Ulica</h6>
+                        <p>{{order.address.street}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Číslo ulice</h6>
+                        <p>{{order.address.streetNumber}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Mesto</h6>
+                        <p>{{order.address.city}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">PSČ</h6>
+                        <p>{{order.address.zipCode}}</p>
+                    </div>
+                </div>
+
             </div>
         </div>
         <div id="photo-modal" class="modal">
@@ -104,7 +179,7 @@
                         </a>
                     </li>
                     <li>
-                        <a id="edit" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                        <a id="edit" ng-click="editOrder()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
                             <i class="material-icons">mode_edit</i>
                         </a>
                     </li>
@@ -118,88 +193,12 @@
                 <p>Potvrdením natrvalo vymažete zákazku zo systému.</p>
             </div>
             <div style="float: right;">
-                <a id="deleteOrder" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+                <a id="deleteOrder" ng-click="deleteOrder()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
                 <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
             </div>
         </div>
 
-        <script>
-            window.onload = function () {
-
-                if (customer) {
-                    var doneLabel = $("#done-customer");
-                    doneLabel.text(customer.firstName + ' ' + customer.lastName);
-                    doneLabel.removeClass('orange');
-                    doneLabel.addClass('green');
-                }
-
-                if (workType) {
-                    $("#work").val(workType.name);
-                    $("#work-label").addClass('active');
-                }
-
-                if (orderType) {
-                    $("#order").val(orderType.name);
-                    $("#order-label").addClass('active');
-                }
-
-                if (order) {
-
-                    var arriveDate = order.arriveDate;
-
-                    if (order.description) {
-                        $("#description").val(order.description);
-                        $("#description-label").addClass('active');
-                    }
-                    if (order.contact) {
-                        if (order.contact.email) {
-                            $("#email").val(order.contact.email);
-                            $("#email-label").addClass('active');
-                        }
-                        if (order.contact.phone) {
-                            $("#phone").val(order.contact.phone);
-                            $("#phone-label").addClass('active');
-                        }
-                    }
-                    if (order.address) {
-                        if (order.address.street) {
-                            $("#street").val(order.address.street);
-                            $("#street-label").addClass('active');
-                        }
-                        if (order.address.streetNumber) {
-                            $("#num").val(order.address.streetNumber);
-                            $("#num-label").addClass('active');
-                        }
-                        if (order.address.city) {
-                            $("#city").val(order.address.city);
-                            $("#city-label").addClass('active');
-                        }
-                        if (order.address.zipCode) {
-                            $("#zip").val(order.address.zipCode);
-                            $("#zip-label").addClass('active');
-                        }
-                    }
-                    if (order.billData) {
-                        if (order.billData.ICO) {
-                            $("#ico").val(order.billData.ICO);
-                            $("#ico-label").addClass('active');
-                        }
-                        if (order.billData.ICDPH) {
-                            $("#icdph").val(order.billData.ICDPH);
-                            $("#icdph-label").addClass('active');
-                        }
-                        if (order.billData.DIC) {
-                            $("#dic").val(order.billData.DIC);
-                            $("#dic-label").addClass('active');
-                        }
-                    }
-                    if (order.price) {
-                        $("#price").val(order.price);
-                        $("#price-label").addClass('active');
-                    }
-                }
-            }
-        </script>
+        <script>$('.modal').modal();</script>
 </body>
 
 </html>

@@ -3,52 +3,58 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-        <script type="text/javascript">
-            var customers = JSON.parse('<%- JSON.stringify(customers) %>');
-        </script>
-        <script type="text/javascript" src="/dist/customers.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
 </head>
 
-<body>
+<body ng-app="Customers" ng-controller="CustomersCtrl">
 
     <% include ../../partials/nav-in.ejs %>
 
         <div class="row">
-            <div class="input-field col s3" style="margin:20px;">
-                <select id="sort-select">
-                    <option value="1">Vzostupne</option>
-                    <option value="2">Zostupne</option>
-                </select>
-                <label>Zoradiť podľa abecedy</label>
+
+            <div class="section col s3" style="margin:20px;">
+                <div input-field>
+                    <select ng-model="sortSelect.value" ng-change="sortChange()" material-select>
+                        <option ng-repeat="option in sortSelect.choices">{{option}}</option>
+                    </select>
+                    <label>Filtrovať podľa abecedy</label>
+                </div>
             </div>
-            <div class="input-field col s3" style="margin:20px;">
-                <select id="order-select">
-                    <option value="1">Všetky</option>
-                    <option value="2">Prijaté</option>
-                    <option value="3">Prebiehajúce</option>
-                    <option value="4">Čakajúce na vyzdvihnutie</option>
-                </select>
-                <label>Filtrovať podľa zákazky</label>
+            <div class="section col s3" style="margin:20px;">
+                <div input-field>
+                    <select ng-model="orderSelect.value" ng-change="orderChange()" material-select>
+                        <option ng-repeat="option in orderSelect.choices">{{option}}</option>
+                    </select>
+                    <label>Filtrovať podľa zákazky</label>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <a id="search" class="btn green lighten-1">
+                    <i class="material-icons left">search</i>Hľadať</a>
             </div>
         </div>
+        <div class="row">
+            <div id="list-container" class="col s12">
+                <ul id="list" class="collection" style="margin-top: 0px;">
 
-        <div id="list-container">
-            <ul id="list" class="collection" style="margin-top: 0px;">
-                <% customers.forEach(function(customer) { %>
-                    <a href="/customer/<%= customer._id %>" class="customer-item collection-item avatar black-text">
-                        <p class="title">
-                            <%= customer.firstName + ' ' + customer.lastName %>
-                        </p>
-                        <span>
-                            <%= customer.contact.email %>
-                        </span>
-                        <br>
-                        <span>
-                            <%= customer.address %>
-                        </span>
-                    </a>
-                    <% }); %>
-            </ul>
+                    <li class="item collection-item avatar black-text" ng-repeat="customer in customers">
+
+                        <div>
+                            <p class="title">{{customer.fullName}}</p>
+
+                            <div class="right secondary-content">
+                                <a href="/customer-edit/{{customer._id}}" class="btn-floating hide-on-small-only brown lighten-1" style="margin-right: 20px;">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <a href="/customer/{{customer._id}}" class="btn-floating hide-on-small-only blue" style="margin-right: 20px;">
+                                    <i class="material-icons">visibility</i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div class="fixed-action-btn">
@@ -56,16 +62,11 @@
                 <i class="large material-icons">person_add</i>
             </a>
         </div>
+
         <script type="text/javascript">
-       
-            var sortOption = JSON.parse('<%- JSON.stringify(sortOption) %>');
-            console.log(sortOption);
-            if (sortOption === 1) {
-                $("#sort-select option[value='1']").attr("selected","selected");
-            } else if (sortOption === 2) {
-                $("#sort-select option[value='2']").attr("selected","selected");
-            }
+            var customers = JSON.parse('<%- JSON.stringify(customers) %>');
         </script>
+        <script type="text/javascript" src="/dist/customers.js"></script>
 </body>
 
 </html>

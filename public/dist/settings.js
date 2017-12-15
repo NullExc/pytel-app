@@ -60,86 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 163);
+/******/ 	return __webpack_require__(__webpack_require__.s = 164);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 163:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(9);
-
-
-
-//$(document).ready(function(){
-
-    function startSignProcess() {
-        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function(GoogleApi) {
-            
-        });
-        console.log('in start sign process', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].GoogleApi);
-    }
-
-    startSignProcess();
-    //Code here
-// });
-
-
-
-
-
-
-/***/ }),
-
-/***/ 31:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(9);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function listUpcomingEvents() {
-    GoogleApi.client.calendar.events.list({
-        'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
-        'showDeleted': false,
-        'singleEvents': true,
-        'maxResults': 10,
-        'orderBy': 'startTime'
-    }).then(function (response) {
-        var events = response.result.items;
-
-        if (events.length > 0) {
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
-                var when = event.start.dateTime;
-                if (!when) {
-                    when = event.start.date;
-                }
-                console.log(event.summary + ' (' + when + ')');
-            }
-        } else {
-            console.log('No upcoming events found.');
-        }
-    });
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, listUpcomingEvents });
-
-/***/ }),
-
-/***/ 9:
+/***/ 10:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -220,6 +146,90 @@ function handleSignoutClick(event) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
+
+/***/ }),
+
+/***/ 164:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(10);
+
+
+
+//$(document).ready(function(){
+
+    function startSignProcess() {
+        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function(GoogleApi) {
+            
+        });
+        console.log('in start sign process', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].GoogleApi);
+    }
+
+    startSignProcess();
+    //Code here
+// });
+
+
+
+
+
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
+
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
 
 /***/ })
 

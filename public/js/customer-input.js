@@ -2,47 +2,115 @@ import http from '../lib/http.js';
 
 $(document).ready(function () {
 
+    $('input[type=radio][name=legal-form]').change(function () {
+        if (this.value == 'person') {
+            $("#person-form").show();
+            $("#company-form").hide();
+        }
+        else if (this.value == 'company') {
+            $("#person-form").hide();
+            $("#company-form").show();
+        }
+    });
+
+    $('#show-person').prop('checked', true);
+    $("#person-form").show();
+    $("#company-form").hide();
+
     $("#create, #update").click(function (e) {
 
-        var customer = {};
+        var data = {};
 
-        customer.firstName = $("#first").val();
-        customer.lastName = $("#last").val();
+        var form = $('input[name=legal-form]:checked', '#customer-form').val();
 
-        var email = $("#email").val();
-        var phone = $("#phone").val();
+        if (form === 'company' || (window.customer && window.customer.company)) {
 
-        if (email || phone) {
-            customer.contact = {};
+            var company = {};
+
+            company.name = $("#name").val();
+
+            var street = $("#company-street").val();
+            var streetNumber = $("#company-num").val();
+            var city = $("#company-city").val();
+            var zipCode = $("#company-zip").val();
+
+            if (street || streetNumber || city || zipCode) {
+                company.address = {};
+            }
+            if (street) company.address.street = street;
+            if (streetNumber) company.address.streetNumber = streetNumber;
+            if (city) company.address.city = city;
+            if (zipCode) company.address.zipCode = zipCode;
+
+            var firstName = $("#contact-first").val();
+            var lastName = $("#contact-last").val();
+            var email = $("#contact-email").val();
+            var phone = $("#contact-phone").val();
+
+            if (firstName || lastName || email || phone) {
+                company.contactPerson = {};
+            }
+            if (firstName) company.contactPerson.firstName = firstName;
+            if (lastName) company.contactPerson.lastName = lastName;
+            if (email) company.contactPerson.email = email;
+            if (phone) company.contactPerson.phone = phone;
+
+            var ico = $("#ico").val();
+            var icdph = $("#icdph").val();
+            var dic = $("#dic").val();
+
+            if (ico || icdph || dic) {
+                company.billData = {};
+            }
+            if (ico) company.billData.ICO = ico;
+            if (icdph) company.billData.ICDPH = icdph;
+            if (dic) company.billData.DIC = dic;
+
+            console.log(JSON.stringify(company, 2, 2));
+
+            data.company = company;
+
+            data.fullName = company.name;
+
+            data.search = company.name;
+
+        } else if (form === 'person' || (customer && customer.person)) {
+
+            var person = {};
+
+            person.firstName = $("#first").val();
+            person.lastName = $("#last").val();
+
+            var street = $("#person-street").val();
+            var streetNumber = $("#person-num").val();
+            var city = $("#person-city").val();
+            var zipCode = $("#person-zip").val();
+
+            if (street || streetNumber || city || zipCode) {
+                person.address = {};
+            }
+            if (street) person.address.street = street;
+            if (streetNumber) person.address.streetNumber = streetNumber;
+            if (city) person.address.city = city;
+            if (zipCode) person.address.zipCode = zipCode;
+
+            var email = $("#email").val();
+            var phone = $("#phone").val();
+
+            if (email) person.email = email;
+            if (phone) person.phone = phone;
+
+            console.log(JSON.stringify(person, 2, 2));
+
+            data.person = person;
+
+            data.fullName = person.firstName + " " + person.lastName;
+
+            data.search = person.lastName;
+
         }
-        if (email) customer.contact.email = email;
-        if (phone) customer.contact.phone = phone;
 
-        var street = $("#street").val();
-        var streetNumber = $("#num").val();
-        var city = $("#city").val();
-        var zipCode = $("#zip").val();
-
-        if (street || streetNumber || city || zipCode) {
-            customer.address = {};
-        }
-        if (street) customer.address.street = street;
-        if (streetNumber) customer.address.streetNumber = streetNumber;
-        if (city) customer.address.city = city;
-        if (zipCode) customer.address.zipCode = zipCode;
-
-        var ico = $("#ico").val();
-        var icdph = $("#icdph").val();
-        var dic = $("#dic").val();
-
-        if (ico || icdph || dic) {
-            customer.billData = {};
-        }
-        if (ico) customer.billData.ICO = ico;
-        if (icdph) customer.billData.ICDPH = icdph;
-        if (dic) customer.billData.DIC = dic;
-
-        var options = {data: customer};
+        var options = { data: {customer: data} };
 
         if (e.target.id === 'create') {
 
@@ -52,7 +120,8 @@ $(document).ready(function () {
             http.request(options, (err, response) => {
                 if (err) console.log(err);
                 else if (response) {
-                    location.href = '/customer/' + response.data.id;
+                    console.log(response);
+                    //location.href = '/customer/' + response.data.id;
                 }
             })
 
@@ -62,6 +131,8 @@ $(document).ready(function () {
             options.url = '/customer/' + id;
             options.method = 'put';
 
+            console.log(JSON.stringify(options, 2, 2));
+
             http.request(options, (err, response) => {
 
                 localStorage.removeItem('updateId');
@@ -69,7 +140,8 @@ $(document).ready(function () {
                 if (err) {
                     console.error(err);
                 } else if (response) {
-                    location.href = '/customer/' + id;
+                    console.log(response);
+                    //location.href = '/customer/' + id;
                 }
             })
         }

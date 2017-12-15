@@ -2,8 +2,6 @@ input {
     margin: 0 !important;
 }
 
-
-
 .input-row {
     margin-bottom: 0;
     padding: 10px;
@@ -21,9 +19,27 @@ input {
 }
 
 #right-container {
-    padding: 15px;
+    padding: 15px; 
     width: 50%;
     float: left;
+}
+
+body {
+    background: #fafafa;
+}
+
+.panel {
+    background-color: #ffffff;
+    padding-bottom: 20px !important;
+}
+
+[type="radio"].with-gap:checked+label:before,
+[type="radio"].with-gap:checked+label:after {
+border: 2px solid #01579b !important;
+}
+
+[type="radio"].with-gap:checked+label:after {
+background-color: #01579b !important;
 }
 
 @media only screen and (max-device-width: 480px) {

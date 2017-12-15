@@ -7,30 +7,40 @@ function setGoogleApi(api) {
     GoogleApi = api;
 }
 
-function listUpcomingEvents() {
-    GoogleApi.client.calendar.events.list({
-        'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
-        'showDeleted': false,
-        'singleEvents': true,
-        'maxResults': 10,
-        'orderBy': 'startTime'
-    }).then(function (response) {
-        var events = response.result.items;
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
 
-        if (events.length > 0) {
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
-                var when = event.start.dateTime;
-                if (!when) {
-                    when = event.start.date;
-                }
-                console.log(event.summary + ' (' + when + ')');
-            }
-        } else {
-            console.log('No upcoming events found.');
-        }
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
     });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+
+
 }
 
-export default { setGoogleApi, listUpcomingEvents };
+export default { setGoogleApi, insertEvent };

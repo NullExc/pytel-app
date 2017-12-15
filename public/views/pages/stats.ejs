@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <% include ../partials/header.ejs %>
+        <script type="text/javascript" src="/dist/stats.js"></script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+
+    <% include ../partials/nav-in.ejs %>
+
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text">
+                <h5>Prehľad</h5>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col s8 offset-l2 panel z-depth-4">
+                <div input-field class="col l2 s6">
+                    <input id="from-date" type="text" readonly>
+                    <label id="from-label" for="from-date">Od</label>
+                </div>
+                <div input-field class="col l2 s6">
+                    <input id="to-date" type="text" readonly>
+                    <label id="to-label" for="to-date">Do</label>
+                </div>
+                <p>{{from}}</p>
+                <p>{{to}}</p>
+            </div>
+
+            <div class="col s8 offset-l2 panel z-depth-4">
+                <div class="col s6">
+                    <h5>Počet zákaziek</h5>
+                    <p>{{totalCount}}</p>
+                </div>
+                <div class="col s6">
+                    <h5>Prijatá suma</h5>
+                    <p>{{totalSum}}</p>
+                </div>
+
+                <div class="col s12">
+                    <h5>Typ zákazky</h5>
+                    <table class="tablesorter bordered responsive-table">
+                        <thead>
+                            <tr>
+                                <th ng-click="orderSort('name')">
+                                    Zákazka
+                                </th>
+                                <th ng-click="orderSort('count')">
+                                    Počet
+                                </th>
+                                <th ng-click="orderSort('sum')">
+                                    Spolu
+                                </th>
+                                <th ng-click="orderSort('time')">
+                                    Čas
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="order in orderSum | orderBy:orderPredicate:orderReverse | itemsPerPage:5" pagination-id="work">
+                                <td>{{order.name}}</td>
+                                <td>{{order.count}}</td>
+                                <td>{{order.sum}}</td>
+                                <td>{{order.time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls pagination-id="work" max-size="5" direction-links="true" boundary-links="true">
+                    </dir-pagination-controls>
+                    <h5>Typ práce</h5>
+                    <table class="tablesorter bordered responsive-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th ng-click="workSort('name')">
+                                    Práca
+                                </th>
+                                <th ng-click="workSort('count')">
+                                    Počet
+                                </th>
+                                <th ng-click="workSort('sum')">
+                                    Spolu
+                                </th>
+                                <th ng-click="workSort('time')">
+                                    Čas
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="work in workSum | orderBy:workPredicate:workReverse | itemsPerPage:5" pagination-id="order">
+                                <td>{{work.name}}</td>
+                                <td>{{work.count}}</td>
+                                <td>{{work.sum}}</td>
+                                <td>{{work.time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls pagination-id="order" max-size="5" direction-links="true" boundary-links="true">
+                    </dir-pagination-controls>
+                </div>
+            </div>
+
+            <div class="col l6 m6 s12">
+
+            </div>
+
+            <div class="col l6 m6 s12" id="list-container">
+                <ul id="list" class="collection with-header">
+                    <li class="collection-header light-blue darken-4 white-text">
+                        <h5>Zákazky</h5>
+                    </li>
+                    <li class="item collection-item avatar black-text" ng-repeat="order in orders">
+                        <div>
+                            <p class="title">
+                                {{order.order.description}}
+                            </p>
+                            <span>
+                                {{order.order.price}}
+                            </span>
+                            <span>
+                                €
+                            </span>
+                            <p>
+                                {{order.workType.name}}
+                            </p>
+                            <p>
+                                {{order.orderType.name}}
+                            </p>
+
+                            <a href="/order-edit/{{order.order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a href="/order/{{order.order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
+                                <i class="material-icons">visibility</i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</body>
+
+</html>

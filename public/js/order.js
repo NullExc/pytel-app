@@ -3,7 +3,45 @@ import http from '../lib/http.js';
 import googleAuth from '../lib/google-auth';
 import calendar from '../lib/calendar.js';
 import picker from '../lib/picker.js';
+import $ from 'jquery';
 
+var app = angular.module('Order', ['ui.materialize']);
+
+app.controller('OrderCtrl', function ($scope, $http, $filter) {
+
+    $scope.order = window.order;
+    $scope.customer = window.customer;
+    $scope.workType = window.workType;
+    $scope.orderType = window.orderType;
+
+    if ($scope.order && $scope.order.photoUrl) {
+        $('#photo-pic').attr('src', $scope.order.photoUrl);
+    } else {
+        $('.show-photo').addClass("disabled");
+    }
+
+    $scope.deleteOrder = function () {
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+        console.log(id);
+
+        $http.delete('/order/' + id).then(function success(data) {
+            location.href = '/order/all';
+        }, function error(err) {
+            console.log(err);
+        })
+            
+    }
+
+    $scope.editOrder = function () {
+        var pathname = window.location.pathname.split("/");
+        var id = pathname[pathname.length - 1];
+        location.href = '/order-edit/' + id;
+    }
+
+})
+
+/*
 $(document).ready(function () {
 
     var state = STATE.arrived;
@@ -63,4 +101,4 @@ $(document).ready(function () {
         var id = pathname[pathname.length - 1];
         location.href = '/order-edit/' + id;
     });
-})
+})*/

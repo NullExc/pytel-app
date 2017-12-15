@@ -38,6 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/public/views'));
+app.use('/scripts', express.static(__dirname + '/node_modules/'));
 
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
@@ -82,7 +83,10 @@ app.get('/customer/:id', customerApi.get);
 app.put('/customer/:id', customerApi.update);
 app.delete('/customer/:id', customerApi.delete);
 
+app.post('/customer/sort', customerApi.sortByOrder);
+
 app.get('/customer/profile/:id', customerApi.getProfile);
+app.get('/customer/stats/:id', customerApi.stats);
 
 //settings routes
 app.get('/settings', settingsApi.get);
@@ -90,6 +94,12 @@ app.get('/settings', settingsApi.get);
 //user routes
 app.post('/register', userApi.register);
 app.post('/login', userApi.login);
+
+
+app.get('/stats', function (req, res, next) {
+  res.render('pages/stats');
+})
+app.post('/stats', orderApi.getStats);
 
 app.use(function(req, res, next){
   res.render('pages/not-found', { status: 404, url: req.url });

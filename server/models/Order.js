@@ -113,7 +113,7 @@ OrderSchema.statics.getFormData = function (callback) {
     })
 }
 
-OrderSchema.statics.getDetail = function (id, callback) {
+OrderSchema.statics.getDetail = function (id, skipCustomers, callback) {
 
     function getCustomers(result, callback) {
         mongoose.model('Customer').find({}, function (err, customers) {
@@ -166,7 +166,7 @@ OrderSchema.statics.getDetail = function (id, callback) {
             if (err) {
                 callback(err, null);
             } else {
-                result["orderType"] = order;
+                result["orderType"] = orderType;
                 callback(null, result);
             }
         })
@@ -185,13 +185,35 @@ OrderSchema.statics.getDetail = function (id, callback) {
             if (order.workType) data.workType = order.workType;
             if (order.orderType) data.orderType = order.orderType;
 
-            var detail = async.compose(getOrderType, getWorkType, getCustomers, getCustomer);
+            var detail;
+
+            if (!skipCustomers) detail = async.compose(getOrderType, getWorkType, getCustomers, getCustomer);
+            else detail = async.compose(getOrderType, getWorkType, getCustomer);
+
             detail(data, function (err, result) {
                 result["order"] = order;
                 callback(err, result);
             })
         }
     })
+}
+
+OrderSchema.statics.getStats = function (from, to, callback) {
+
+    var orderDetails = [];
+
+    Order.find({}).where('state').equals('pickUp').where('pickDate').gte(from).lte(to).exec(function (err, orders) {
+        async.each(orders, function (order, callback) {
+            
+            Order.getDetail(order._id, true, function (err, detail) {
+                orderDetails.push(detail);
+                if (err) callback(err);
+                else callback();
+            })
+        }, function (err) {
+            callback(err, orderDetails);
+        })
+    });
 }
 
 var Order = mongoose.model('Order', OrderSchema);

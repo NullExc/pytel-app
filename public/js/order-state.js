@@ -1,9 +1,11 @@
 import STATE from './state.js';
 import moment from 'moment';
 
+
 $(document).ready(function () {
 
-
+    
+    
     if (order) {
 
         var arriveDate = moment.utc(order.arriveDate);

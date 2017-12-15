@@ -4,6 +4,12 @@ import googleAuth from '../lib/google-auth';
 import calendar from '../lib/calendar.js';
 import picker from '../lib/picker.js';
 
+var app = angular.module('OrderInput', ['ui.materialize']);
+
+app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
+
+})
+
 $(document).ready(function () {
 
     $('.timepicker').pickatime({
@@ -45,7 +51,7 @@ $(document).ready(function () {
     var state = STATE.arrived;
 
     var date = new Date();
-    var utcDate;
+    var utcDate = new Date();
 
     if (edit) {
         date = new Date(order.arriveDate);
@@ -57,11 +63,11 @@ $(document).ready(function () {
         + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
         + '/' + utcDate.getFullYear());
 
-    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() + 1 : ('0' + utcDate.getHours()))
         + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
 
     customers.forEach(function (customer) {
-        names[customer.firstName + ' ' + customer.lastName] = null;
+        names[customer.fullName] = null;
     })
 
     workTypes.forEach(function (worktype) {
@@ -75,67 +81,97 @@ $(document).ready(function () {
     var fillCustomerData = function () {
 
         var doneLabel = $("#done-customer");
-        doneLabel.text(selectedCustomer.firstName + ' ' + selectedCustomer.lastName);
+        doneLabel.text(selectedCustomer.fullName);
         doneLabel.removeClass('orange');
         doneLabel.addClass('green');
 
         $(".customer-label").removeClass("active");
 
+        var email, phone, street, number, city, zipCode, ico, icdph, dic;
+
         if (selectedCustomer) {
-            if (selectedCustomer.contact) {
 
-                if (selectedCustomer.contact.email) {
-                    $("#email").val(selectedCustomer.contact.email);
-                    $("#email-label").addClass('active');
-                } else $("#email").val('');
+            if (selectedCustomer.person) {
+                var person = selectedCustomer.person;
 
-                if (selectedCustomer.contact.phone) {
-                    $("#phone").val(selectedCustomer.contact.phone);
-                    $("#phone-label").addClass('active');
-                } else $("#phone").val('');
+                if (person.phone) phone = person.phone;
+                if (person.email) email = person.email;
+
+                if (person.address) {
+                    var address = person.address;
+                    if (address.street) street = address.street;
+                    if (address.streetNumber) number = address.streetNumber;
+                    if (address.city) city = address.city;
+                    if (address.zipCode) zipCode = address.zipCode;
+                }
+
+                ico = "neuvedené (FO)";
+                icdph = "neuvedené (FO)";
+                dic = "neuvedené (FO)";
+
             }
-            if (selectedCustomer.address) {
 
-                if (selectedCustomer.address.street) {
-                    $("#street").val(selectedCustomer.address.street);
-                    $("#street-label").addClass('active');
-                } else $("#street").val('');
+            if (selectedCustomer.company) {
+                var company = selectedCustomer.company;
 
-                if (selectedCustomer.address.streetNumber) {
-                    $("#num").val(selectedCustomer.address.streetNumber);
-                    $("#num-label").addClass('active');
-                } else $("#num").val('');
+                if (company.contactPerson) {
+                    var contactPerson = company.contactPerson;
 
-                if (selectedCustomer.address.city) {
-                    $("#city").val(selectedCustomer.address.city);
-                    $("#city-label").addClass('active');
-                } else $("#city").val('');
+                    if (contactPerson.phone) phone = contactPerson.phone;
+                    if (contactPerson.email) email = contactPerson.email;
+                }
+                if (company.address) {
+                    var address = company.address;
 
-                if (selectedCustomer.address.zipCode) {
-                    $("#zip").val(selectedCustomer.address.zipCode);
-                    $("#zip-label").addClass('active');
-                } else $("#zip").val('');
+                    if (address.street) street = address.street;
+                    if (address.streetNumber) number = address.streetNumber;
+                    if (address.city) city = address.city;
+                    if (address.zipCode) zipCode = address.zipCode;
+                }
+                if (company.billData) {
+                    var billData = company.billData;
+
+                    if (billData.ICO) ico = billData.ICO;
+                    if (billData.ICDPH) icdph = billData.ICDPH;
+                    if (billData.DIC) dic = billData.DIC;
+                }
             }
-            if (selectedCustomer.billData) {
 
-                if (selectedCustomer.billData.ICO) {
-                    $("#ico").val(selectedCustomer.billData.ICO);
-                    $("#ico-label").addClass('active');
-                } else $("#ico").val(' ');
-
-                if (selectedCustomer.billData.ICDPH) {
-                    $("#icdph").val(selectedCustomer.billData.ICDPH);
-                    $("#icdph-label").addClass('active');
-                } else $("#icdph").val(' ');
-
-                if (selectedCustomer.billData.DIC) {
-                    $("#dic").val(selectedCustomer.billData.DIC);
-                    $("#dic-label").addClass('active');
-                } else $("#dic").val(' ');
-            } else {
-                $("#ico").val(null);
-                $("#icdph").val(null);
-                $("#dic").val(null);
+            if (email) {
+                $("#email").val(email);
+                $("#email-label").addClass('active');
+            }
+            if (phone) {
+                $("#phone").val(phone);
+                $("#phone-label").addClass('active');
+            }
+            if (street) {
+                $("#street").val(street);
+                $("#street-label").addClass('active');
+            }
+            if (number) {
+                $("#num").val(number);
+                $("#num-label").addClass('active');
+            }
+            if (city) {
+                $("#city").val(city);
+                $("#city-label").addClass('active');
+            }
+            if (zipCode) {
+                $("#zip").val(zipCode);
+                $("#zip-label").addClass('active');
+            }
+            if (ico) {
+                $("#ico").val(ico);
+                $("#ico-label").addClass('active');
+            }
+            if (icdph) {
+                $("#icdph").val(icdph);
+                $("#icdph-label").addClass('active');
+            }
+            if (dic) {
+                $("#dic").val(dic);
+                $("#dic-label").addClass('active');
             }
         }
     }
@@ -188,7 +224,7 @@ $(document).ready(function () {
         limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
         onAutocomplete: function (val) {
             for (var i = 0; i < customers.length; i++) {
-                if (val === customers[i].firstName + ' ' + customers[i].lastName) {
+                if (val === customers[i].fullName) {
                     selectedCustomer = customers[i];
                     break;
                 }
@@ -212,18 +248,16 @@ $(document).ready(function () {
     })
 
     $('#create, #update').click(function (e) {
-
-        googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-            console.log(typeof GoogleApi);
-            calendar.setGoogleApi(GoogleApi);
-            calendar.listUpcomingEvents();
-        });
+        
         var order = {};
 
         order.description = $("#description").val();
 
         var email = $("#email").val();
         var phone = $("#phone").val();
+        var price = $("#price").val();
+
+        if (price) order.price = price;
 
         if (email || phone) {
             order.contact = {};
@@ -266,21 +300,17 @@ $(document).ready(function () {
 
         date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth() + 1, help.getUTCDate(), help.getUTCHours(), help.getUTCMinutes(), help.getUTCSeconds()));
 
-        console.log(date);
         //date.setUTCMonth(date.getMonth() + 1);
 
         if (state === STATE.working) {
             order.startDate = date;
-        //    order.startDate.
+            //    order.startDate.
         } else if (state === STATE.done) {
             order.endDate = date;
         } else if (state === STATE.pickUp) {
             order.pickDate = date;
         }
         order.photoUrl = picker.getPhotoUrl();
-
-        console.log('creating order with ', order.photoUrl);
-
 
         var options = {
             url: '/order',
@@ -289,26 +319,37 @@ $(document).ready(function () {
             }
         }
 
-        if (e.target.id === 'create') options.method = 'post';
+        if (e.target.id === 'create') {
+
+            options.method = 'post';
+
+            utcDate.setUTCHours(utcDate.getUTCHours() + 2);
+            options.data.order.arriveDate = utcDate;
+        }
         else {
+
+            googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+                console.log(typeof GoogleApi);
+                calendar.setGoogleApi(GoogleApi);
+                calendar.insertEvent(order, selectedCustomer);
+            });
+
             var pathname = window.location.pathname.split("/");
             var id = pathname[pathname.length - 1];
             options.method = 'put';
             options.url = '/order/' + id
         }
 
-        console.log(JSON.stringify(options));
-
         http.request(options, (err, response) => {
             if (err) console.log("error", err);
             else if (response) {
                 console.log("response", response.data);
                 if (response.data.id) {
-                    location.href = "/order/" + response.data.id;
+                    //location.href = "/order/" + response.data.id;
                 } else {
                     var pathname = window.location.pathname.split("/");
                     var id = pathname[pathname.length - 1];
-                    location.href = "/order/" + id;
+                    //location.href = "/order/" + id;
                 }
             }
         })
@@ -316,16 +357,22 @@ $(document).ready(function () {
 
     $('.start-state').click(function () {
         console.log("start");
+        $('.start-state').removeClass('light-blue');
+        $('.start-state').addClass('light-green');
         state = STATE.working;
     })
 
     $('.end-state').click(function () {
         console.log("done");
+        $('.end-state').removeClass('light-blue');
+        $('.end-state').addClass('light-green');
         state = STATE.done;
     })
 
     $('.pickup-state').click(function () {
         console.log("picked up");
+        $('.pickup-state').removeClass('light-blue');
+        $('.pickup-state').addClass('light-green');
         state = STATE.pickUp;
     })
 })

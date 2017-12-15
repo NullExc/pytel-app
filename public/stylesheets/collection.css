@@ -5,3 +5,14 @@
         cursor: pointer;
     }
 }
+
+.collection.with-header .collection-item.avatar {
+    padding-left: 20px;
+}
+
+
+.caret {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}

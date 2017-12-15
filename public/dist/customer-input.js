@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 152);
+/******/ 	return __webpack_require__(__webpack_require__.s = 156);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -71,8 +71,8 @@
 "use strict";
 
 
-var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(13);
+var bind = __webpack_require__(4);
+var isBuffer = __webpack_require__(14);
 
 /*global toString:true*/
 
@@ -376,11 +376,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 10:
+/***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
@@ -409,22 +409,22 @@ module.exports = {
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(13);
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(3);
-var Axios = __webpack_require__(14);
+var bind = __webpack_require__(4);
+var Axios = __webpack_require__(15);
 var defaults = __webpack_require__(2);
 
 /**
@@ -458,15 +458,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(28);
-axios.isCancel = __webpack_require__(7);
+axios.Cancel = __webpack_require__(9);
+axios.CancelToken = __webpack_require__(29);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(29);
+axios.spread = __webpack_require__(30);
 
 module.exports = axios;
 
@@ -476,7 +476,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports) {
 
 /*!
@@ -504,7 +504,7 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -512,10 +512,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(23);
-var dispatchRequest = __webpack_require__(24);
-var isAbsoluteURL = __webpack_require__(26);
-var combineURLs = __webpack_require__(27);
+var InterceptorManager = __webpack_require__(24);
+var dispatchRequest = __webpack_require__(25);
+var isAbsoluteURL = __webpack_require__(27);
+var combineURLs = __webpack_require__(28);
 
 /**
  * Create a new instance of Axios
@@ -598,7 +598,165 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 15:
+/***/ 156:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(11);
+
+
+$(document).ready(function () {
+
+    $('input[type=radio][name=legal-form]').change(function () {
+        if (this.value == 'person') {
+            $("#person-form").show();
+            $("#company-form").hide();
+        }
+        else if (this.value == 'company') {
+            $("#person-form").hide();
+            $("#company-form").show();
+        }
+    });
+
+    $('#show-person').prop('checked', true);
+    $("#person-form").show();
+    $("#company-form").hide();
+
+    $("#create, #update").click(function (e) {
+
+        var data = {};
+
+        var form = $('input[name=legal-form]:checked', '#customer-form').val();
+
+        if (form === 'company' || (window.customer && window.customer.company)) {
+
+            var company = {};
+
+            company.name = $("#name").val();
+
+            var street = $("#company-street").val();
+            var streetNumber = $("#company-num").val();
+            var city = $("#company-city").val();
+            var zipCode = $("#company-zip").val();
+
+            if (street || streetNumber || city || zipCode) {
+                company.address = {};
+            }
+            if (street) company.address.street = street;
+            if (streetNumber) company.address.streetNumber = streetNumber;
+            if (city) company.address.city = city;
+            if (zipCode) company.address.zipCode = zipCode;
+
+            var firstName = $("#contact-first").val();
+            var lastName = $("#contact-last").val();
+            var email = $("#contact-email").val();
+            var phone = $("#contact-phone").val();
+
+            if (firstName || lastName || email || phone) {
+                company.contactPerson = {};
+            }
+            if (firstName) company.contactPerson.firstName = firstName;
+            if (lastName) company.contactPerson.lastName = lastName;
+            if (email) company.contactPerson.email = email;
+            if (phone) company.contactPerson.phone = phone;
+
+            var ico = $("#ico").val();
+            var icdph = $("#icdph").val();
+            var dic = $("#dic").val();
+
+            if (ico || icdph || dic) {
+                company.billData = {};
+            }
+            if (ico) company.billData.ICO = ico;
+            if (icdph) company.billData.ICDPH = icdph;
+            if (dic) company.billData.DIC = dic;
+
+            console.log(JSON.stringify(company, 2, 2));
+
+            data.company = company;
+
+            data.fullName = company.name;
+
+            data.search = company.name;
+
+        } else if (form === 'person' || (customer && customer.person)) {
+
+            var person = {};
+
+            person.firstName = $("#first").val();
+            person.lastName = $("#last").val();
+
+            var street = $("#person-street").val();
+            var streetNumber = $("#person-num").val();
+            var city = $("#person-city").val();
+            var zipCode = $("#person-zip").val();
+
+            if (street || streetNumber || city || zipCode) {
+                person.address = {};
+            }
+            if (street) person.address.street = street;
+            if (streetNumber) person.address.streetNumber = streetNumber;
+            if (city) person.address.city = city;
+            if (zipCode) person.address.zipCode = zipCode;
+
+            var email = $("#email").val();
+            var phone = $("#phone").val();
+
+            if (email) person.email = email;
+            if (phone) person.phone = phone;
+
+            console.log(JSON.stringify(person, 2, 2));
+
+            data.person = person;
+
+            data.fullName = person.firstName + " " + person.lastName;
+
+            data.search = person.lastName;
+
+        }
+
+        var options = { data: {customer: data} };
+
+        if (e.target.id === 'create') {
+
+            options.url = '/customer';
+            options.method = 'post';
+
+            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
+                if (err) console.log(err);
+                else if (response) {
+                    console.log(response);
+                    //location.href = '/customer/' + response.data.id;
+                }
+            })
+
+        } else if (e.target.id === 'update') {
+
+            var id = localStorage.getItem('updateId');
+            options.url = '/customer/' + id;
+            options.method = 'put';
+
+            console.log(JSON.stringify(options, 2, 2));
+
+            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
+
+                localStorage.removeItem('updateId');
+
+                if (err) {
+                    console.error(err);
+                } else if (response) {
+                    console.log(response);
+                    //location.href = '/customer/' + id;
+                }
+            })
+        }
+    })
+})
+
+/***/ }),
+
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -618,99 +776,13 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ 152:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(10);
-
-
-$(document).ready(function () {
-
-    $("#create, #update").click(function (e) {
-
-        var customer = {};
-
-        customer.firstName = $("#first").val();
-        customer.lastName = $("#last").val();
-
-        var email = $("#email").val();
-        var phone = $("#phone").val();
-
-        if (email || phone) {
-            customer.contact = {};
-        }
-        if (email) customer.contact.email = email;
-        if (phone) customer.contact.phone = phone;
-
-        var street = $("#street").val();
-        var streetNumber = $("#num").val();
-        var city = $("#city").val();
-        var zipCode = $("#zip").val();
-
-        if (street || streetNumber || city || zipCode) {
-            customer.address = {};
-        }
-        if (street) customer.address.street = street;
-        if (streetNumber) customer.address.streetNumber = streetNumber;
-        if (city) customer.address.city = city;
-        if (zipCode) customer.address.zipCode = zipCode;
-
-        var ico = $("#ico").val();
-        var icdph = $("#icdph").val();
-        var dic = $("#dic").val();
-
-        if (ico || icdph || dic) {
-            customer.billData = {};
-        }
-        if (ico) customer.billData.ICO = ico;
-        if (icdph) customer.billData.ICDPH = icdph;
-        if (dic) customer.billData.DIC = dic;
-
-        var options = {data: customer};
-
-        if (e.target.id === 'create') {
-
-            options.url = '/customer';
-            options.method = 'post';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-                if (err) console.log(err);
-                else if (response) {
-                    location.href = '/customer/' + response.data.id;
-                }
-            })
-
-        } else if (e.target.id === 'update') {
-
-            var id = localStorage.getItem('updateId');
-            options.url = '/customer/' + id;
-            options.method = 'put';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-
-                localStorage.removeItem('updateId');
-
-                if (err) {
-                    console.error(err);
-                } else if (response) {
-                    location.href = '/customer/' + id;
-                }
-            })
-        }
-    })
-})
-
-/***/ }),
-
-/***/ 16:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(6);
+var createError = __webpack_require__(7);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -738,7 +810,7 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ 17:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -767,7 +839,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -843,51 +915,6 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(1);
-
-/**
- * Parse headers into an object
- *
- * ```
- * Date: Wed, 27 Aug 2014 08:58:49 GMT
- * Content-Type: application/json
- * Connection: keep-alive
- * Transfer-Encoding: chunked
- * ```
- *
- * @param {String} headers Headers needing to be parsed
- * @returns {Object} Headers parsed into an object
- */
-module.exports = function parseHeaders(headers) {
-  var parsed = {};
-  var key;
-  var val;
-  var i;
-
-  if (!headers) { return parsed; }
-
-  utils.forEach(headers.split('\n'), function parser(line) {
-    i = line.indexOf(':');
-    key = utils.trim(line.substr(0, i)).toLowerCase();
-    val = utils.trim(line.substr(i + 1));
-
-    if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
-    }
-  });
-
-  return parsed;
-};
-
-
-/***/ }),
-
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -895,7 +922,7 @@ module.exports = function parseHeaders(headers) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(15);
+var normalizeHeaderName = __webpack_require__(16);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -911,10 +938,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -985,11 +1012,56 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
 /***/ 20:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(1);
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1065,7 +1137,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1109,7 +1181,7 @@ module.exports = btoa;
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1170,7 +1242,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1230,15 +1302,15 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(25);
-var isCancel = __webpack_require__(7);
+var transformData = __webpack_require__(26);
+var isCancel = __webpack_require__(8);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1317,7 +1389,7 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1345,7 +1417,7 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1367,7 +1439,7 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 27:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1389,13 +1461,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(8);
+var Cancel = __webpack_require__(9);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1454,7 +1526,7 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ 29:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1489,7 +1561,7 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1508,7 +1580,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1699,19 +1771,19 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(16);
-var buildURL = __webpack_require__(18);
-var parseHeaders = __webpack_require__(19);
-var isURLSameOrigin = __webpack_require__(20);
-var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(21);
+var settle = __webpack_require__(17);
+var buildURL = __webpack_require__(19);
+var parseHeaders = __webpack_require__(20);
+var isURLSameOrigin = __webpack_require__(21);
+var createError = __webpack_require__(7);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -1808,7 +1880,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(22);
+      var cookies = __webpack_require__(23);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -1884,17 +1956,17 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(17);
+var enhanceError = __webpack_require__(18);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -1914,7 +1986,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1927,7 +1999,7 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
