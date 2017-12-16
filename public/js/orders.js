@@ -2,7 +2,7 @@ import $ from 'jquery';
 import picker from 'jquery-datepicker';
 import STATE from './state';
 
-var app = angular.module('Orders', ['ui.materialize']);
+var app = angular.module('Orders', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 

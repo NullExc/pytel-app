@@ -2469,7 +2469,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var app = angular.module('Orders', ['ui.materialize']);
+var app = angular.module('Orders', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 

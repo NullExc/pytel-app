@@ -12,15 +12,15 @@ $(document).ready(function () {
 
         var id;
 
-        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY h:mm:ss'));
+        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
 
         if (order.state === STATE.working || order.state === STATE.done || order.state === STATE.pickUp) {
-            $("#start-date").text(moment.utc(order.startDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#start-date").text(moment.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
         }
 
         if (order.state === STATE.done || order.state === STATE.pickUp) {
             $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(moment.utc(order.endDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#end-date").text(moment.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
@@ -64,7 +64,7 @@ $(document).ready(function () {
             $('.end-state').addClass('disabled');
             $('.pickup-state').addClass('disabled');
 
-            $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
         }
 
         $(id).removeClass("teal");

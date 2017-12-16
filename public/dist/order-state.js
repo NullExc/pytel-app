@@ -16355,15 +16355,15 @@ $(document).ready(function () {
 
         var id;
 
-        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY h:mm:ss'));
+        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
 
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
-            $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
         }
 
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
             $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
@@ -16407,7 +16407,7 @@ $(document).ready(function () {
             $('.end-state').addClass('disabled');
             $('.pickup-state').addClass('disabled');
 
-            $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY h:mm:ss'));
+            $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
         }
 
         $(id).removeClass("teal");

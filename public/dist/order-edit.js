@@ -1075,7 +1075,7 @@ $(document).ready(function () {
 
         var help = new Date();
 
-        date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth() + 1, help.getUTCDate(), help.getUTCHours(), help.getUTCMinutes(), help.getUTCSeconds()));
+        date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth(), help.getUTCDate(), help.getUTCHours() + 1, help.getUTCMinutes(), help.getUTCSeconds()));
 
         //date.setUTCMonth(date.getMonth() + 1);
 

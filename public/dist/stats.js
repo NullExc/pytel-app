@@ -28991,7 +28991,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var app = angular.module('myApp', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
-app.controller('myCtrl', function ($scope, $http) {
+app.controller('myCtrl', function ($scope, $http, $filter) {
 
     $scope.orderPredicate = 'name';
     $scope.orderReverse = true;
@@ -29007,15 +29007,27 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.workPredicate = predicate;
     };
 
-    $scope.from = new Date(2010, 10, 15);
-    $scope.to = new Date(2020, 10, 15);
+    var date = new Date();
+
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+    var firstDayDate = new Date(date.getFullYear(), date.getMonth(), 1, 1, 1);
+
+    var lastDayDate = new Date(date.getFullYear(), date.getMonth(), lastDay, 24, 59);
+
+    $scope.from = firstDayDate;
+    $scope.to = lastDayDate;
+
+    $scope.fromString = $filter('date')(lastDayDate, 'yyyy-MM-dd');
+
+    console.log('from', firstDayDate.getUTCDate());
 
     $scope.getStats = function () {
         $http.post('/stats', {
             from: $scope.from,
             to: $scope.to
         }).success(function (data) {
-            console.log(JSON.stringify(data.workSum));
+            console.log(JSON.stringify(data));
             $scope.totalCount = data.totalCount;
             $scope.totalSum = data.totalSum;
             $scope.orders = data.orders;
@@ -29044,6 +29056,20 @@ app.controller('myCtrl', function ($scope, $http) {
     }
 
     $scope.getStats();
+
+    $scope.parseDate = function (time) {
+
+        var days = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('D');
+        var minutes = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('m');
+        var hours = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('H');
+        var string = hours + " hodín, " + minutes + " minút.";
+
+        var daysNumber = parseInt(days) - 1;
+
+        string = daysNumber + " dní, " + string;
+
+        return string;
+    }
 
     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(document).ready(function () {
 
@@ -29115,37 +29141,49 @@ app.controller('myCtrl', function ($scope, $http) {
         };
         __WEBPACK_IMPORTED_MODULE_2_jquery___default.a.datepicker.setDefaults(__WEBPACK_IMPORTED_MODULE_2_jquery___default.a.datepicker.regional['sk']);
 
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#from-label").addClass("active");
+
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#from-date").val(($scope.from.getDate()) + '.' + ($scope.from.getMonth() + 1) + '.' + $scope.from.getFullYear());
+
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#to-label").addClass("active");
+
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#to-date").val(($scope.to.getUTCDate()) + '.' + ($scope.to.getUTCMonth() + 1) + '.' + $scope.to.getUTCFullYear());
+
+        //$("#to-date").val($scope.from);
+
+        console.log('to', $scope.to, 'from', $scope.from);
+
         __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#from-date").datepicker({
             onSelect: function (dateText) {
-
-                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#from-label").addClass("active");
 
                 console.log('from', dateText);
 
                 var dateParts = dateText.split('.');
 
-                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
 
                 $scope.from = date;
 
                 $scope.$apply();
+
+                $scope.getStats();
             }
         });
 
         __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#to-date").datepicker({
             onSelect: function (dateText) {
 
-                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#to-label").addClass("active");
-
                 console.log('to selected ', dateText);
 
                 var dateParts = dateText.split('.');
 
-                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 24, 59);
 
                 $scope.to = date;
 
                 $scope.$apply();
+
+                $scope.getStats();
             }
         });
 
@@ -29154,20 +29192,6 @@ app.controller('myCtrl', function ($scope, $http) {
         __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#to-date").datepicker(__WEBPACK_IMPORTED_MODULE_2_jquery___default.a.datepicker.regional["sk"]);
     })
 });
-
-function parseDate(time) {
-
-    var days = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('D');
-    var minutes = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('m');
-    var hours = __WEBPACK_IMPORTED_MODULE_0_moment___default()(time).utc().format('H');
-    var string = hours + " hodín, " + minutes + " minút.";
-
-    var daysNumber = parseInt(days) - 1;
-
-    string = daysNumber + " dní, " + string;
-
-    return string;
-}
 
 
 

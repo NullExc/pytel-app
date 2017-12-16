@@ -6,7 +6,7 @@
         <script type="text/javascript">
             var orders = JSON.parse('<%- JSON.stringify(orders) %>');
         </script>
-
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
 </head>
@@ -14,48 +14,41 @@
 <body ng-app="Orders" ng-controller="OrdersCtrl">
     <% include ../../partials/nav-in.ejs %>
 
-        <div class="row">
-
-            <div class="section col l3 m3 s12">
-                <div input-field>
+        <div class="row section">
+            <div class="col l8 m8 s12 offset-l2 panel z-depth-4">
+                <div input-field class="col s12">
                     <select ng-model="typeSelect.value" ng-change="typeChange()" material-select>
                         <option ng-repeat="option in typeSelect.choices">{{option}}</option>
                     </select>
                     <label>Filtrovať podľa zákazky.</label>
                 </div>
-            </div>
-
-            <div class="col l3 m3 s12">
-                <div class="section col s12">
-                    <div input-field>
-                        <select ng-model="dateSelect.value" ng-change="dateChange()" material-select>
-                            <option ng-repeat="option in dateSelect.choices">{{option}}</option>
-                        </select>
-                        <label>Filtrovať podľa datumu</label>
-                    </div>
+                <div input-field class="col s12">
+                    <select ng-model="dateSelect.value" ng-change="dateChange()" material-select>
+                        <option ng-repeat="option in dateSelect.choices">{{option}}</option>
+                    </select>
+                    <label>Filtrovať podľa datumu</label>
                 </div>
-                <div input-field class="col l6 s6">
+                <div input-field class="col s6 l2 m2">
                     <input id="from-date" type="text" readonly>
                     <label for="from-date">Od</label>
                 </div>
-                <div input-field class="col l6 s6">
+                <div input-field class="col s6 l2 m2">
                     <input id="to-date" type="text" readonly>
                     <label for="to-date">Do</label>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div id="list-container" class="col s12">
-                <ul id="list" class="collection" style="margin-top: 0px;">
 
-                    <li class="item collection-item avatar black-text" ng-repeat="order in orders">
+            </div>
+
+            <div id="list-container" class="col l8 m8 s12 offset-l2 panel z-depth-4">
+                <ul id="list" class="collection with-header">
+                    <li class="collection-header light-blue darken-4 white-text">
+                        <h5>Zákazky</h5>
+                    </li>
+                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 5" pagination-id="orders">
                         <div>
                             <p class="title">
                                 {{order.description}}
                             </p>
-                            <span>
-                                {{order.arriveDate}}
-                            </span>
 
                             <div class="right">
                                 <span ng-if="order.state === 'arrived'" class="new badge grey" data-badge-caption="">Prijatá</span>
@@ -71,8 +64,10 @@
                                 <i class="material-icons">visibility</i>
                             </a>
                         </div>
-                    </liv>
+                    </li>
                 </ul>
+                <dir-pagination-controls pagination-id="orders" max-size="5" direction-links="true" boundary-links="true">
+                </dir-pagination-controls>
             </div>
         </div>
         <div class="fixed-action-btn">
