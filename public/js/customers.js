@@ -1,6 +1,6 @@
 import STATE from './state';
 
-var app = angular.module('Customers', ['ui.materialize']);
+var app = angular.module('Customers', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('CustomersCtrl', function ($scope, $http, $filter) {
 

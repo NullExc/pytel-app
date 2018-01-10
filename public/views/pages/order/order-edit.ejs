@@ -4,6 +4,7 @@
 <head>
     <% include ../../partials/header.ejs %>
         <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
         <script type="text/javascript">
             var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
             var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');

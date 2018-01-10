@@ -4,8 +4,6 @@ import moment from 'moment';
 
 $(document).ready(function () {
 
-    
-    
     if (order) {
 
         var arriveDate = moment.utc(order.arriveDate);
@@ -78,11 +76,15 @@ function getDiffTime(fromDate, toDate) {
 
     var startDate = moment.utc(fromDate);
 
-    var now;
+    var now = new Date();
+
+    now.setHours(now.getHours() + 1);
 
     if (toDate) now = moment.utc(toDate);
 
-    else now = moment.utc(Date.now());
+    else now = moment.utc(now);
+
+    console.log(now);
 
     var workingTime = now.diff(startDate);
 
@@ -93,7 +95,9 @@ function getDiffTime(fromDate, toDate) {
 
     var daysNumber = parseInt(days) - 1;
 
-    string = daysNumber + " dní, " + string;
+    if (daysNumber && daysNumber > 0) {
+        string = daysNumber + " dní, " + string;
+    }
 
     return string;
 }

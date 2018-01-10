@@ -136,11 +136,14 @@ module.exports = {
 
                     })
                 })*/
+                console.log('stats', orders[0]);
                 totalCount = orders.length;
-                orders.forEach(function (order) {
+                orders.forEach(function (detail) {
+                    var order = detail.order;
+                    console.log(detail.workType, detail.orderType);
                     totalSum += order.price ? order.price : 0;
-                    if (order.workType) workTypes.push(order.workType);
-                    if (order.orderType) orderTypes.push(order.orderType);
+                    if (detail.workType) workTypes.push(detail.workType);
+                    if (detail.orderType) orderTypes.push(detail.orderType);
                 })
                 var groupWork = workTypes.reduce(function (rv, x) {
                     (rv[x["name"]] = rv[x["name"]] || []).push(x);

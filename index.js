@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var jwt = require('jsonwebtoken');
 
 //loading api modules
@@ -35,6 +36,7 @@ app.set('secret', config.secret);
 app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/public/views'));
@@ -47,15 +49,56 @@ app.get('/', function (req, res) {
   res.render('pages/index');
 });
 
+//user routes
+app.post('/register', userApi.register);
+app.post('/login', userApi.login);
+
+app.use(function (req, res, next) {
+
+  console.log('cookies', req.cookies.token);
+
+  var token = req.body.token || req.query.token || req.headers['authorization'] || req.cookies.token;
+
+  if (token) {
+
+    jwt.verify(token, app.get('secret'), function (err, decoded) {
+      if (err) {
+      next(); //  return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+
+  } else {
+
+    var error = new Error("Vaše sedenie na stránke vypršalo. Prihláste sa prosím.");
+
+    error.status = 509;
+
+    //console.log('no token', req.headers);
+
+    /*return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });*/
+
+    return next(error);
+
+  }
+});
+
 //work type routes
 app.get('/worktype', worktypeApi.getAll);
-app.post('/worktype-new', worktypeApi.create);
+app.post('/worktype', worktypeApi.create);
 app.post('/worktype/:id', worktypeApi.edit);
+app.delete('/worktype/:id', worktypeApi.delete);
 
 //order types routes
 app.get('/ordertype/all', ordertypeApi.getAll);
-app.post('/ordertype-new', ordertypeApi.create);
-app.post('/ordertype-edit/:id', ordertypeApi.edit);
+app.post('/ordertype', ordertypeApi.create);
+app.post('/ordertype/:id', ordertypeApi.edit);
+app.delete('/ordertype/:id', ordertypeApi.delete);
 
 //order routes
 app.get('/order-new', orderApi.new);
@@ -91,11 +134,6 @@ app.get('/customer/stats/:id', customerApi.stats);
 //settings routes
 app.get('/settings', settingsApi.get);
 
-//user routes
-app.post('/register', userApi.register);
-app.post('/login', userApi.login);
-
-
 app.get('/stats', function (req, res, next) {
   res.render('pages/stats');
 })
@@ -107,34 +145,10 @@ app.use(function(req, res, next){
 
 app.use(function (err, req, res, next) {
   if (err) {
-    console.info(err);
+    console.info('error handler', err);
   }
   res.status(500).render('pages/error', {error : err});
 })
-
-/*app.use(function (req, res, next) {
-
-  var token = req.body.token || req.query.token || req.headers['Authorization'];
-
-  if (token) {
-
-    jwt.verify(token, app.get('secret'), function (err, decoded) {
-      if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });
-      } else {
-        req.decoded = decoded;
-        next();
-      }
-    });
-
-  } else {
-
-    return res.status(403).send({
-      success: false,
-      message: 'No token provided.'
-    });
-  }
-});*/
 
 
 

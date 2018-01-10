@@ -217,6 +217,10 @@ OrderSchema.statics.getStats = function (from, to, callback) {
     });
 }
 
+OrderSchema.statics.filterOrders = function (dateType, from, to, callback) {
+    
+}
+
 var Order = mongoose.model('Order', OrderSchema);
 
 module.exports = Order;

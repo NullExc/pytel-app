@@ -2464,7 +2464,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(9);
 
 
 
@@ -2480,41 +2480,52 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
         choices: ['Všetky', 'Prijaté', 'Prebiehajúce', 'Čakajúce na vyzdvihnutie', 'Vyzdvihnuté']
     }
 
+    $scope.dateSelect = {
+        value: 'Dátum prijatia',
+        choices: ['Dátum prijatia', 'Dátum začatia', 'Dátum ukončenia', 'Dátum vyzvihnutia']
+    }
+
     $scope.typeChange = function () {
-        console.log($scope.typeSelect.value);
+
+
+        filter(false);
+
+        /*console.log($scope.typeSelect.value);
         $scope.orders = window.orders;
 
         if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
-            $scope.orders = $filter('filter')($scope.orders, {state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].arrived});
+            $scope.orders = $filter('filter')($scope.orders, { state: STATE.arrived });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
-            $scope.orders = $filter('filter')($scope.orders, {state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].working});
+            $scope.orders = $filter('filter')($scope.orders, { state: STATE.working });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
-            $scope.orders = $filter('filter')($scope.orders, {state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].done});
+            $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
-            $scope.orders = $filter('filter')($scope.orders, {state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp});
+            $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
 
-        }
-    }
-
-    $scope.fromChange = function () {
-
-    }
-
-    $scope.toChange = function () {
-
-    }
-
-    $scope.dateSelect = {
-        value: '',
-        choices: ['', 'Dátum prijatia', 'Dátum začatia', 'Dátum ukončenia', 'Dátum vyzvihnutia']
+        }*/
     }
 
     $scope.dateChange = function () {
-        
+        console.log('date change');
+
+        filter(false);
     }
+
+    var date = new Date();
+
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+    var firstDayDate = new Date(date.getFullYear(), date.getMonth(), 1, 1, 1);
+
+    var lastDayDate = new Date(date.getFullYear(), date.getMonth(), lastDay, 24, 59);
+
+    $scope.from = firstDayDate;
+    $scope.to = lastDayDate;
+
+    $scope.fromString = $filter('date')(lastDayDate, 'yyyy-MM-dd');
 
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
 
@@ -2586,54 +2597,116 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
         };
         __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.setDefaults(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional['sk']);
 
+
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#from-label").addClass("active");
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#from-date").val(($scope.from.getDate()) + '.' + ($scope.from.getMonth() + 1) + '.' + $scope.from.getFullYear());
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#to-label").addClass("active");
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#to-date").val(($scope.to.getUTCDate()) + '.' + ($scope.to.getUTCMonth() + 1) + '.' + $scope.to.getUTCFullYear());
+
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#from-date").datepicker({
             onSelect: function (dateText) {
-                
+
+                console.log('date type', $scope.dateSelect.value);
+
                 var dateParts = dateText.split('.');
-                
-                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
-                
-                var resultArray = [];
 
-                $scope.orders.forEach(function (order) {
-                    var orderDate = new Date(order.arriveDate);
-                    var compareDate = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate());
-                    console.log(order.description, compareDate, date);
-                })
+                //var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
 
-                console.log('from selected ', date.toDateString());
+                $scope.from = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+
+                $scope.$apply();
+
+                filter(true);
             }
         });
 
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#to-date").datepicker({
             onSelect: function (dateText) {
-                console.log('to selected ', dateText);
+                console.log('date type', $scope.dateSelect.value);
+
+                var dateParts = dateText.split('.');
+
+                //var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+
+                $scope.to = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+
+                $scope.$apply();
+
+                filter(true);
             }
         });
-    
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#from-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional["sk"]);
-    
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#to-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional["sk"]);
 
-        
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#from-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional["sk"]);
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()("#to-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional["sk"]);
 
     })
 
+    var filter = function (jquery) {
+        var resultArray = [];
+
+        $scope.orders = window.orders;
+
+        if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
+            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].arrived });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
+            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].working });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
+            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].done });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
+            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp });
+
+        }
+
+        $scope.orders.forEach(function (order) {
+
+            var orderDate;
+
+            var compare = false;
+
+            if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+                orderDate = new Date(order.arriveDate);
+                compare = true;
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1] && (order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].working || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].done || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp)) {
+                orderDate = new Date(order.startDate);
+                compare = true;
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2] && (order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].done || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp)) {
+                orderDate = new Date(order.endDate);
+                compare = true;
+            } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3] && order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp) {
+                orderDate = new Date(order.pickDate);
+                compare = true;
+            }
+
+            if (compare) {
+                var compareDate = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate() + 1);
+
+                if (compareDate.getTime() >= $scope.from.getTime() && compareDate.getTime() <= $scope.to.getTime()) {
+                    console.log('add', order.description, compareDate, date);
+                    resultArray.push(order);
+                } else {
+                    console.log('remove', order.description, compareDate, date);
+                }
+            }
+        })
+
+        $scope.orders = resultArray;
+
+        if (jquery) {
+            $scope.$apply();
+        }
+    }
+
+    filter(false);
+
 })
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
 
 /***/ }),
 
@@ -12895,6 +12968,20 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
 
 /***/ })
 

@@ -5,43 +5,45 @@
     <% include ../../partials/header.ejs %>
 
         <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
 </head>
 
 <body ng-app="Customers" ng-controller="CustomersCtrl">
 
     <% include ../../partials/nav-in.ejs %>
 
-        <div class="row">
+        <div class="row section">
 
-            <div class="section col s3" style="margin:20px;">
-                <div input-field>
-                    <select ng-model="sortSelect.value" ng-change="sortChange()" material-select>
-                        <option ng-repeat="option in sortSelect.choices">{{option}}</option>
-                    </select>
-                    <label>Filtrovať podľa abecedy</label>
+            <div class="col s12 l8 offset-l2 panel z-depth-4">
+                <div class="col s3" style="margin:20px;">
+                    <div input-field>
+                        <select ng-model="sortSelect.value" ng-change="sortChange()" material-select>
+                            <option ng-repeat="option in sortSelect.choices">{{option}}</option>
+                        </select>
+                        <label>Zoradiť podľa abecedy</label>
+                    </div>
+                </div>
+                <div class="col s3" style="margin:20px;">
+                    <div input-field>
+                        <select ng-model="orderSelect.value" ng-change="orderChange()" material-select>
+                            <option ng-repeat="option in orderSelect.choices">{{option}}</option>
+                        </select>
+                        <label>Filtrovať podľa zákazky</label>
+                    </div>
                 </div>
             </div>
-            <div class="section col s3" style="margin:20px;">
-                <div input-field>
-                    <select ng-model="orderSelect.value" ng-change="orderChange()" material-select>
-                        <option ng-repeat="option in orderSelect.choices">{{option}}</option>
-                    </select>
-                    <label>Filtrovať podľa zákazky</label>
-                </div>
-            </div>
-            <div style="margin-top: 20px;">
-                <a id="search" class="btn green lighten-1">
-                    <i class="material-icons left">search</i>Hľadať</a>
-            </div>
-        </div>
-        <div class="row">
-            <div id="list-container" class="col s12">
-                <ul id="list" class="collection" style="margin-top: 0px;">
 
-                    <li class="item collection-item avatar black-text" ng-repeat="customer in customers">
+            <div id="list-container" class="col s12 l8 offset-l2 panel z-depth-4">
+                <ul id="list" class="collection with-header">
+                    <li class="collection-header light-blue darken-4 white-text">
+                        <h5>Zákazníci</h5>
+                    </li>
+                    <li class="item collection-item avatar black-text" dir-paginate="customer in customers | itemsPerPage:5" pagination-id="customers">
 
                         <div>
                             <p class="title">{{customer.fullName}}</p>
+                            <p ng-if="customer.company">{{customer.company.contactPerson.phone}}</p>
+                            <p ng-if="customer.person">{{customer.person.phone}}</p>
 
                             <div class="right secondary-content">
                                 <a href="/customer-edit/{{customer._id}}" class="btn-floating hide-on-small-only brown lighten-1" style="margin-right: 20px;">
@@ -54,6 +56,8 @@
                         </div>
                     </li>
                 </ul>
+                <dir-pagination-controls pagination-id="customers" max-size="5" direction-links="true" boundary-links="true">
+                </dir-pagination-controls>
             </div>
         </div>
 

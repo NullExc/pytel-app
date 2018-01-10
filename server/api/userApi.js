@@ -11,15 +11,12 @@ module.exports.register = function (req, res, next) {
     }
 
     if (req.body.email &&
-        req.body.username &&
         req.body.password &&
         req.body.passwordConf) {
 
-        var userData = {
+        var userData = { 
             email: req.body.email,
-            username: req.body.username,
-            password: req.body.password,
-            passwordConf: req.body.passwordConf,
+            password: req.body.password
         }
 
         //use schema.create to insert data into the db
@@ -33,21 +30,28 @@ module.exports.register = function (req, res, next) {
     }
 }
 
-module.exports.login = function (req, res, next) {
+module.exports.login = function (req, res,  next) {
     if (req.body.email && req.body.password) {
         User.authenticate(req.body.email, req.body.password, function (error, user) {
             if (error || !user) {
-                var err = new Error('Wrong email or password.');
+                var err = new Error('Zlý email alebo heslo.');
                 err.status = 401;
                 return next(err);
             } else {
                 var token = jwt.sign({data: user}, req.app.get('secret'), {
                     expiresIn: 1440
                 })
-                res.json({
+
+                console.log(token);
+
+                res.cookie('token', token, {
+                    maxAge: 86400000, httpOnly: true
+
+                  }).json({
                     success: true,
                     token: token
                 })
+
             }
         });
     }

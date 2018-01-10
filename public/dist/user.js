@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 156);
+/******/ 	return __webpack_require__(__webpack_require__.s = 166);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -598,164 +598,6 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 156:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(11);
-
-
-$(document).ready(function () {
-
-    $('input[type=radio][name=legal-form]').change(function () {
-        if (this.value == 'person') {
-            $("#person-form").show();
-            $("#company-form").hide();
-        }
-        else if (this.value == 'company') {
-            $("#person-form").hide();
-            $("#company-form").show();
-        }
-    });
-
-    $('#show-person').prop('checked', true);
-    $("#person-form").show();
-    $("#company-form").hide();
-
-    $("#create, #update").click(function (e) {
-
-        var data = {};
-
-        var form = $('input[name=legal-form]:checked', '#customer-form').val();
-
-        if (form === 'company' || (window.customer && window.customer.company)) {
-
-            var company = {};
-
-            company.name = $("#name").val();
-
-            var street = $("#company-street").val();
-            var streetNumber = $("#company-num").val();
-            var city = $("#company-city").val();
-            var zipCode = $("#company-zip").val();
-
-            if (street || streetNumber || city || zipCode) {
-                company.address = {};
-            }
-            if (street) company.address.street = street;
-            if (streetNumber) company.address.streetNumber = streetNumber;
-            if (city) company.address.city = city;
-            if (zipCode) company.address.zipCode = zipCode;
-
-            var firstName = $("#contact-first").val();
-            var lastName = $("#contact-last").val();
-            var email = $("#contact-email").val();
-            var phone = $("#contact-phone").val();
-
-            if (firstName || lastName || email || phone) {
-                company.contactPerson = {};
-            }
-            if (firstName) company.contactPerson.firstName = firstName;
-            if (lastName) company.contactPerson.lastName = lastName;
-            if (email) company.contactPerson.email = email;
-            if (phone) company.contactPerson.phone = phone;
-
-            var ico = $("#ico").val();
-            var icdph = $("#icdph").val();
-            var dic = $("#dic").val();
-
-            if (ico || icdph || dic) {
-                company.billData = {};
-            }
-            if (ico) company.billData.ICO = ico;
-            if (icdph) company.billData.ICDPH = icdph;
-            if (dic) company.billData.DIC = dic;
-
-            console.log(JSON.stringify(company, 2, 2));
-
-            data.company = company;
-
-            data.fullName = company.name;
-
-            data.search = company.name;
-
-        } else if (form === 'person' || (customer && customer.person)) {
-
-            var person = {};
-
-            person.firstName = $("#first").val();
-            person.lastName = $("#last").val();
-
-            var street = $("#person-street").val();
-            var streetNumber = $("#person-num").val();
-            var city = $("#person-city").val();
-            var zipCode = $("#person-zip").val();
-
-            if (street || streetNumber || city || zipCode) {
-                person.address = {};
-            }
-            if (street) person.address.street = street;
-            if (streetNumber) person.address.streetNumber = streetNumber;
-            if (city) person.address.city = city;
-            if (zipCode) person.address.zipCode = zipCode;
-
-            var email = $("#email").val();
-            var phone = $("#phone").val();
-
-            if (email) person.email = email;
-            if (phone) person.phone = phone;
-
-            console.log(JSON.stringify(person, 2, 2));
-
-            data.person = person;
-
-            data.fullName = person.firstName + " " + person.lastName;
-
-            data.search = person.lastName;
-
-        }
-
-        var options = { data: {customer: data} };
-
-        if (e.target.id === 'create') {
-
-            options.url = '/customer';
-            options.method = 'post';
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-                if (err) console.log(err);
-                else if (response) {
-                    console.log(response);
-                    //location.href = '/customer/' + response.data.id;
-                }
-            })
-
-        } else if (e.target.id === 'update') {
-
-            var id = localStorage.getItem('updateId');
-            options.url = '/customer/' + id;
-            options.method = 'put';
-
-            console.log(JSON.stringify(options, 2, 2));
-
-            __WEBPACK_IMPORTED_MODULE_0__lib_http_js__["a" /* default */].request(options, (err, response) => {
-
-                localStorage.removeItem('updateId');
-
-                if (err) {
-                    console.error(err);
-                } else if (response) {
-                    console.log(response);
-                    //location.href = '/customer/' + id;
-                }
-            })
-        }
-    })
-})
-
-/***/ }),
-
 /***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -773,6 +615,70 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
+
+/***/ }),
+
+/***/ 166:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(11);
+
+
+var app = angular.module('User', []);
+
+app.controller('UserCtrl', function ($scope, $http) {
+
+    $scope.loginEmail = "";
+
+    $scope.loginPassword = "";
+
+    $scope.registerEmail = "";
+
+    $scope.registerPassword = "";
+
+    $scope.repeatPassword = "";
+
+    $scope.login = function () {
+
+        $http.post('/login', {
+            email: $scope.loginEmail,
+            password: $scope.loginPassword
+        })
+        .success(function (data) {
+            console.log('data', data);
+        })
+        .error(function (error) {
+            console.log('error', error);
+        })
+        
+
+       // console.log('login', $scope.loginEmail, $scope.loginPassword);
+
+    }
+
+    $scope.register = function () {
+
+        $http.post('/register', {
+            email: $scope.registerEmail,
+            password: $scope.registerPassword,
+            passwordConf: $scope.repeatPassword
+        })
+        .success(function (data) {
+            console.log('data', data);
+        })
+        .error(function (error) {
+            console.log('error', error);
+        })
+
+        console.log('register', $scope.registerEmail, $scope.registerPassword, $scope.repeatPassword);
+
+    }
+
+
+
+})
 
 /***/ }),
 

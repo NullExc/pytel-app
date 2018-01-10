@@ -17,8 +17,10 @@ var GoogleAuth;
 var GoogleApi;
 var isClientSigned = false;
 
+var clientCallback;
+
 function handleClientLoad(callback) {
-    if (GoogleApi) {
+    if (GoogleApi && TOKEN) {
         console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
     } else {
@@ -36,6 +38,8 @@ function handleClientLoad(callback) {
                 clientId: CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
+
+                console.log('client init');
         
                 GoogleAuth = gapi.auth2.getAuthInstance();
         
@@ -56,6 +60,8 @@ function handleClientLoad(callback) {
         }
 }
 
+function login() {}
+
 function updateSigninStatus(isSignedIn) {
     if (!isSignedIn) {
         isClientSigned = false;
@@ -64,6 +70,7 @@ function updateSigninStatus(isSignedIn) {
         isSignedIn = true;
     }
     console.log('status change', isSignedIn);
+    //clientCallback();
 }
 
 function handleAuthClick(event) {
@@ -72,6 +79,14 @@ function handleAuthClick(event) {
 
 function handleSignoutClick(event) {
     GoogleAuth.signOut();
+
+    GoogleApi = null;
 }
 
-export default { TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID }
+function isClientLogged() {
+    gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+
+
+export default { TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback }

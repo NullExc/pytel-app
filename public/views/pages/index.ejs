@@ -3,70 +3,73 @@
 
 <head>
   <% include ../partials/header.ejs %>
+  <script type="text/javascript" src="/dist/user.js"></script>
 </head>
 
-<body>
+<body ng-app="User" ng-controller="UserCtrl">
 
   <% include ../partials/nav-in.ejs %>
 
     <div class="row">
-      <div class="col s12">
-        <ul class="tabs">
-          <li class="tab col s6"><a class="active black-text" href="#login">Prihlásenie</a></li>
-          <li class="tab col s6"><a class="black-text" href="#register">Registrácia</a></li>
-        </ul>
-      </div>
-      <div id="login" class="col s12">
-        <div class="row user-input">
-          <form class="col s10">
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="email" type="text">
-                <label for="email">Email</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="password" type="password">
-                <label for="password">Heslo</label>
-              </div>
-            </div>
-
-            <a class="waves-effect waves-light btn light-blue darken-4">prihlásiť sa</a>
-
-          </form>
+      <div class="col col l6 offset-l3 s12">
+        <div class="col s12">
+          <ul class="tabs">
+            <li class="tab col s6">
+              <a class="active black-text" href="#login">Prihlásenie</a>
+            </li>
+            <li class="tab col s6">
+              <a class="black-text" href="#register">Registrácia</a>
+            </li>
+          </ul>
         </div>
-      </div>
-      <div id="register" class="col s12">
-        <div class="row user-input">
-          <form class="col s10">
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="email" type="text">
-                <label for="email">Meno</label>
+        <div id="login" class="col s12">
+          <div class="row user-input">
+            <form class="col s10">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input ng-model="loginEmail" id="email" type="text">
+                  <label for="email">Email</label>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="email" type="email">
-                <label for="email">Email</label>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input ng-model="loginPassword" id="password" type="password">
+                  <label for="password">Heslo</label>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="password" type="password">
-                <label for="password">Heslo</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="passwordConf" type="password">
-                <label for="password">Zopakovať heslo</label>
-              </div>
-            </div>
-            <a class="waves-effect waves-light btn light-blue darken-4">registrovať sa</a>
 
-          </form>
+              <a ng-click="login()" class="btn light-blue darken-4" ng-class="{disabled: loginEmail.length == 0 || loginPassword.length == 0}">prihlásiť sa</a>
+
+            </form>
+          </div>
+        </div>
+        <div id="register" class="col s12">
+          <div class="row user-input">
+            <form class="col s10">
+              <div class="row">
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input ng-model="registerEmail" id="email" type="email">
+                  <label for="email">Email</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input ng-model="registerPassword" id="password" type="password">
+                  <label for="password">Heslo</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input ng-model="repeatPassword" id="passwordConf" type="password">
+                  <label for="password">Zopakovať heslo</label>
+                </div>
+              </div>
+              <a ng-click="register()" class="btn light-blue darken-4" ng-class="{disabled: registerEmail.length == 0 || registerPassword.length == 0 || repeatPassword.length == 0}">registrovať sa</a>
+
+            </form>
+          </div>
         </div>
       </div>
     </div>

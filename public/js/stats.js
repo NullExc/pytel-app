@@ -8,6 +8,7 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
 
     $scope.orderPredicate = 'name';
     $scope.orderReverse = true;
+    
     $scope.orderSort = function (predicate) {
         $scope.orderReverse = ($scope.orderPredicate === predicate) ? !$scope.orderReverse : false;
         $scope.orderPredicate = predicate;
@@ -15,6 +16,7 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
 
     $scope.workPredicate = 'name';
     $scope.workReverse = true;
+
     $scope.workSort = function (predicate) {
         $scope.workReverse = ($scope.workPredicate === predicate) ? !$scope.workReverse : false;
         $scope.workPredicate = predicate;
@@ -72,6 +74,8 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
 
     $scope.parseDate = function (time) {
 
+        //time = parseInt(time);
+
         var days = moment(time).utc().format('D');
         var minutes = moment(time).utc().format('m');
         var hours = moment(time).utc().format('H');
@@ -80,6 +84,8 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
         var daysNumber = parseInt(days) - 1;
 
         string = daysNumber + " dní, " + string;
+
+        console.log(time, minutes);
 
         return string;
     }
@@ -180,6 +186,7 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
                 $scope.$apply();
 
                 $scope.getStats();
+                
             }
         });
 

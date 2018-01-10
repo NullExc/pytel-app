@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/file-picker.css" />
     <script src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
     <script type="text/javascript">
         var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
         var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
@@ -18,7 +19,7 @@
     <script type="text/javascript" src="/dist/order-crud.js"></script>
 </head>
 
-<body>
+<body ng-app="OrderInput" ng-controller="OrderInputCtrl">
 
     <% include ../../partials/nav-in.ejs %>
         <div class="row col s12 light-blue darken-4 white-text header-layer">

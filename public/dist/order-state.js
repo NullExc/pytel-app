@@ -4588,7 +4588,13 @@ return hooks;
 /***/ }),
 /* 1 */,
 /* 2 */,
-/* 3 */
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4601,12 +4607,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
@@ -16338,7 +16338,7 @@ webpackContext.id = 153;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
 
@@ -16347,8 +16347,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 $(document).ready(function () {
 
-    
-    
     if (order) {
 
         var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate);
@@ -16421,11 +16419,15 @@ function getDiffTime(fromDate, toDate) {
 
     var startDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(fromDate);
 
-    var now;
+    var now = new Date();
+
+    now.setHours(now.getHours() + 1);
 
     if (toDate) now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(toDate);
 
-    else now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(Date.now());
+    else now = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(now);
+
+    console.log(now);
 
     var workingTime = now.diff(startDate);
 
@@ -16436,7 +16438,9 @@ function getDiffTime(fromDate, toDate) {
 
     var daysNumber = parseInt(days) - 1;
 
-    string = daysNumber + " dní, " + string;
+    if (daysNumber && daysNumber > 0) {
+        string = daysNumber + " dní, " + string;
+    }
 
     return string;
 }

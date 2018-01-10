@@ -7,7 +7,6 @@
             var orders = JSON.parse('<%- JSON.stringify(orders) %>');
         </script>
         <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
 </head>
 
@@ -30,11 +29,11 @@
                 </div>
                 <div input-field class="col s6 l2 m2">
                     <input id="from-date" type="text" readonly>
-                    <label for="from-date">Od</label>
+                    <label id="from-label" for="from-date">Od</label>
                 </div>
                 <div input-field class="col s6 l2 m2">
                     <input id="to-date" type="text" readonly>
-                    <label for="to-date">Do</label>
+                    <label id="to-label" for="to-date">Do</label>
                 </div>
 
             </div>
@@ -45,25 +44,27 @@
                         <h5>Zákazky</h5>
                     </li>
                     <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 5" pagination-id="orders">
-                        <div>
+                        
                             <p class="title">
                                 {{order.description}}
                             </p>
+                            <span>{{order.contact.email}}</span><br>
+                            <span>{{order.contact.phone}}</span>
 
-                            <div class="right">
+                            <div class="secondary-content">
                                 <span ng-if="order.state === 'arrived'" class="new badge grey" data-badge-caption="">Prijatá</span>
                                 <span ng-if="order.state === 'working'" class="new badge blue" data-badge-caption="">Pracuje sa</span>
                                 <span ng-if="order.state === 'done'" class="new badge red" data-badge-caption="">Čaká na vyzdvihnutie</span>
                                 <span ng-if="order.state === 'pickUp'" class="new badge green" data-badge-caption="">Vyzdvihnutá</span>
-                            </div>
 
-                            <a href="/order-edit/{{order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
-                                <i class="material-icons">edit</i>
-                            </a>
-                            <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
-                                <i class="material-icons">visibility</i>
-                            </a>
-                        </div>
+                                <a href="/order-edit/{{order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
+                                    <i class="material-icons">visibility</i>
+                                </a>
+                            </div>
+                       
                     </li>
                 </ul>
                 <dir-pagination-controls pagination-id="orders" max-size="5" direction-links="true" boundary-links="true">

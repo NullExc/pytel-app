@@ -71,7 +71,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(3);
 var isBuffer = __webpack_require__(14);
 
 /*global toString:true*/
@@ -399,8 +399,10 @@ var GoogleAuth;
 var GoogleApi;
 var isClientSigned = false;
 
+var clientCallback;
+
 function handleClientLoad(callback) {
-    if (GoogleApi) {
+    if (GoogleApi && TOKEN) {
         console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
     } else {
@@ -418,6 +420,8 @@ function handleClientLoad(callback) {
                 clientId: CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
+
+                console.log('client init');
         
                 GoogleAuth = gapi.auth2.getAuthInstance();
         
@@ -438,6 +442,8 @@ function handleClientLoad(callback) {
         }
 }
 
+function login() {}
+
 function updateSigninStatus(isSignedIn) {
     if (!isSignedIn) {
         isClientSigned = false;
@@ -446,6 +452,7 @@ function updateSigninStatus(isSignedIn) {
         isSignedIn = true;
     }
     console.log('status change', isSignedIn);
+    //clientCallback();
 }
 
 function handleAuthClick(event) {
@@ -454,9 +461,17 @@ function handleAuthClick(event) {
 
 function handleSignoutClick(event) {
     GoogleAuth.signOut();
+
+    GoogleApi = null;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID });
+function isClientLogged() {
+    gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
 
 /***/ }),
 
@@ -507,7 +522,7 @@ module.exports = __webpack_require__(13);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(3);
 var Axios = __webpack_require__(15);
 var defaults = __webpack_require__(2);
 
@@ -542,9 +557,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
+axios.Cancel = __webpack_require__(8);
 axios.CancelToken = __webpack_require__(29);
-axios.isCancel = __webpack_require__(8);
+axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -770,7 +785,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
@@ -781,79 +796,85 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var app = angular.module('OrderInput', ['ui.materialize']);
+var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
-})
+    $scope.customers = window.customers;
 
-$(document).ready(function () {
+    $scope.newWork = false;
 
-    $('.timepicker').pickatime({
-        default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-        fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-        twelvehour: false, // Use AM/PM or 24-hour format
-        donetext: 'OK', // text for done-button
-        cleartext: 'Vynulovať', // text for clear-button
-        canceltext: 'Zavrieť', // Text for cancel-button
-        autoclose: false, // automatic close timepicker
-        ampmclickable: true, // make AM PM clickable
-        aftershow: function () { } //Function for after opening timepicker
-    });
+    $scope.newType = false;
 
-    $('.datepicker').pickadate({
-        selectMonths: true,
-        labelMonthNext: 'Ďalší mesiac',
-        labelMonthPrev: 'Posledný mesiac',
-        labelMonthSelect: 'Vybrať mesiac',
-        labelYearSelect: 'Vybrať rok',
-        monthsFull: ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
-        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
-        weekdaysFull: ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
-        weekdaysShort: ['Ned', 'Pon', 'Uto', 'Str', 'Stv', 'Pia', 'Sob'],
-        weekdaysLetter: ['N', 'P', 'U', 'S', 'Š', 'P', 'S'],
-        today: 'Dnes',
-        clear: 'Vynulovať',
-        close: 'Zavrieť',
-        format: 'dd/mm/yyyy'
-    });
+    $scope.newWorkName = '';
 
-    var names = {};
-    var workNames = {};
-    var orderNames = {};
+    $scope.newOrderName = '';
 
     var selectedCustomer = edit ? customer : null;
+
     var selectedWork = edit ? workType : null;
+
     var selectedOrder = edit ? orderType : null;
-    var state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived;
 
-    var date = new Date();
-    var utcDate = new Date();
+    console.log(selectedCustomer);
 
-    if (edit) {
-        date = new Date(order.arriveDate);
-        state = order.state;
+    $scope.pickCustomer = function (event) {
+        var id = event.target.id;
+        for (var i = 0; i < $scope.customers.length; i++) {
+            if (id === $scope.customers[i]._id) {
+                selectedCustomer = $scope.customers[i];
+                break;
+            }
+        }
+        fillCustomerData();
+        $('#select-customer').collapsible('close', 0);
     }
-    utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
-    $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
-        + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
-        + '/' + utcDate.getFullYear());
+    $scope.workInput = function () {
+        if ($scope.newWork === true) {
+            createWorkType();
+        } else {
+            $scope.newWork = true;
+        }
+    }
 
-    $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() + 1 : ('0' + utcDate.getHours()))
-        + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+    $scope.typeInput = function () {
+        if ($scope.newType === true) {
+            createOrderType();
+        } else {
+            $scope.newType = true;
+        }
+    }
 
-    customers.forEach(function (customer) {
-        names[customer.fullName] = null;
-    })
+    var createWorkType = function () {
 
-    workTypes.forEach(function (worktype) {
-        workNames[worktype.name] = null;
-    })
+        $http.post('/worktype', {
+            name: $scope.newWorkName
+        }).success(function (response) {
+            $scope.newWork = false;
+            selectedWork = response;
+            $("#work").val(response.name);
+            $("#work-label").addClass('active');
+            console.log(response);
+        }).error(function (error) {
+            console.log(error);
+        })
+    }
 
-    orderTypes.forEach(function (ordertype) {
-        orderNames[ordertype.name] = null;
-    })
+    var createOrderType = function () {
+
+        $http.post('/ordertype', {
+            name: $scope.newOrderName
+        }).success(function (response) {
+            $scope.newType = false;
+            selectedOrder = response;
+            $("#order").val(response.name);
+            $("#order-label").addClass('active');
+            console.log(response);
+        }).error(function (error) {
+            console.log(error);
+        })
+    }
 
     var fillCustomerData = function () {
 
@@ -953,205 +974,347 @@ $(document).ready(function () {
         }
     }
 
-    $('.selected').click(function (event) {
-        var id = event.target.id;
-        for (var i = 0; i < customers.length; i++) {
-            if (id === customers[i]._id) {
-                selectedCustomer = customers[i];
-                break;
-            }
-        }
-        fillCustomerData();
-        $('#select-customer').collapsible('close', 0);
-    })
-
-    $('#drop-up').click(function (event) {
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        $('#address-data').collapsible('close', 0);
-    })
 
 
+    $(document).ready(function () {
 
-    $('#work').autocomplete({
-        data: workNames,
-        onAutocomplete: function (val) {
-            workTypes.forEach(function (worktype) {
-                if (val === worktype.name) {
-                    selectedWork = worktype;
-                }
-            })
-            console.info(JSON.stringify(selectedWork));
-        }
-    })
+        var utcDate = new Date();
 
-    $('#order').autocomplete({
-        data: orderNames,
-        onAutocomplete: function (val) {
-            orderTypes.forEach(function (ordertype) {
-                if (val === ordertype.name) {
-                    selectedOrder = ordertype;
-                }
-            })
-            console.info(JSON.stringify(selectedOrder));
-        }
-    })
+        $.datepicker.regional['sk'] = {
+            closeText: 'Zavrieť',
+            prevText: '&lt; Predchádzajúci',
+            nextText: 'Nasledujúci &gt;',
+            currentText: 'Dnes',
+            monthNames: [
+                'Január',
+                'Február',
+                'Marec',
+                'Apríl',
+                'Máj',
+                'Jún',
+                'Júl',
+                'August',
+                'September',
+                'Október',
+                'November',
+                'December'
+            ],
+            monthNamesShort: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'Máj',
+                'Jún',
+                'Júl',
+                'Aug',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Dec'
+            ],
+            dayNames: [
+                'Nedeľa',
+                'Pondelok',
+                'Utorok',
+                'Streda',
+                'Štvrtok',
+                'Piatok',
+                'Sobota'
+            ],
+            dayNamesShort: [
+                'Ned',
+                'Pon',
+                'Uto',
+                'Str',
+                'Štv',
+                'Pia',
+                'Sob'
+            ],
+            dayNamesMin: [
+                'Ne',
+                'Po',
+                'Ut',
+                'St',
+                'Št',
+                'Pia',
+                'So'
+            ],
+            dateFormat: 'd.m.yy',
+            firstDay: 0,
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['sk']);
 
-    $('#customer-search').autocomplete({
-        data: names,
-        limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
-        onAutocomplete: function (val) {
-            for (var i = 0; i < customers.length; i++) {
-                if (val === customers[i].fullName) {
-                    selectedCustomer = customers[i];
-                    break;
-                }
-            }
+        $("#date").datepicker({
+            onSelect: function (dateText) {
+                console.log('to selected ', dateText);
 
-            $("#customer-search").val(null);
-            fillCustomerData();
-        },
-        minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
-    });
+                var dateParts = dateText.split('.');
 
-    $('#load-photo').click(function () {
-        console.log('loading picker');
-        __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-            console.log('picker ready to open', GoogleApi, TOKEN);
-            if (GoogleApi && TOKEN) {
-                __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].setGoogleApi(GoogleApi, TOKEN);
-                __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].loadPicker();
+                var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]));
+
+                var resultArray = [];
+
+                utcDate.setFullYear(date.getFullYear());
+
+                utcDate.setMonth(date.getMonth());
+
+                utcDate.setDate(date.getDate());
+
+                console.log('from selected ', utcDate);
             }
         });
-    })
 
-    $('#create, #update').click(function (e) {
-        
-        var order = {};
+        $("#date").datepicker($.datepicker.regional["sk"]);
 
-        order.description = $("#description").val();
+        $('input.timepicker').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
 
-        var email = $("#email").val();
-        var phone = $("#phone").val();
-        var price = $("#price").val();
+                if (utcDate) {
+                    // the input field
+                    var element = $(this), text;
+                    // get access to this Timepicker instance
+                    //   var timepicker = element.timepicker();
+                    //  text = 'Selected time is: ' + timepicker.format(time);
+                    time.setUTCHours(time.getUTCHours() + 1);
 
-        if (price) order.price = price;
+                    utcDate.setHours(time.getHours());
 
-        if (email || phone) {
-            order.contact = {};
-        }
-        if (email) order.contact.email = email;
-        if (phone) order.contact.phone = phone;
+                    utcDate.setMinutes(time.getMinutes());
 
-        var street = $("#street").val();
-        var streetNumber = $("#num").val();
-        var city = $("#city").val();
-        var zipCode = $("#zip").val();
-
-        if (street || streetNumber || city || zipCode) {
-            order.address = {};
-        }
-        if (street) order.address.street = street;
-        if (streetNumber) order.address.streetNumber = streetNumber;
-        if (city) order.address.city = city;
-        if (zipCode) order.address.zipCode = zipCode;
-
-        var ico = $("#ico").val();
-        var icdph = $("#icdph").val();
-        var dic = $("#dic").val();
-
-        if (ico || icdph || dic) {
-            order.billData = {};
-        }
-
-        if (ico) order.billData.ICO = ico;
-        if (icdph) order.billData.ICDPH = icdph;
-        if (dic) order.billData.DIC = dic;
-
-        if (selectedCustomer) order.customerId = selectedCustomer._id;
-        if (selectedOrder) order.orderType = selectedOrder._id;
-        if (selectedWork) order.workType = selectedWork._id;
-
-        order.state = state;
-
-        var help = new Date();
-
-        date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth(), help.getUTCDate(), help.getUTCHours() + 1, help.getUTCMinutes(), help.getUTCSeconds()));
-
-        //date.setUTCMonth(date.getMonth() + 1);
-
-        if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
-            order.startDate = date;
-            //    order.startDate.
-        } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
-            order.endDate = date;
-        } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
-            order.pickDate = date;
-        }
-        order.photoUrl = __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].getPhotoUrl();
-
-        var options = {
-            url: '/order',
-            data: {
-                order
-            }
-        }
-
-        if (e.target.id === 'create') {
-
-            options.method = 'post';
-
-            utcDate.setUTCHours(utcDate.getUTCHours() + 2);
-            options.data.order.arriveDate = utcDate;
-        }
-        else {
-
-            __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-                console.log(typeof GoogleApi);
-                __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
-                __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
-            });
-
-            var pathname = window.location.pathname.split("/");
-            var id = pathname[pathname.length - 1];
-            options.method = 'put';
-            options.url = '/order/' + id
-        }
-
-        __WEBPACK_IMPORTED_MODULE_1__lib_http_js__["a" /* default */].request(options, (err, response) => {
-            if (err) console.log("error", err);
-            else if (response) {
-                console.log("response", response.data);
-                if (response.data.id) {
-                    //location.href = "/order/" + response.data.id;
-                } else {
-                    var pathname = window.location.pathname.split("/");
-                    var id = pathname[pathname.length - 1];
-                    //location.href = "/order/" + id;
+                    console.log('hm', utcDate);
                 }
             }
+        });
+
+        var names = {};
+        var workNames = {};
+        var orderNames = {};
+
+        var state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived;
+
+        var date = new Date();
+
+        if (edit) {
+            date = new Date(order.arriveDate);
+            state = order.state;
+        }
+        utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours() + 1, date.getUTCMinutes(), date.getUTCSeconds());
+
+        $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+            + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+            + '/' + utcDate.getFullYear());
+
+        // $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() + 1 : ('0' + utcDate.getHours()))
+        //     + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+
+        customers.forEach(function (customer) {
+            names[customer.fullName] = null;
+        })
+
+        workTypes.forEach(function (worktype) {
+            workNames[worktype.name] = null;
+        })
+
+        orderTypes.forEach(function (ordertype) {
+            orderNames[ordertype.name] = null;
+        })
+
+        $('#drop-up').click(function (event) {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#address-data').collapsible('close', 0);
+        })
+
+        $('#work').autocomplete({
+            data: workNames,
+            onAutocomplete: function (val) {
+                workTypes.forEach(function (worktype) {
+                    if (val === worktype.name) {
+                        selectedWork = worktype;
+                    }
+                })
+                console.info(JSON.stringify(selectedWork));
+            }
+        })
+
+        $('#order').autocomplete({
+            data: orderNames,
+            onAutocomplete: function (val) {
+                orderTypes.forEach(function (ordertype) {
+                    if (val === ordertype.name) {
+                        selectedOrder = ordertype;
+                    }
+                })
+                console.info(JSON.stringify(selectedOrder));
+            }
+        })
+
+        $('#customer-search').autocomplete({
+            data: names,
+            limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+            onAutocomplete: function (val) {
+                for (var i = 0; i < customers.length; i++) {
+                    if (val === customers[i].fullName) {
+                        selectedCustomer = customers[i];
+                        break;
+                    }
+                }
+
+                $("#customer-search").val(null);
+                fillCustomerData();
+            },
+            minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
+        });
+
+        $('#load-photo').click(function () {
+            console.log('loading picker');
+            __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+                console.log('picker ready to open', GoogleApi, TOKEN);
+                if (GoogleApi && TOKEN) {
+                    __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].setGoogleApi(GoogleApi, TOKEN);
+                    __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].loadPicker();
+                }
+            });
+        })
+
+        $('#create, #update').click(function (e) {
+
+            var order = {};
+
+            order.description = $("#description").val();
+
+            var email = $("#email").val();
+            var phone = $("#phone").val();
+            var price = $("#price").val();
+
+            if (price) order.price = price;
+
+            if (email || phone) {
+                order.contact = {};
+            }
+            if (email) order.contact.email = email;
+            if (phone) order.contact.phone = phone;
+
+            var street = $("#street").val();
+            var streetNumber = $("#num").val();
+            var city = $("#city").val();
+            var zipCode = $("#zip").val();
+
+            if (street || streetNumber || city || zipCode) {
+                order.address = {};
+            }
+            if (street) order.address.street = street;
+            if (streetNumber) order.address.streetNumber = streetNumber;
+            if (city) order.address.city = city;
+            if (zipCode) order.address.zipCode = zipCode;
+
+            var ico = $("#ico").val();
+            var icdph = $("#icdph").val();
+            var dic = $("#dic").val();
+
+            if (ico || icdph || dic) {
+                order.billData = {};
+            }
+
+            if (ico) order.billData.ICO = ico;
+            if (icdph) order.billData.ICDPH = icdph;
+            if (dic) order.billData.DIC = dic;
+
+            if (selectedCustomer) order.customerId = selectedCustomer._id;
+            if (selectedOrder) order.orderType = selectedOrder._id;
+            if (selectedWork) order.workType = selectedWork._id;
+
+            order.state = state;
+
+            var help = new Date();
+
+            date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth(), help.getUTCDate(), help.getUTCHours() + 1, help.getUTCMinutes(), help.getUTCSeconds()));
+
+            //date.setUTCMonth(date.getMonth() + 1);
+
+            if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+                order.startDate = date;
+                //    order.startDate.
+            } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
+                order.endDate = date;
+            } else if (state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+                order.pickDate = date;
+            }
+            order.photoUrl = __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].getPhotoUrl();
+
+            var options = {
+                url: '/order',
+                data: {
+                    order
+                }
+            }
+
+            if (e.target.id === 'create') {
+
+                options.method = 'post';
+
+                //utcDate.setUTCHours(utcDate.getUTCHours() + 2);
+
+
+                console.log('arrive hm', utcDate);
+
+                options.data.order.arriveDate = utcDate;
+            }
+            else {
+
+                __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+                    console.log(typeof GoogleApi);
+                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
+                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
+                });
+
+                var pathname = window.location.pathname.split("/");
+                var id = pathname[pathname.length - 1];
+                options.method = 'put';
+                options.url = '/order/' + id
+            }
+
+            __WEBPACK_IMPORTED_MODULE_1__lib_http_js__["a" /* default */].request(options, (err, response) => {
+                if (err) console.log("error", err);
+                else if (response) {
+                    console.log("response", response.data);
+                    if (response.data.id) {
+                        //location.href = "/order/" + response.data.id;
+                    } else {
+                        var pathname = window.location.pathname.split("/");
+                        var id = pathname[pathname.length - 1];
+                        //location.href = "/order/" + id;
+                    }
+                }
+            })
+        })
+
+        $('.start-state').click(function () {
+            console.log("start");
+            $('.start-state').removeClass('light-blue');
+            $('.start-state').addClass('light-green');
+            state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
+        })
+
+        $('.end-state').click(function () {
+            console.log("done");
+            $('.end-state').removeClass('light-blue');
+            $('.end-state').addClass('light-green');
+            state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done;
+        })
+
+        $('.pickup-state').click(function () {
+            console.log("picked up");
+            $('.pickup-state').removeClass('light-blue');
+            $('.pickup-state').addClass('light-green');
+            state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
         })
     })
 
-    $('.start-state').click(function () {
-        console.log("start");
-        $('.start-state').removeClass('light-blue');
-        $('.start-state').addClass('light-green');
-        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
-    })
-
-    $('.end-state').click(function () {
-        console.log("done");
-        $('.end-state').removeClass('light-blue');
-        $('.end-state').addClass('light-green');
-        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done;
-    })
-
-    $('.pickup-state').click(function () {
-        console.log("picked up");
-        $('.pickup-state').removeClass('light-blue');
-        $('.pickup-state').addClass('light-green');
-        state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
-    })
 })
 
 
@@ -1163,7 +1326,7 @@ $(document).ready(function () {
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(6);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -1319,10 +1482,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(5);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(5);
   }
   return adapter;
 }
@@ -1393,7 +1556,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 
@@ -1691,7 +1854,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(26);
-var isCancel = __webpack_require__(8);
+var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1848,7 +2011,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(8);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1908,16 +2071,21 @@ module.exports = CancelToken;
 /***/ }),
 
 /***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
 
 /***/ }),
 
@@ -2011,25 +2179,6 @@ function insertEvent(order, customer) {
 /***/ }),
 
 /***/ 4:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-
-/***/ 5:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2220,7 +2369,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2231,7 +2380,7 @@ var settle = __webpack_require__(17);
 var buildURL = __webpack_require__(19);
 var parseHeaders = __webpack_require__(20);
 var isURLSameOrigin = __webpack_require__(21);
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(6);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
 
 module.exports = function xhrAdapter(config) {
@@ -2405,11 +2554,11 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 
-/***/ 7:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2435,7 +2584,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2448,7 +2597,7 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 9:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2472,6 +2621,20 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
 
 /***/ })
 

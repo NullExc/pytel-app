@@ -1,14 +1,11 @@
 <div class="row">
     <div class="col s12 l6 offset-l3">
         <div class="panel z-depth-4">
-
-
             <h4>
                 <span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span>
             </h4>
 
             <div id="find-customer" class="input-field">
-
                 <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
                 <label for="customer-search" style="margin-top: 10px;">
                     <i class="material-icons prefix">search</i>
@@ -21,13 +18,14 @@
                         <i class="material-icons grey-text">people</i>Vybrať v zozname
                     </div>
                     <div class="collapsible-body">
-                        <div class="collection" style="margin-top: 0px;">
-                            <% result.form.customers.forEach(function(customer) { %>
-                                <a id="<%= customer._id %>" href="#" class="selected collection-item black-text" style="text-decoration: none;">
-                                    <%= customer.fullName %>
-                                </a>
-                                <% }); %>
-                        </div>
+                        <ul class="collection" style="margin-top: 0px;">
+                            <li href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text" dir-paginate="customer in customers | itemsPerPage: 5"
+                                pagination-id="customers">
+                                {{customer.fullName}}
+                            </li>
+                        </ul>
+                        <dir-pagination-controls pagination-id="customers" max-size="5" direction-links="true" boundary-links="true">
+                        </dir-pagination-controls>
                     </div>
                 </li>
             </ul>
@@ -96,53 +94,74 @@
                     </div>
                 </li>
             </ul>
-
-
         </div>
     </div>
     <div class="col s12 l6 offset-l3">
-        <div class="panel z-depth-4">
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="description" class="order-input" type="text">
-                    <label id="description-label" for="description">Popis</label>
+        <div class="col s12 panel z-depth-4">
+
+            <div class="input-field col s12">
+                <input id="description" class="order-input" type="text">
+                <label id="description-label" for="description">Popis</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input id="work" class="order-input autocomplete" type="text">
+                <label id="work-label" for="work">
+                    <i class="material-icons">search</i>
+                    Typ práce
+                </label>
+            </div>
+
+            <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''">
+                <div class="col s1" style="margin-top: 10px;">
+                    <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix">
+                        <i class="material-icons">add</i>
+                    </a>
+                    <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''">
+                        <i class="material-icons">save</i>
+                    </a>
+                </div>
+                <div class="col l11 s9 offset-s2">
+                    <input ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text">
                 </div>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="work" class="order-input autocomplete" type="text">
-                    <label id="work-label" for="work">
-                        <i class="material-icons">search</i>
-                        Typ práce
-                    </label>
+
+            <div class="input-field col s12">
+                <input id="order" class="order-input autocomplete" type="text">
+                <label id="order-label" for="order">
+                    <i class="material-icons">search</i>
+                    Typ zákazky
+                </label>
+            </div>
+
+            <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''">
+                <div class="col s1" style="margin-top: 10px;">
+                    <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix">
+                        <i class="material-icons">add</i>
+                    </a>
+                    <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''">
+                        <i class="material-icons">save</i>
+                    </a>
+                </div>
+                <div class="col l11 s9 offset-s2">
+                    <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text">
                 </div>
             </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="order" class="order-input autocomplete" type="text">
-                    <label id="order-label" for="order">
-                        <i class="material-icons">search</i>
-                        Typ zákazky
-                    </label>
-                </div>
+
+            <div class="input-field col s5" id="input-date">
+                <i class="material-icons prefix grey-text">event</i>
+                <input type="text" class="datepicker order-input" id="date">
+                <label id="date-label" for="date">Dátum prij.</label>
             </div>
-            <div class="row">
-                <div class="input-field col s5" id="input-date">
-                    <i class="material-icons prefix grey-text">event</i>
-                    <input type="text" class="datepicker order-input" id="date">
-                    <label id="date-label" for="date">Dátum prij.</label>
-                </div>
-                <div class="input-field col s5" id="input-time">
-                    <i class="material-icons prefix grey-text">schedule</i>
-                    <input type="text" class="timepicker" id="time">
-                    <label id="time-label" for="time">Čas prij.</label>
-                </div>
+            <div class="input-field col s5" id="input-time">
+                <i class="material-icons prefix grey-text">schedule</i>
+                <input type="text" class="timepicker" id="time">
+                <label id="time-label" for="time">Čas prij.</label>
             </div>
-            <div class="row">
-                <div id="price-div" class="input-field col s4">
-                    <input id="price" class="order-input" type="number">
-                    <label id="price-label" for="price">Cena</label>
-                </div>
+
+            <div id="price-div" class="input-field col s4">
+                <input id="price" class="order-input" type="number">
+                <label id="price-label" for="price">Cena</label>
             </div>
         </div>
     </div>

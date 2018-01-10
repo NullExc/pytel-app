@@ -47,69 +47,67 @@
                 </div>
 
                 <div class="col s12">
-                    <div class="col s12">
-                        <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ zákazky</h5>
-                        <table class="tablesorter bordered responsive-table">
-                            <thead>
-                                <tr>
-                                    <th ng-click="orderSort('name')">
-                                        Názov
-                                    </th>
-                                    <th ng-click="orderSort('count')">
-                                        Počet
-                                    </th>
-                                    <th ng-click="orderSort('sum')">
-                                        Spolu
-                                    </th>
-                                    <th ng-click="orderSort('time')">
-                                        Čas
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr dir-paginate="order in orderSum | orderBy:orderPredicate:orderReverse | itemsPerPage:5" pagination-id="work">
-                                    <td>{{order.name}}</td>
-                                    <td>{{order.count}}</td>
-                                    <td>{{order.sum}}</td>
-                                    <td>{{parseDate(order.time)}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <dir-pagination-controls pagination-id="work" max-size="5" direction-links="true" boundary-links="true">
-                        </dir-pagination-controls>
-                    </div>
+                    <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ zákazky</h5>
+                    <table class="tablesorter bordered responsive-table">
+                        <thead>
+                            <tr>
+                                <th ng-click="orderSort('name')">
+                                    Názov
+                                </th>
+                                <th ng-click="orderSort('count')">
+                                    Počet
+                                </th>
+                                <th ng-click="orderSort('sum')">
+                                    Spolu
+                                </th>
+                                <th ng-click="orderSort('time')">
+                                    Čas
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="order in orderSum | orderBy:orderPredicate:orderReverse | itemsPerPage:5" pagination-id="work">
+                                <td>{{order.name}}</td>
+                                <td>{{order.count}}</td>
+                                <td>{{order.sum}}</td>
+                                <td>{{parseDate(order.time)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls pagination-id="work" max-size="5" direction-links="true" boundary-links="true">
+                    </dir-pagination-controls>
+                </div>
 
-                    <div class="col s12">
-                        <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ práce</h5>
-                        <table class="tablesorter bordered responsive-table" style="margin-top: 20px;">
-                            <thead>
-                                <tr>
-                                    <th ng-click="workSort('name')">
-                                        Názov
-                                    </th>
-                                    <th ng-click="workSort('count')">
-                                        Počet
-                                    </th>
-                                    <th ng-click="workSort('sum')">
-                                        Spolu
-                                    </th>
-                                    <th ng-click="workSort('time')">
-                                        Čas
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr dir-paginate="work in workSum | orderBy:workPredicate:workReverse | itemsPerPage:5" pagination-id="order">
-                                    <td>{{work.name}}</td>
-                                    <td>{{work.count}}</td>
-                                    <td>{{work.sum}}</td>
-                                    <td>{{parseDate(work.time)}}</td> 
-                                </tr>
-                            </tbody>
-                        </table>
-                        <dir-pagination-controls pagination-id="order" max-size="5" direction-links="true" boundary-links="true">
-                        </dir-pagination-controls>
-                    </div>
+                <div class="col s12">
+                    <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ práce</h5>
+                    <table class="tablesorter bordered responsive-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th ng-click="workSort('name')">
+                                    Názov
+                                </th>
+                                <th ng-click="workSort('count')">
+                                    Počet
+                                </th>
+                                <th ng-click="workSort('sum')">
+                                    Spolu
+                                </th>
+                                <th ng-click="workSort('time')">
+                                    Čas
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="work in workSum | orderBy:workPredicate:workReverse | itemsPerPage:5" pagination-id="order">
+                                <td>{{work.name}}</td>
+                                <td>{{work.count}}</td>
+                                <td>{{work.sum}}</td>
+                                <td>{{parseDate(work.time)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls pagination-id="order" max-size="5" direction-links="true" boundary-links="true">
+                    </dir-pagination-controls>
                 </div>
             </div>
 
@@ -129,12 +127,6 @@
                             <span>
                                 €
                             </span>
-                            <p>
-                                {{order.workType.name}}
-                            </p>
-                            <p>
-                                {{order.orderType.name}}
-                            </p>
 
                             <a href="/order-edit/{{order.order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
                                 <i class="material-icons">edit</i>
