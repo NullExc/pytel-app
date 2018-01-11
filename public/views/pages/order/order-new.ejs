@@ -3,20 +3,20 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/file-picker.css" />
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
-    <script type="text/javascript">
-        var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
-        var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
-        var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/file-picker.css" />
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+        <script type="text/javascript">
+            var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+            var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+            var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
 
-        var edit = false;
-    </script>
-    <script type="text/javascript" src="/dist/order-edit.js"></script>
-    <script type="text/javascript" src="/dist/order-crud.js"></script>
+            var edit = false;
+        </script>
+        <script type="text/javascript" src="/dist/order-edit.js"></script>
+        <script type="text/javascript" src="/dist/order-crud.js"></script>
 </head>
 
 <body ng-app="OrderInput" ng-controller="OrderInputCtrl">
@@ -27,9 +27,11 @@
         </div>
 
         <div class="row">
-            <a id="load-photo" class="waves-effect waves-light btn light-blue darken-4">
-                <i class="material-icons left">add_a_photo</i>nahrať
-            </a>
+            <div class="col s12 l6 offset-l3">
+                <a id="load-photo" class="waves-effect waves-light btn light-blue darken-4">
+                    <i class="material-icons left">add_a_photo</i>nahrať
+                </a>
+            </div>
         </div>
 
         <% include ./order-input.ejs %>

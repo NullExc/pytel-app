@@ -26,7 +26,7 @@ module.exports = {
 
         async.each(customers, function (customer, callback) {
             Order.find({}).where('customerId').equals(customer._id).where('state').equals(order).exec(function (err, orders) {
-                console.log("customer " + customer.fullName + " has " + orders.length + " orders");
+                //console.log("customer " + customer.fullName + " has " + orders.length + " orders");
                 if (orders && orders.length > 0) {
                     result.push(customer);
                 }

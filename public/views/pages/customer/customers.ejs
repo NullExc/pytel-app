@@ -15,20 +15,20 @@
         <div class="row section">
 
             <div class="col s12 l8 offset-l2 panel z-depth-4">
-                <div class="col s3" style="margin:20px;">
+                <div class="col l3 s6">
                     <div input-field>
                         <select ng-model="sortSelect.value" ng-change="sortChange()" material-select>
                             <option ng-repeat="option in sortSelect.choices">{{option}}</option>
                         </select>
-                        <label>Zoradiť podľa abecedy</label>
+                        <label>Podľa abecedy</label>
                     </div>
                 </div>
-                <div class="col s3" style="margin:20px;">
+                <div class="col l3 s6">
                     <div input-field>
                         <select ng-model="orderSelect.value" ng-change="orderChange()" material-select>
                             <option ng-repeat="option in orderSelect.choices">{{option}}</option>
                         </select>
-                        <label>Filtrovať podľa zákazky</label>
+                        <label>Podľa zákazky</label>
                     </div>
                 </div>
             </div>

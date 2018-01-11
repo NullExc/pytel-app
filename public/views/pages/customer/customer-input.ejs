@@ -64,7 +64,7 @@
 
 <form id="company-form" style="margin-top: 20px;">
     <div class="row">
-        <div class="col l6 s12">
+        <div class="col l6 s12 offset-l3">
             <div class="col s12 panel z-depth-4">
                 <h5>Názov právnickej osoby</h5>
                 <div class="input-field">
@@ -106,6 +106,28 @@
             </div>
 
             <div class="col s12 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Kontaktná osoba</h5>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-first" type="text">
+                    <label id="contact-first-label" for="contact-first">Meno</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-last" type="text">
+                    <label id="contact-last-label" for="contact-last">Priezvisko</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-email" type="text">
+                    <label id="contact-email-label" for="contact-email">E-mail</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="contact-phone" type="text">
+                    <label id="contact-phone-label" for="contact-phone">Mobil</label>
+                </div>
+            </div>
+
+            <div class="col s12 panel z-depth-4">
                 <div class="col s12" style="margin-top: 20px;">
                     <h5>Fakturačné údaje</h5>
                 </div>
@@ -131,32 +153,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="col l6 s12">
-            <div class="col s12 panel z-depth-4">
-                <div class="col s12">
-                    <h5>Kontaktná osoba</h5>
-                </div>
-                <div class="input-field col s6">
-                    <input id="contact-first" type="text">
-                    <label id="contact-first-label" for="contact-first">Meno</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="contact-last" type="text">
-                    <label id="contact-last-label" for="contact-last">Priezvisko</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="contact-email" type="text">
-                    <label id="contact-email-label" for="contact-email">E-mail</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="contact-phone" type="text">
-                    <label id="contact-phone-label" for="contact-phone">Mobil</label>
-                </div>
-            </div>
-
         </div>
     </div>
 </form>

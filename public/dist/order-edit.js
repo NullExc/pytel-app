@@ -1259,18 +1259,18 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 //utcDate.setUTCHours(utcDate.getUTCHours() + 2);
 
+                __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+                    console.log('token', TOKEN);
+                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
+                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
+                });
+
 
                 console.log('arrive hm', utcDate);
 
                 options.data.order.arriveDate = utcDate;
             }
             else {
-
-                __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-                    console.log(typeof GoogleApi);
-                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
-                    __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
-                });
 
                 var pathname = window.location.pathname.split("/");
                 var id = pathname[pathname.length - 1];

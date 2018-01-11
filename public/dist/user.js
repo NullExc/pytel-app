@@ -626,6 +626,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(11);
 
 
+//import angularCookies from 'angular-cookies';
+
 var app = angular.module('User', []);
 
 app.controller('UserCtrl', function ($scope, $http) {
@@ -640,6 +642,18 @@ app.controller('UserCtrl', function ($scope, $http) {
 
     $scope.repeatPassword = "";
 
+    $scope.loginError = false;
+
+    $scope.registerEmailError = false;
+
+    $scope.registerPasswordError = false;
+
+    $scope.registerMatchError = false;
+
+    $scope.registerSuccess = false;
+
+   // console.log('cookies', $cookies);
+
     $scope.login = function () {
 
         $http.post('/login', {
@@ -648,8 +662,15 @@ app.controller('UserCtrl', function ($scope, $http) {
         })
         .success(function (data) {
             console.log('data', data);
+
+            location.href = '/order-new';
         })
         .error(function (error) {
+
+            if (error) {
+                $scope.loginError = true;
+            }
+
             console.log('error', error);
         })
         
@@ -660,6 +681,10 @@ app.controller('UserCtrl', function ($scope, $http) {
 
     $scope.register = function () {
 
+        $scope.registerEmailError = false;
+
+        $scope.registerPasswordError = false;
+
         $http.post('/register', {
             email: $scope.registerEmail,
             password: $scope.registerPassword,
@@ -667,9 +692,22 @@ app.controller('UserCtrl', function ($scope, $http) {
         })
         .success(function (data) {
             console.log('data', data);
+
+            $scope.registerSuccess = true;
         })
         .error(function (error) {
             console.log('error', error);
+
+            if (error.status === 402) {
+                $scope.registerEmailError = true;
+
+            } else if (error.status === 403) {
+                $scope.registerPasswordError = true;
+
+            } else if (error.status === 400) {
+                $scope.registerMatchError = true;
+
+            }
         })
 
         console.log('register', $scope.registerEmail, $scope.registerPassword, $scope.repeatPassword);

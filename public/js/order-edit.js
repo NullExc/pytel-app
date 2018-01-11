@@ -467,18 +467,18 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 //utcDate.setUTCHours(utcDate.getUTCHours() + 2);
 
+                googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+                    console.log('token', TOKEN);
+                    calendar.setGoogleApi(GoogleApi);
+                    calendar.insertEvent(order, selectedCustomer);
+                });
+
 
                 console.log('arrive hm', utcDate);
 
                 options.data.order.arriveDate = utcDate;
             }
             else {
-
-                googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-                    console.log(typeof GoogleApi);
-                    calendar.setGoogleApi(GoogleApi);
-                    calendar.insertEvent(order, selectedCustomer);
-                });
 
                 var pathname = window.location.pathname.split("/");
                 var id = pathname[pathname.length - 1];

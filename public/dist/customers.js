@@ -124,13 +124,13 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
     }
 
     var orderRequest = function (order) {
-        console.log(order);
+        //console.log(order);
 
         $http.post('/customer/sort', {
             customers: window.customers,
             order: order
         }).success(function (data) {
-            console.log('arrived', JSON.stringify(data));
+            //console.log('arrived', JSON.stringify(data));
             $scope.customers = data;
         })
     }

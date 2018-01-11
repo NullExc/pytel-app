@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -24,7 +26,13 @@ var config = require('./config/config.js');
 
 var app = express();
 
-mongoose.connect(config.url);
+mongoose.connect(config.url, {
+
+  reconnectTries: 100,
+  
+  reconnectInterval: 10000
+});
+
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -45,13 +53,19 @@ app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function (req, res) {
-  res.render('pages/index');
-});
-
 //user routes
 app.post('/register', userApi.register);
 app.post('/login', userApi.login);
+
+app.get('/logout', function (req, res, next) {
+
+  if (req.cookies && req.cookies.token) {
+    res.clearCookie("token");
+
+  } 
+  res.redirect('/');
+
+})
 
 app.use(function (req, res, next) {
 
@@ -66,13 +80,24 @@ app.use(function (req, res, next) {
       next(); //  return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         req.decoded = decoded;
+
+        if (req.path === '/') {
+          return res.redirect('/order-new');
+        }
+
         next();
       }
     });
 
   } else {
 
-    var error = new Error("Vaše sedenie na stránke vypršalo. Prihláste sa prosím.");
+    console.log('path', req.path);
+
+    if (req.path === '/') {
+      return next();
+    }
+
+    var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
 
     error.status = 509;
 
@@ -86,6 +111,10 @@ app.use(function (req, res, next) {
     return next(error);
 
   }
+});
+
+app.get('/', function (req, res) {
+  res.render('pages/index');
 });
 
 //work type routes
