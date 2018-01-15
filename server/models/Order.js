@@ -35,9 +35,9 @@ var OrderSchema = new mongoose.Schema({
     endDate: {
         type: Date
     },
-    facilities: [{
+    facilities: {
         type: String
-    }],
+    },
     notes: {
         type: String
     },

@@ -121,8 +121,8 @@
                 </label>
             </div>
 
-            <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''">
-                <div class="col s1" style="margin-top: 10px;">
+            <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''" style="margin-top:0px;">
+                <div style="margin-top: 10px;">
                     <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
                         <i class="material-icons">add</i>
                     </a>
@@ -130,7 +130,7 @@
                         <i class="material-icons">save</i>
                     </a>
                 </div>
-                <div class="col l11 s9 offset-s2">
+                <div class="col l11 s9 offset-s2 offset-l1">
                     <input ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text" ng-disabled="sale">
                 </div>
             </div>
@@ -143,8 +143,8 @@
                 </label>
             </div>
 
-            <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''">
-                <div class="col s1" style="margin-top: 10px;">
+            <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''" style="margin-top:0px;">
+                <div class="" style="margin-top: 20px;">
                     <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
                         <i class="material-icons">add</i>
                     </a>
@@ -152,7 +152,7 @@
                         <i class="material-icons">save</i>
                     </a>
                 </div>
-                <div class="col l11 s9 offset-s2">
+                <div class="col l11 s9 offset-s2 offset-l1">
                     <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text" ng-disabled="sale">
                 </div>
             </div>
@@ -171,6 +171,12 @@
             <div id="price-div" class="input-field col s4">
                 <input value="0" id="price" class="order-input" type="number">
                 <label id="price-label" for="price">Cena</label>
+            </div>
+        </div>
+        <div class="col s12 panel z-depth-4">
+            <div class="input-field col s12">
+                <textarea id="notes" class="materialize-textarea"></textarea>
+                <label for="notes">Poznámky</label>
             </div>
         </div>
     </div>

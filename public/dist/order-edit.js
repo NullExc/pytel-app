@@ -1336,11 +1336,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 else if (response) {
                     console.log("response", response.data);
                     if (response.data.id) {
-                        //location.href = "/order/" + response.data.id;
+                        location.href = "/order/" + response.data.id;
                     } else {
                         var pathname = window.location.pathname.split("/");
                         var id = pathname[pathname.length - 1];
-                        //location.href = "/order/" + id;
+                        location.href = "/order/" + id;
                     }
                 }
             })
