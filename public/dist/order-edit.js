@@ -1197,9 +1197,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             console.log('loading picker');
             __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
                 console.log('picker ready to open', GoogleApi, TOKEN);
+                
                 if (GoogleApi && TOKEN) {
                     __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].setGoogleApi(GoogleApi, TOKEN);
                     __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].loadPicker();
+                } else {
+                    $('#load-photo').addClass('disabled');
                 }
             });
         })

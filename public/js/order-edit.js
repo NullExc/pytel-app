@@ -405,9 +405,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             console.log('loading picker');
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
                 console.log('picker ready to open', GoogleApi, TOKEN);
+                
                 if (GoogleApi && TOKEN) {
                     picker.setGoogleApi(GoogleApi, TOKEN);
                     picker.loadPicker();
+                } else {
+                    $('#load-photo').addClass('disabled');
                 }
             });
         })
