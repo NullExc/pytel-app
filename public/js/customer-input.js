@@ -29,6 +29,15 @@ $(document).ready(function () {
 
             company.name = $("#name").val();
 
+            if (!company.name) {
+
+                $('#name').addClass('invalid');
+
+                $('#name-label').addClass('active');
+
+                return;
+            }
+
             var street = $("#company-street").val();
             var streetNumber = $("#company-num").val();
             var city = $("#company-city").val();
@@ -80,6 +89,15 @@ $(document).ready(function () {
 
             person.firstName = $("#first").val();
             person.lastName = $("#last").val();
+
+            if (!person.lastName) {
+
+                $('#last').addClass('invalid');
+
+                $('#last-label').addClass('active');
+
+                return;
+            }
 
             var street = $("#person-street").val();
             var streetNumber = $("#person-num").val();

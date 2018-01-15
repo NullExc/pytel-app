@@ -22,7 +22,9 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
     $scope.newOrderName = '';
 
-    console.log($scope.orderTypes.length, $scope.workTypes.length);
+    $scope.orderTypes = $filter('orderBy')($scope.orderTypes, 'name', false);
+
+    $scope.workTypes = $filter('orderBy')($scope.workTypes, 'name', false);
 
     $scope.googleLogin = function () {
 
@@ -38,10 +40,8 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
     }
 
     $scope.googleLogout = function () {
-        console.log('google logout');
-
+    
         googleAuth.handleSignoutClick();
-        
     }
 
     $scope.pickWorkType = function (name) {

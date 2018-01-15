@@ -800,6 +800,11 @@ var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination',
 
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
+    __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+        console.log('token', TOKEN);
+        
+    });
+
     $scope.customers = window.customers;
 
     $scope.newWork = false;
@@ -809,6 +814,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     $scope.newWorkName = '';
 
     $scope.newOrderName = '';
+
+    $scope.sale = edit ? order.sale : false;
 
     var selectedCustomer = edit ? customer : null;
 
@@ -978,6 +985,20 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     $(document).ready(function () {
 
+        $('#date-label').addClass('active');
+        $('#time-label').addClass('active');
+
+        if (edit) {
+            $('#date').attr('disabled', true);
+            $('#time').attr('disabled', true);
+            $('#check-sale').attr('disabled', 'disabled');
+            $('#check-sale').removeClass('checkbox-blue');
+
+            if ($scope.sale) {
+                $("#state-div").addClass('hide');
+            }
+        }
+
         var utcDate = new Date();
 
         $.datepicker.regional['sk'] = {
@@ -1073,6 +1094,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             defaultTime: 'now',
             interval: 15,
             change: function (time) {
+
+                console.log('check', $scope.sale);
 
                 if (utcDate) {
                     // the input field
@@ -1187,6 +1210,25 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             order.description = $("#description").val();
 
+            if (!order.description) {
+
+                $('#description').addClass('invalid');
+
+                $('#description-label').addClass('active');
+
+            }
+
+            if (!selectedCustomer) {
+
+                $("#done-customer").removeClass('orange');
+                $("#done-customer").addClass('red');
+
+            }
+
+            if (!order.description || !selectedCustomer) {
+                return;
+            }
+
             var email = $("#email").val();
             var phone = $("#phone").val();
             var price = $("#price").val();
@@ -1255,16 +1297,27 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             if (e.target.id === 'create') {
 
-                options.method = 'post';
+                if ($scope.sale) {
+                    order.state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
 
-                //utcDate.setUTCHours(utcDate.getUTCHours() + 2);
+                    if (order.orderType) delete order.orderType;
+                    if (order.workType) delete order.workType;
+
+                    order.sale = true;
+
+                    order.state = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp;
+
+                    order.pickDate = utcDate;
+
+                }
+
+                options.method = 'post';
 
                 __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
                     console.log('token', TOKEN);
                     __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].setGoogleApi(GoogleApi);
                     __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
                 });
-
 
                 console.log('arrive hm', utcDate);
 

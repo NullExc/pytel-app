@@ -1,8 +1,10 @@
+<html>
+
 <head>
   <% include ../../partials/header.ejs %>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
     <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
-    
+
 </head>
 
 <body ng-app="Settings" ng-controller="SettingsCtrl">
@@ -14,20 +16,20 @@
 
     <div class="row">
 
-      <div class="col s12 l8 offset-l2">
+      <div class="col s12 l8 offset-l2 panel z-depth-4" style="padding: 15px;">
 
         <h5>Google účet</h5>
 
-       
-          <a id="login-button" ng-click="googleLogin()" class="btn light-blue darken-4" style="margin-top: 15px;">
-            Prihlásiť sa
-          </a>
-        
-        
-          <a id="logout-button" ng-click="googleLogout()" class="btn light-blue darken-4" style="margin-top: 15px;">
-            Odhlásiť sa
-          </a>
-       
+
+        <a id="login-button" ng-click="googleLogin()" class="btn light-blue darken-4" style="margin-top: 15px;">
+          Prihlásiť sa
+        </a>
+
+
+        <a id="logout-button" ng-click="googleLogout()" class="btn light-blue darken-4" style="margin-top: 15px;">
+          Odhlásiť sa
+        </a>
+
       </div>
 
       <div class="col s12 l8 offset-l2 panel z-depth-4" style="margin-top: 30px;">
@@ -38,134 +40,134 @@
           </li>
           <li class="collection-item  black-text" dir-paginate="orderType in orderTypes | itemsPerPage:5" pagination-id="ordertypes">
 
-              <div>
-                {{orderType.name}}
-                <a href="#!" class="secondary-content" style="margin-right: 20px;">
-                    <i ng-click="pickOrderType(orderType.name)" class="material-icons modal-trigger red-text" href="#delete-order-modal">delete</i>
-                </a>
-                <a href="#!" class="secondary-content">
-                  <i ng-click="pickOrderType(orderType.name)" class="material-icons modal-trigger" href="#edit-order-modal" style="margin-right: 15px;">edit</i>
-                </a>
-              </div>
-            
+            <div>
+              {{orderType.name}}
+              <a href="#!" class="secondary-content" style="margin-right: 20px;">
+                <i ng-click="pickOrderType(orderType.name)" class="material-icons modal-trigger red-text" href="#delete-order-modal">delete</i>
+              </a>
+              <a href="#!" class="secondary-content">
+                <i ng-click="pickOrderType(orderType.name)" class="material-icons modal-trigger" href="#edit-order-modal" style="margin-right: 15px;">edit</i>
+              </a>
+            </div>
+
           </li>
         </ul>
         <dir-pagination-controls pagination-id="ordertypes" max-size="5" direction-links="true" boundary-links="true">
         </dir-pagination-controls>
 
         <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''" style="margin-bottom: 20px;">
-            <div class="col s1" style="margin-top: 10px;">
-                <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix">
-                    <i class="material-icons">add</i>
-                </a>
-                <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''">
-                    <i class="material-icons">save</i>
-                </a>
-            </div>
-            <div class="col l11 s9 offset-s2">
-                <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text">
-            </div>
+          <div class="col s1" style="margin-top: 10px;">
+            <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix">
+              <i class="material-icons">add</i>
+            </a>
+            <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''">
+              <i class="material-icons">save</i>
+            </a>
+          </div>
+          <div class="col l11 s9 offset-s2">
+            <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text">
+          </div>
         </div>
 
       </div>
 
       <div class="col s12 l8 offset-l2 panel z-depth-4" style="margin-top: 30px;">
 
-          <ul id="list" class="collection with-header">
-            <li class="collection-header light-blue darken-4 white-text">
-              <h5>Typy práce</h5>
-            </li>
-            <li class="collection-item  black-text" dir-paginate="workType in workTypes | itemsPerPage:5" pagination-id="worktypes">
-  
-                <div>
-                  {{workType.name}}
-                  <a href="#!" class="secondary-content" style="margin-right: 20px;">
-                      <i ng-click="pickWorkType(workType.name)" class="material-icons modal-trigger red-text" href="#delete-work-modal">delete</i>
-                  </a>
-                  <a href="#!" class="secondary-content">
-                    <i ng-click="pickWorkType(workType.name)" class="material-icons modal-trigger" href="#edit-work-modal" style="margin-right: 15px;">edit</i>
-                  </a>
-                </div>
-              
-            </li>
-          </ul>
-          <dir-pagination-controls pagination-id="worktypes" max-size="5" direction-links="true" boundary-links="true">
-          </dir-pagination-controls>
-  
-          <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''" style="margin-bottom: 20px;">
-              <div class="col s1" style="margin-top: 10px;">
-                  <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix">
-                      <i class="material-icons">add</i>
-                  </a>
-                  <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''">
-                      <i class="material-icons">save</i>
-                  </a>
-              </div>
-              <div class="col l11 s9 offset-s2">
-                  <input ng-model="newWorkName" ng-disabled="!newWork" id="new-type" class="order-input" type="text">
-              </div>
+        <ul id="list" class="collection with-header">
+          <li class="collection-header light-blue darken-4 white-text">
+            <h5>Typy práce</h5>
+          </li>
+          <li class="collection-item  black-text" dir-paginate="workType in workTypes | itemsPerPage:5" pagination-id="worktypes">
+
+            <div>
+              {{workType.name}}
+              <a href="#!" class="secondary-content" style="margin-right: 20px;">
+                <i ng-click="pickWorkType(workType.name)" class="material-icons modal-trigger red-text" href="#delete-work-modal">delete</i>
+              </a>
+              <a href="#!" class="secondary-content">
+                <i ng-click="pickWorkType(workType.name)" class="material-icons modal-trigger" href="#edit-work-modal" style="margin-right: 15px;">edit</i>
+              </a>
+            </div>
+
+          </li>
+        </ul>
+        <dir-pagination-controls pagination-id="worktypes" max-size="5" direction-links="true" boundary-links="true">
+        </dir-pagination-controls>
+
+        <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''" style="margin-bottom: 20px;">
+          <div class="col s1" style="margin-top: 10px;">
+            <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix">
+              <i class="material-icons">add</i>
+            </a>
+            <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''">
+              <i class="material-icons">save</i>
+            </a>
+          </div>
+          <div class="col l11 s9 offset-s2">
+            <input ng-model="newWorkName" ng-disabled="!newWork" id="new-type" class="order-input" type="text">
           </div>
         </div>
+      </div>
     </div>
 
     <div style="height: 45%;" id="edit-order-modal" class="modal">
-        <div style="margin: 20px;">
-            <h5>Editovať typ zákazky</h5>
-            <div class="input-field" style="margin-top: 20px;">
-              <input id="edit-ordertype" type="text" >
-            </div>
+      <div style="margin: 20px;">
+        <h5>Editovať typ zákazky</h5>
+        <div class="input-field" style="margin-top: 20px;">
+          <input id="edit-ordertype" type="text">
         </div>
-        <div style="float: right;">
-            <a id="edit-order-type" ng-click="editOrderType()" class="modal-action waves-effect waves-green btn-flat">Potvrdiť</a>
-            <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
-        </div>
+      </div>
+      <div style="float: right;">
+        <a id="edit-order-type" ng-click="editOrderType()" class="modal-action waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
     </div>
 
     <div style="height: 45%;" id="delete-order-modal" class="modal">
-        <div style="margin: 20px;">
-            <h5>Vymazať typ zákazky</h5>
-            <p>Potvrdením natrvalo vymažete ty zákazky zo systému.</p>
-        </div>
-        <div style="float: right;">
-            <a id="delete-order-type" ng-click="deleteOrderType()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
-            <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
-        </div>
+      <div style="margin: 20px;">
+        <h5>Vymazať typ zákazky</h5>
+        <p>Potvrdením natrvalo vymažete ty zákazky zo systému.</p>
+      </div>
+      <div style="float: right;">
+        <a id="delete-order-type" ng-click="deleteOrderType()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
     </div>
 
     <div style="height: 45%;" id="edit-work-modal" class="modal">
-        <div style="margin: 20px;">
-            <h5>Editovať typ práce</h5>
-            <div class="input-field" style="margin-top: 20px;">
-              <input id="edit-worktype" type="text" >
-            </div>
+      <div style="margin: 20px;">
+        <h5>Editovať typ práce</h5>
+        <div class="input-field" style="margin-top: 20px;">
+          <input id="edit-worktype" type="text">
         </div>
-        <div style="float: right;">
-            <a id="edit-work-type" ng-click="editWorkType()" class="modal-action waves-effect waves-green btn-flat">Potvrdiť</a>
-            <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
-        </div>
+      </div>
+      <div style="float: right;">
+        <a id="edit-work-type" ng-click="editWorkType()" class="modal-action waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
     </div>
 
     <div style="height: 45%;" id="delete-work-modal" class="modal">
-        <div style="margin: 20px;">
-            <h5>Vymazať typ práce</h5>
-            <p>Potvrdením natrvalo vymažete ty práce zo systému.</p>
-        </div>
-        <div style="float: right;">
-            <a id="delete-work-type" ng-click="deleteWorkType()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
-            <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
-        </div>
+      <div style="margin: 20px;">
+        <h5>Vymazať typ práce</h5>
+        <p>Potvrdením natrvalo vymažete ty práce zo systému.</p>
+      </div>
+      <div style="float: right;">
+        <a id="delete-work-type" ng-click="deleteWorkType()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
     </div>
 
     <script>
       $('.modal').modal();
 
       var closeOrderModal = function () {
-        
+
         $("#edit-order-modal").modal('close');
       }
 
       var closeWorkModal = function () {
-        
+
         $("#edit-work-modal").modal('close');
       }
 

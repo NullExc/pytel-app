@@ -68,6 +68,10 @@ var OrderSchema = new mongoose.Schema({
     },
     customerId: {
         type: mongoose.Schema.Types.ObjectId
+    },
+    sale: {
+        type: Boolean,
+        default: false
     }
 });
 

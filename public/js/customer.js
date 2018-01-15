@@ -1,8 +1,6 @@
-import http from '../lib/http.js';
 import STATE from './state.js';
-import $ from 'jquery';
 
-var app = angular.module('Customer', ['ui.materialize']);
+var app = angular.module('Customer', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('CustomerCtrl', function ($scope, $http, $filter) {
 
@@ -33,10 +31,42 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
         location.href = '/customer-edit/' + id;
     }
 
-    
+    $(document).ready(function () {
 
+        var options = {
+            url: '/customer/names',
+            method: 'get'
+        }
 
+        $http.get('/customer/names')
+            .success(function (data) {
 
+                if (data.names) {
+                    var names = {};
+                    data.names.forEach(function (name) {
+                        names[name] = null;
+                    })
+                    $('input.autocomplete').autocomplete({
+                        data: names,
+                        limit: 5, // The max amount of results that can be shown at once. Default: Infinity.
+                        onAutocomplete: function (val) {
+                            
+                            console.log(val);
+
+                            $http.get('/customer/name/' + val)
+                                .success(function (data) {
+
+                                    if (data.customer && data.customer._id) {
+                                        console.log(data.customer._id);
+                                        location.href = '/customer/' + data.customer._id;
+                                    }
+                                })
+                        },
+                        minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
+                    });
+                }
+            })
+    })
 })
 
 /*$(document).ready(function () {

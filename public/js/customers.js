@@ -30,6 +30,8 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
         }
     }
 
+    $scope.sortChange();
+
     $scope.orderChange = function () {
 
         if ($scope.orderSelect.value == $scope.orderSelect.choices[0]) {
@@ -61,5 +63,42 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
             $scope.customers = data;
         })
     }
+
+    $(document).ready(function () {
+
+        var options = {
+            url: '/customer/names',
+            method: 'get'
+        }
+
+        $http.get('/customer/names')
+            .success(function (data) {
+
+                if (data.names) {
+                    var names = {};
+                    data.names.forEach(function (name) {
+                        names[name] = null;
+                    })
+                    $('input.autocomplete').autocomplete({
+                        data: names,
+                        limit: 5, // The max amount of results that can be shown at once. Default: Infinity.
+                        onAutocomplete: function (val) {
+
+                            console.log(val);
+
+                            $http.get('/customer/name/' + val)
+                                .success(function (data) {
+
+                                    if (data.customer && data.customer._id) {
+                                        console.log(data.customer._id);
+                                        location.href = '/customer/' + data.customer._id;
+                                    }
+                                })
+                        },
+                        minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
+                    });
+                }
+            })
+    })
 
 })

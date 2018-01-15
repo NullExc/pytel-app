@@ -100,12 +100,21 @@
         <div class="col s12 panel z-depth-4">
 
             <div class="input-field col s12">
-                <input id="description" class="order-input" type="text">
-                <label id="description-label" for="description">Popis</label>
+                <input id="description" class="order-input validate" type="text">
+                <label id="description-label" for="description" data-error="Je potrebné zadať popis">Popis</label>
+            </div>
+
+            <div class="col s12">
+                <form>
+                    <p>
+                        <input type="checkbox" class="filled-in checkbox-blue" id="check-sale" ng-checked="sale" ng-model="sale" />
+                        <label for="check-sale">Predaj</label>
+                    </p>
+                </form>
             </div>
 
             <div class="input-field col s12">
-                <input id="work" class="order-input autocomplete" type="text">
+                <input id="work" class="order-input autocomplete" type="text" ng-disabled="sale">
                 <label id="work-label" for="work">
                     <i class="material-icons">search</i>
                     Typ práce
@@ -114,20 +123,20 @@
 
             <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''">
                 <div class="col s1" style="margin-top: 10px;">
-                    <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix">
+                    <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
                         <i class="material-icons">add</i>
                     </a>
-                    <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''">
+                    <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''" ng-disabled="sale">
                         <i class="material-icons">save</i>
                     </a>
                 </div>
                 <div class="col l11 s9 offset-s2">
-                    <input ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text">
+                    <input ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text" ng-disabled="sale">
                 </div>
             </div>
 
             <div class="input-field col s12">
-                <input id="order" class="order-input autocomplete" type="text">
+                <input id="order" class="order-input autocomplete" type="text" ng-disabled="sale">
                 <label id="order-label" for="order">
                     <i class="material-icons">search</i>
                     Typ zákazky
@@ -136,15 +145,15 @@
 
             <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''">
                 <div class="col s1" style="margin-top: 10px;">
-                    <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix">
+                    <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
                         <i class="material-icons">add</i>
                     </a>
-                    <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''">
+                    <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''" ng-disabled="sale">
                         <i class="material-icons">save</i>
                     </a>
                 </div>
                 <div class="col l11 s9 offset-s2">
-                    <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text">
+                    <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text" ng-disabled="sale">
                 </div>
             </div>
 
@@ -160,7 +169,7 @@
             </div>
 
             <div id="price-div" class="input-field col s4">
-                <input id="price" class="order-input" type="number">
+                <input value="0" id="price" class="order-input" type="number">
                 <label id="price-label" for="price">Cena</label>
             </div>
         </div>

@@ -149,6 +149,7 @@ app.get('/customer-search', customerApi.search);
 app.get('/customer-new', customerApi.new);
 app.get('/customer-edit/:id', customerApi.edit);
 app.get('/customer/names', customerApi.getNames);
+app.get('/customer/name/:name', customerApi.getByName);
 
 app.post('/customer', customerApi.create);
 app.get('/customer/:id', customerApi.get);

@@ -42,6 +42,11 @@ border: 2px solid #01579b !important;
 background-color: #01579b !important;
 }
 
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid rgb(223, 10, 10) !important;
+    box-shadow: 0 1px 0 0 rgb(238, 8, 8) !important;
+  }
+
 @media only screen and (max-device-width: 480px) {
     
     #left-container {

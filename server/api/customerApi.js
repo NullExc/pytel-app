@@ -86,6 +86,32 @@ module.exports = {
             return res.json({ names: names });
         })
     },
+    getByName(req, res, next) {
+
+        Customer.find({}, function (err, customers) {
+            if (err) {
+                return next(err);
+            }
+
+            var result;
+            
+            async.each(customers, function (customer, callback) {
+
+                if (customer.fullName === req.params.name) {
+                    result = customer;
+                }
+
+                callback();
+
+            }, function (err) {
+                if (err) {
+                    return next(err);
+                }
+                return res.json({customer: result});
+            })
+        })
+
+    },
     update(req, res, next) {
 
         Customer.update({ _id: req.params.id }, req.body.customer, { multi: false, upsert: false })
