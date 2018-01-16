@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
     <% include ../../partials/header.ejs %>
         <script type="text/javascript"> 
@@ -18,8 +20,10 @@
 
     <% include ../../partials/nav-in.ejs %>
 
-        <div class="row col s12 light-blue darken-4 white-text header-layer">
-            <h5 style="margin-left: 10px;"> {{customer.fullName}} </h5>
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text header-layer">
+                <h5> {{customer.fullName}} </h5>
+            </div>
         </div>
 
         <section class="row">
@@ -170,7 +174,8 @@
                             </div>
                             <div class="collapsible-body">
                                 <div class="collection">
-                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.arrived} | itemsPerPage:5" pagination-id="arrived-pagination" ng-href="/order/{{order._id}}">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.arrived} | itemsPerPage:5" pagination-id="arrived-pagination"
+                                        ng-href="/order/{{order._id}}">
                                         <p>{{order.description}}</p>
                                     </a>
                                 </div>
@@ -185,7 +190,8 @@
                             <div class="collapsible-body">
 
                                 <div class="collection">
-                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.working} | itemsPerPage:5" pagination-id="working-pagination" ng-href="/order/{{order._id}}">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.working} | itemsPerPage:5" pagination-id="working-pagination"
+                                        ng-href="/order/{{order._id}}">
                                         <p>{{order.description}}</p>
                                     </a>
                                 </div>
@@ -199,7 +205,8 @@
                             </div>
                             <div class="collapsible-body">
                                 <div class="collection">
-                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.done} | itemsPerPage:5" pagination-id="done-pagination" ng-href="/order/{{order._id}}">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.done} | itemsPerPage:5" pagination-id="done-pagination"
+                                        ng-href="/order/{{order._id}}">
                                         <p>{{order.description}}</p>
                                     </a>
                                 </div>
@@ -213,7 +220,8 @@
                             </div>
                             <div class="collapsible-body">
                                 <div class="collection">
-                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.pickUp} | itemsPerPage:5" pagination-id="pickup-pagination" ng-href="/order/{{order._id}}">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.pickUp} | itemsPerPage:5" pagination-id="pickup-pagination"
+                                        ng-href="/order/{{order._id}}">
                                         <p>{{order.description}}</p>
                                     </a>
                                 </div>
