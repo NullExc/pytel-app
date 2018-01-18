@@ -30,6 +30,8 @@ function handleClientLoad(callback) {
     }
 
     function initClient() {
+
+            return callback("aaaaa", gapi);
         
             GoogleApi = gapi;
         
@@ -39,8 +41,6 @@ function handleClientLoad(callback) {
                 clientId: CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
-
-                return callback("aaaaa", "initClientThen");
 
                 console.log('client init');
         
