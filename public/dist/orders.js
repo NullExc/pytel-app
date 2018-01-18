@@ -2464,7 +2464,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(3);
 
 
 
@@ -2734,6 +2734,20 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     filter(false);
 
 })
+
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
 
 /***/ }),
 
@@ -12995,20 +13009,6 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
 
 /***/ })
 

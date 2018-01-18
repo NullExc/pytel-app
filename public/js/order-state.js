@@ -22,53 +22,61 @@ $(document).ready(function () {
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
-        if (order.state === STATE.arrived) {
+        if (order.sale) {
 
-            id = "#arrive-body";
+            $("#sale-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
 
-            $('.end-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+        } else {
 
-            $('#start-body').addClass('hide');
-            $('#end-body').addClass('hide');
-            $('#pick-body').addClass('hide');
+            if (order.state === STATE.arrived) {
 
-        } else if (order.state === STATE.working) {
+                id = "#arrive-body";
 
-            id = "#start-body";
+                $('.end-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
 
-            $('.start-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+                $('#start-body').addClass('hide');
+                $('#end-body').addClass('hide');
+                $('#pick-body').addClass('hide');
 
-            $('#end-body').addClass('hide');
-            $('#pick-body').addClass('hide');
+            } else if (order.state === STATE.working) {
+
+                id = "#start-body";
+
+                $('.start-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
+
+                $('#end-body').addClass('hide');
+                $('#pick-body').addClass('hide');
 
 
-            $("#diff-time").text(getDiffTime(order.startDate, null));
+                $("#diff-time").text(getDiffTime(order.startDate, null));
 
-        } else if (order.state === STATE.done) {
+            } else if (order.state === STATE.done) {
 
-            id = "#end-body";
+                id = "#end-body";
 
-            $('.start-state').addClass('disabled');
-            $('.end-state').addClass('disabled');
+                $('.start-state').addClass('disabled');
+                $('.end-state').addClass('disabled');
 
-            $('#pick-body').addClass('hide');
-        } else if (order.state === STATE.pickUp) {
+                $('#pick-body').addClass('hide');
+            } else if (order.state === STATE.pickUp) {
 
-            id = "#pick-body";
+                id = "#pick-body";
 
-            $('.start-state').addClass('disabled');
-            $('.end-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+                $('.start-state').addClass('disabled');
+                $('.end-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
 
-            $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+                $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+            }
+
+            $(id).removeClass("teal");
+            $(id).removeClass("lighten-4");
+            $(id).addClass("green");
+            $(id).addClass("lighten-1");
+
         }
-
-        $(id).removeClass("teal");
-        $(id).removeClass("lighten-4");
-        $(id).addClass("green");
-        $(id).addClass("lighten-1");
     }
 });
 

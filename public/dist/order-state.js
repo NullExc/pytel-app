@@ -4588,13 +4588,7 @@ return hooks;
 /***/ }),
 /* 1 */,
 /* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4607,6 +4601,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
@@ -16338,7 +16338,7 @@ webpackContext.id = 153;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
 
@@ -16365,53 +16365,61 @@ $(document).ready(function () {
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
-        if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
+        if (order.sale) {
 
-            id = "#arrive-body";
+            $("#sale-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
 
-            $('.end-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+        } else {
 
-            $('#start-body').addClass('hide');
-            $('#end-body').addClass('hide');
-            $('#pick-body').addClass('hide');
+            if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
 
-        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+                id = "#arrive-body";
 
-            id = "#start-body";
+                $('.end-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
 
-            $('.start-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+                $('#start-body').addClass('hide');
+                $('#end-body').addClass('hide');
+                $('#pick-body').addClass('hide');
 
-            $('#end-body').addClass('hide');
-            $('#pick-body').addClass('hide');
+            } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working) {
+
+                id = "#start-body";
+
+                $('.start-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
+
+                $('#end-body').addClass('hide');
+                $('#pick-body').addClass('hide');
 
 
-            $("#diff-time").text(getDiffTime(order.startDate, null));
+                $("#diff-time").text(getDiffTime(order.startDate, null));
 
-        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
+            } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done) {
 
-            id = "#end-body";
+                id = "#end-body";
 
-            $('.start-state').addClass('disabled');
-            $('.end-state').addClass('disabled');
+                $('.start-state').addClass('disabled');
+                $('.end-state').addClass('disabled');
 
-            $('#pick-body').addClass('hide');
-        } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+                $('#pick-body').addClass('hide');
+            } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
 
-            id = "#pick-body";
+                id = "#pick-body";
 
-            $('.start-state').addClass('disabled');
-            $('.end-state').addClass('disabled');
-            $('.pickup-state').addClass('disabled');
+                $('.start-state').addClass('disabled');
+                $('.end-state').addClass('disabled');
+                $('.pickup-state').addClass('disabled');
 
-            $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+                $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+            }
+
+            $(id).removeClass("teal");
+            $(id).removeClass("lighten-4");
+            $(id).addClass("green");
+            $(id).addClass("lighten-1");
+
         }
-
-        $(id).removeClass("teal");
-        $(id).removeClass("lighten-4");
-        $(id).addClass("green");
-        $(id).addClass("lighten-1");
     }
 });
 

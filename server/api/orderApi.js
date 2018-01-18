@@ -158,7 +158,7 @@ module.exports = {
                 for (var key in groupWork) {
                     if (groupWork.hasOwnProperty(key)) {
                         orders.forEach(function (order) {
-                            if (order.workType && order.workType.name == key && order.order.price) {
+                            if (order.workType && order.workType.name == key /*&& order.order.price*/) {
                                 //console.log("work", key);
                                 if (!workSum[order.workType.name]) {
                                     workSum[order.workType.name] = {};
@@ -184,7 +184,7 @@ module.exports = {
                 for (var key in groupOrder) {
                     if (groupOrder.hasOwnProperty(key)) {
                         orders.forEach(function (order) {
-                            if (order.orderType && order.orderType.name == key && order.order.price) {
+                            if (order.orderType && order.orderType.name == key /*&& order.order.price*/) {
                                 //console.log("order", order.order.description);
                                 if (!orderSum[order.orderType.name]) {
                                     orderSum[order.orderType.name] = {};

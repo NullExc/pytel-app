@@ -29029,7 +29029,7 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
             from: $scope.from,
             to: $scope.to
         }).success(function (data) {
-            console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data, 2, 2));
             $scope.totalCount = data.totalCount;
             $scope.totalSum = data.totalSum;
             $scope.orders = data.orders;

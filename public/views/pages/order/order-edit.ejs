@@ -128,6 +128,14 @@
                         $("#price").val(order.price);
                         $("#price-label").addClass('active');
                     }
+                    if (order.notes) {
+                        $("#notes").val(order.notes);
+                        $("#notes-label").addClass('active');
+                    }
+                    if (order.facilities) {
+                        $("#facilities").val(order.facilities);
+                        $("#facilities-label").addClass('active');
+                    }
                 }
             }
         </script>

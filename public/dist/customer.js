@@ -70,7 +70,7 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
 
 
 var app = angular.module('Customer', ['angularUtils.directives.dirPagination', 'ui.materialize']);
@@ -198,7 +198,7 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
 
 /***/ }),
 
-/***/ 9:
+/***/ 3:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

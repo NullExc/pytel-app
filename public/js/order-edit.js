@@ -10,8 +10,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
         console.log('token', TOKEN);
-        
+
     });
+
+    $scope.token = "nothing";
 
     $scope.customers = window.customers;
 
@@ -306,11 +308,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 console.log('check', $scope.sale);
 
                 if (utcDate) {
-                    // the input field
-                    var element = $(this), text;
-                    // get access to this Timepicker instance
-                    //   var timepicker = element.timepicker();
-                    //  text = 'Selected time is: ' + timepicker.format(time);
+                
                     time.setUTCHours(time.getUTCHours() + 1);
 
                     utcDate.setHours(time.getHours());
@@ -404,8 +402,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         $('#load-photo').click(function () {
             console.log('loading picker');
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+
+                $scope.token = TOKEN;
+
+                $scope.$apply();
+
                 console.log('picker ready to open', GoogleApi, TOKEN);
-                
+
                 if (GoogleApi && TOKEN) {
                     picker.setGoogleApi(GoogleApi, TOKEN);
                     picker.loadPicker();
@@ -443,9 +446,40 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             var email = $("#email").val();
             var phone = $("#phone").val();
             var price = $("#price").val();
+            var notes = $("#notes").val();
+            var facilities = $("#facilities").val();
+
+
+            if (notes) {
+
+                var temp = notes.replace(/[\\]/g, '\\\\')
+                    .replace(/[\"]/g, '\\\"')
+                    .replace(/[\/]/g, '\\/')
+                    .replace(/[\b]/g, '\\b')
+                    .replace(/[\f]/g, '\\f')
+                    .replace(/[\n]/g, '\\n')
+                    .replace(/[\r]/g, '\\r')
+                    .replace(/[\t]/g, '\\t');
+
+                order.notes = temp;
+
+                console.log('notes', order.notes);
+            }
+            if (facilities) {
+
+                var temp = facilities.replace(/[\\]/g, '\\\\')
+                    .replace(/[\"]/g, '\\\"')
+                    .replace(/[\/]/g, '\\/')
+                    .replace(/[\b]/g, '\\b')
+                    .replace(/[\f]/g, '\\f')
+                    .replace(/[\n]/g, '\\n')
+                    .replace(/[\r]/g, '\\r')
+                    .replace(/[\t]/g, '\\t');
+
+                order.facilities = temp;
+            }
 
             if (price) order.price = price;
-
             if (email || phone) {
                 order.contact = {};
             }
@@ -529,8 +563,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     calendar.setGoogleApi(GoogleApi);
                     calendar.insertEvent(order, selectedCustomer);
                 });
-
-                console.log('arrive hm', utcDate);
 
                 options.data.order.arriveDate = utcDate;
             }

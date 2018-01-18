@@ -71,7 +71,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(3);
+var bind = __webpack_require__(4);
 var isBuffer = __webpack_require__(14);
 
 /*global toString:true*/
@@ -522,7 +522,7 @@ module.exports = __webpack_require__(13);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(3);
+var bind = __webpack_require__(4);
 var Axios = __webpack_require__(15);
 var defaults = __webpack_require__(2);
 
@@ -557,9 +557,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(8);
+axios.Cancel = __webpack_require__(9);
 axios.CancelToken = __webpack_require__(29);
-axios.isCancel = __webpack_require__(7);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -785,7 +785,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
@@ -802,8 +802,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
         console.log('token', TOKEN);
-        
+
     });
+
+    $scope.token = "nothing";
 
     $scope.customers = window.customers;
 
@@ -1098,11 +1100,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 console.log('check', $scope.sale);
 
                 if (utcDate) {
-                    // the input field
-                    var element = $(this), text;
-                    // get access to this Timepicker instance
-                    //   var timepicker = element.timepicker();
-                    //  text = 'Selected time is: ' + timepicker.format(time);
+                
                     time.setUTCHours(time.getUTCHours() + 1);
 
                     utcDate.setHours(time.getHours());
@@ -1196,8 +1194,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         $('#load-photo').click(function () {
             console.log('loading picker');
             __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
+
+                $scope.token = TOKEN;
+
+                $scope.$apply();
+
                 console.log('picker ready to open', GoogleApi, TOKEN);
-                
+
                 if (GoogleApi && TOKEN) {
                     __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].setGoogleApi(GoogleApi, TOKEN);
                     __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__["a" /* default */].loadPicker();
@@ -1235,9 +1238,40 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             var email = $("#email").val();
             var phone = $("#phone").val();
             var price = $("#price").val();
+            var notes = $("#notes").val();
+            var facilities = $("#facilities").val();
+
+
+            if (notes) {
+
+                var temp = notes.replace(/[\\]/g, '\\\\')
+                    .replace(/[\"]/g, '\\\"')
+                    .replace(/[\/]/g, '\\/')
+                    .replace(/[\b]/g, '\\b')
+                    .replace(/[\f]/g, '\\f')
+                    .replace(/[\n]/g, '\\n')
+                    .replace(/[\r]/g, '\\r')
+                    .replace(/[\t]/g, '\\t');
+
+                order.notes = temp;
+
+                console.log('notes', order.notes);
+            }
+            if (facilities) {
+
+                var temp = facilities.replace(/[\\]/g, '\\\\')
+                    .replace(/[\"]/g, '\\\"')
+                    .replace(/[\/]/g, '\\/')
+                    .replace(/[\b]/g, '\\b')
+                    .replace(/[\f]/g, '\\f')
+                    .replace(/[\n]/g, '\\n')
+                    .replace(/[\r]/g, '\\r')
+                    .replace(/[\t]/g, '\\t');
+
+                order.facilities = temp;
+            }
 
             if (price) order.price = price;
-
             if (email || phone) {
                 order.contact = {};
             }
@@ -1322,8 +1356,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__["a" /* default */].insertEvent(order, selectedCustomer);
                 });
 
-                console.log('arrive hm', utcDate);
-
                 options.data.order.arriveDate = utcDate;
             }
             else {
@@ -1382,7 +1414,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 "use strict";
 
 
-var createError = __webpack_require__(6);
+var createError = __webpack_require__(7);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -1538,10 +1570,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -1612,7 +1644,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
@@ -1910,7 +1942,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(26);
-var isCancel = __webpack_require__(7);
+var isCancel = __webpack_require__(8);
 var defaults = __webpack_require__(2);
 
 /**
@@ -2067,7 +2099,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(8);
+var Cancel = __webpack_require__(9);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -2127,21 +2159,16 @@ module.exports = CancelToken;
 /***/ }),
 
 /***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
 
 /***/ }),
 
@@ -2235,6 +2262,25 @@ function insertEvent(order, customer) {
 /***/ }),
 
 /***/ 4:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ 5:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2425,7 +2471,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2436,7 +2482,7 @@ var settle = __webpack_require__(17);
 var buildURL = __webpack_require__(19);
 var parseHeaders = __webpack_require__(20);
 var isURLSameOrigin = __webpack_require__(21);
-var createError = __webpack_require__(6);
+var createError = __webpack_require__(7);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
 
 module.exports = function xhrAdapter(config) {
@@ -2610,11 +2656,11 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2640,7 +2686,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2653,7 +2699,7 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2677,20 +2723,6 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
 
 /***/ })
 

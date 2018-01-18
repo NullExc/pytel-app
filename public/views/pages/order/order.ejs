@@ -24,66 +24,60 @@
     <% include ../../partials/nav-in.ejs %>
         <div class="row">
             <div class="row col s12 light-blue darken-4 white-text header-layer">
-                <h5 class="col s3" style="margin-left: 10px;">
+                <h5 class="col s3">
                     <%= detail.order.description %>
                 </h5>
-                <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal">
-                    <i class="material-icons left">photo_camera</i>fotka</a>
             </div>
 
-            <div class="row col s12 white-text">
+            <div class="row col s12 l8 offset-l2">
 
-                <div class="row state-body black-text">
-                    <div class="col l3 m6 s12">
-                        <div id="arrive-body" class="card teal lighten-4 z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Prijatie</span>
-                                <p>Zákazka bola prijatá o :
-                                    <br>
-                                    <span id="arrive-date"></span>
-                                </p>
-                            </div>
+                <div>
+                    <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal">
+                        <i class="material-icons left">photo_camera</i>fotka</a>
+                </div>
+
+                <div class="state-body black-text">
+                    <div id="arrive-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
+                        <div class="card-content black-text">
+                            <span class="card-title">Prijatie</span>
+                            <br>
+                            <span id="arrive-date"></span>
                         </div>
                     </div>
-                    <div class="col l3 m6 s12">
-                        <div id="start-body" class="card teal lighten-4 z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Začatie</span>
-                                <p id="work-progress">Na zákazke sa pracuje.</p>
-                                <p>Čas začatia práce:
-                                    <span id="start-date"></span>
-                                </p>
-                                <h5 id="diff-time"></h5>
-                            </div>
+                    <div id="start-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
+                        <div class="card-content black-text">
+                            <span class="card-title">Začatie</span>
+                            <p id="work-progress">Na zákazke sa pracuje.</p>
+                            <span id="start-date"></span>
+                            <h5 id="diff-time"></h5>
                         </div>
                     </div>
-                    <div class="col l3 m6 s12">
-                        <div id="end-body" class="card teal lighten-4 z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Ukončenie</span>
-                                <p>Zákazka bola dokončená o :
-                                    <br>
-                                    <span id="end-date"></span>
-                                </p>
-                            </div>
+                    <div id="end-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
+                        <div class="card-content black-text">
+                            <span class="card-title">Ukončenie</span>
+                            <br>
+                            <span id="end-date"></span>
                         </div>
                     </div>
-                    <div class="col l3 m6 s12">
-                        <div id="pick-body" class="card teal lighten-4 z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Vyzdvihnutie</span>
-                                <p>Zákazka bola vyzdvihnutá o :
-                                    <br>
-                                    <span id="pickup-date"></span>
-                                </p>
-                            </div>
+                    <div id="pick-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
+                        <div class="card-content black-text">
+                            <span class="card-title">Vyzdvihnutie</span>
+                            <br>
+                            <span id="pickup-date"></span>
+                        </div>
+                    </div>
+                    <div id="sale-body" class="card green lighten-1 z-depth-3" ng-show="sale">
+                        <div class="card-content black-text">
+                            <span class="card-title">Predaj</span>
+                            <br>
+                            <span id="sale-date"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col s8 offset-l2 panel z-depth-4">
+            <div class="col l8 s12 offset-l2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Zákazka</h5>
                 </div>
@@ -111,8 +105,14 @@
                         <p>{{order.notes}}</p>
                     </div>
                 </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Pracovné pomôcky</h6>
+                        <p>{{order.facilities}}</p>
+                    </div>
+                </div>
             </div>
-            <div class="col s8 offset-l2 panel z-depth-4">
+            <div class="col s12 l8 offset-l2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Zákazník</h5>
                 </div>

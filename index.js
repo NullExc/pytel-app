@@ -84,7 +84,6 @@ app.use(function (req, res, next) {
         if (req.path === '/') {
           return res.redirect('/order-new');
         }
-
         next();
       }
     });

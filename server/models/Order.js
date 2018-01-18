@@ -206,7 +206,7 @@ OrderSchema.statics.getStats = function (from, to, callback) {
 
     var orderDetails = [];
 
-    Order.find({}).where('state').equals('pickUp').where('pickDate').gte(from).lte(to).exec(function (err, orders) {
+    Order.find({}).where('state').equals('pickUp').where('sale').equals(false).where('pickDate').gte(from).lte(to).exec(function (err, orders) {
         console.log("orders", orders.length, 'from', from, 'to', to);
         async.each(orders, function (order, callback) {
             

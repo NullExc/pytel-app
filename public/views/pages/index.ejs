@@ -3,7 +3,7 @@
 
 <head>
   <% include ../partials/header.ejs %>
-  <script type="text/javascript" src="/dist/user.js"></script>
+    <script type="text/javascript" src="/dist/user.js"></script>
 </head>
 
 <body ng-app="User" ng-controller="UserCtrl">
@@ -11,8 +11,8 @@
   <% include ../partials/nav-in.ejs %>
 
     <div class="row">
-      <div class="col col l6 offset-l3 s12">
-        <div class="col s12">
+      <div class="col col l6 offset-l3 s12 panel z-depth-4" style="margin-top: 20px;">
+        <div>
           <ul class="tabs">
             <li class="tab col s6">
               <a class="active black-text" href="#login">Prihlásenie</a>
@@ -25,49 +25,37 @@
         <div id="login" class="col s12">
           <div class="row user-input">
             <form class="col s10">
-              <div class="row">
-                <div class="input-field col s12">
-                  <input ng-model="loginEmail" id="email" type="text">
-                  <label for="email">Email</label>
-                </div>
+              <div class="input-field">
+                <input ng-model="loginEmail" id="email" type="text">
+                <label for="email">Email</label>
               </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input ng-model="loginPassword" id="password" type="password">
-                  <label for="password">Heslo</label>
-                </div>
+              <div class="input-field">
+                <input ng-model="loginPassword" id="password" type="password">
+                <label for="password">Heslo</label>
               </div>
 
               <a ng-click="login()" class="btn light-blue darken-4" ng-class="{disabled: loginEmail.length == 0 || loginPassword.length == 0}">prihlásiť sa</a>
 
               <h5 ng-show="loginError" class="red-text">Bolo zadané zlé meno alebo heslo.</h5>
-
             </form>
           </div>
         </div>
         <div id="register" class="col s12">
           <div class="row user-input">
             <form class="col s10">
-              <div class="row">
+              <div class="input-field">
+                <input ng-model="registerEmail" id="email" type="email">
+                <label for="email">Email</label>
               </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input ng-model="registerEmail" id="email" type="email">
-                  <label for="email">Email</label>
-                </div>
+              <div class="input-field">
+                <input ng-model="registerPassword" id="password" type="password">
+                <label for="password">Heslo</label>
               </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input ng-model="registerPassword" id="password" type="password">
-                  <label for="password">Heslo</label>
-                </div>
+              <div class="input-field">
+                <input ng-model="repeatPassword" id="passwordConf" type="password">
+                <label for="password">Zopakovať heslo</label>
               </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input ng-model="repeatPassword" id="passwordConf" type="password">
-                  <label for="password">Zopakovať heslo</label>
-                </div>
-              </div>
+
               <a ng-click="register()" class="btn light-blue darken-4" ng-class="{disabled: registerEmail.length == 0 || registerPassword.length == 0 || repeatPassword.length == 0}">registrovať sa</a>
 
               <h5 ng-show="registerEmailError" class="red-text">Dané meno nie je priradené administrátorom.</h5>
