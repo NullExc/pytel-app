@@ -21,8 +21,6 @@ var clientCallback;
 
 function handleClientLoad(callback) {
 
-    return callback("aaaaa", "bbbbb");
-
     if (GoogleApi && TOKEN) {
         console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
@@ -32,6 +30,8 @@ function handleClientLoad(callback) {
     }
 
     function initClient() {
+
+            return callback("aaaaa", "initClient");
         
             GoogleApi = gapi;
         
