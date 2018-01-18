@@ -413,7 +413,7 @@ function handleClientLoad(callback) {
 
     function initClient() {
 
-            return callback("aaaaa", gapi);
+            return callback("aaaaa", gapi.client);
         
             GoogleApi = gapi;
         
