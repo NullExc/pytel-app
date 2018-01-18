@@ -1196,7 +1196,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('#load-photo').click(function () {
 
-            $scope.token = 'loading picker ' + testToken;
+            $scope.token = 'loading picker ' + testToken + " " + __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
             $scope.$apply();
             
             console.log('loading picker');

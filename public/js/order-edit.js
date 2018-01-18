@@ -404,7 +404,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('#load-photo').click(function () {
 
-            $scope.token = 'loading picker ' + testToken;
+            $scope.token = 'loading picker ' + testToken + " " + STATE.working;
             $scope.$apply();
             
             console.log('loading picker');
