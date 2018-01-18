@@ -91,6 +91,9 @@ var isClientSigned = false;
 var clientCallback;
 
 function handleClientLoad(callback) {
+
+    return callback("aaaaa", "bbbbb");
+
     if (GoogleApi && TOKEN) {
         console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
