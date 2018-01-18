@@ -8,7 +8,10 @@ var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination',
 
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
+    var testToken;
+
     googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
+        testToken = TOKEN;
         console.log('token', TOKEN);
 
     });
@@ -400,12 +403,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         });
 
         $('#load-photo').click(function () {
+
+            $scope.token = 'loading picker ' + testToken;
+            $scope.$apply();
             
             console.log('loading picker');
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-
-                $scope.token = 'loading picker callback';
-                $scope.$apply();
 
                 $scope.token = TOKEN;
 
