@@ -400,6 +400,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         });
 
         $('#load-photo').click(function () {
+            $scope.token = 'loading picker';
+            $scope.$apply();
             console.log('loading picker');
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
 

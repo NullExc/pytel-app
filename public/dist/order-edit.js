@@ -1192,6 +1192,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         });
 
         $('#load-photo').click(function () {
+            $scope.token = 'loading picker';
+            $scope.$apply();
             console.log('loading picker');
             __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
 
