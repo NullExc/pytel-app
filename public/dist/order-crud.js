@@ -444,12 +444,12 @@ function handleClientLoad(callback) {
             });
         } else {
 
-            
+            return callback("auth0", "done");
+
+
             gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
-
-                return callback("auth0", "done");
 
                 gapi.auth.authorize(
                     {
@@ -458,7 +458,7 @@ function handleClientLoad(callback) {
                         'immediate': false
                     },
                     function (authResult) {
-                        return callback("auth0", "done");
+                        
                     });
 
             }
