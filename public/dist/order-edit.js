@@ -444,6 +444,7 @@ function handleClientLoad(callback) {
             });
         } else {
 
+            
             gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
