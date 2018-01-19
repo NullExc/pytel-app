@@ -106,6 +106,8 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
+            return callback("auth0", "done");
+
             gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
                 apiKey: API_KEY,
@@ -133,7 +135,7 @@ function handleClientLoad(callback) {
             });
         } else {
 
-            return callback("auth0", "done");
+            
 
 
             gapi.load('auth', { 'callback': mobileApiLoad });
@@ -147,7 +149,7 @@ function handleClientLoad(callback) {
                         'immediate': false
                     },
                     function (authResult) {
-                        
+
                     });
 
             }
