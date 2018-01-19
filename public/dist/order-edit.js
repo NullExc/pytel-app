@@ -417,7 +417,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-            return callback("auth0", "done");
+            return callback("auth0", "done123");
 
             gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
