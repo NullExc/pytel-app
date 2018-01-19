@@ -102,10 +102,10 @@ function handleClientLoad(callback) {
 
     function initClient() {
 
-            return callback("aaaaa", gapi.client);
-        
-            GoogleApi = gapi;
-        
+        GoogleApi = gapi;
+
+        if (gapi.client.init) {
+
             gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
                 apiKey: API_KEY,
@@ -114,13 +114,13 @@ function handleClientLoad(callback) {
             }).then(function () {
 
                 console.log('client init');
-        
+
                 GoogleAuth = gapi.auth2.getAuthInstance();
-        
+
                 GoogleAuth.isSignedIn.listen(updateSigninStatus);
-        
+
                 updateSigninStatus(GoogleAuth.isSignedIn.get());
-        
+
                 TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
 
                 if (!GoogleAuth.isSignedIn.get()) {
@@ -128,13 +128,31 @@ function handleClientLoad(callback) {
                 } else {
                     callback(GoogleApi, TOKEN);
                 }
-        
+
                 //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
             });
+        } else {
+
+            gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+                        return callback("auth0", "done");
+                    });
+
+            }
+
         }
+    }
 }
 
-function login() {}
+function login() { }
 
 function updateSigninStatus(isSignedIn) {
     if (!isSignedIn) {
