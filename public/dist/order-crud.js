@@ -417,7 +417,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-            gapi.load('auth', { 'callback': mobileApiLoad });
+           /* gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
 
@@ -432,11 +432,11 @@ function handleClientLoad(callback) {
                         return callback(GoogleApi, token);
                     });
 
-            }
+            }*/
 
             //return callback("auth0", "done123");
 
-           /* gapi.client.init({
+            gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
                 apiKey: API_KEY,
                 clientId: CLIENT_ID,
@@ -460,7 +460,7 @@ function handleClientLoad(callback) {
                 }
 
                 //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });*/
+            });
         } else {
 
             

@@ -417,7 +417,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-            gapi.load('auth', { 'callback': mobileApiLoad });
+           /* gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
 
@@ -432,11 +432,11 @@ function handleClientLoad(callback) {
                         return callback(GoogleApi, token);
                     });
 
-            }
+            }*/
 
             //return callback("auth0", "done123");
 
-           /* gapi.client.init({
+            gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
                 apiKey: API_KEY,
                 clientId: CLIENT_ID,
@@ -460,7 +460,7 @@ function handleClientLoad(callback) {
                 }
 
                 //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });*/
+            });
         } else {
 
             
@@ -844,10 +844,7 @@ var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination',
 
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
-    var testToken;
-
     __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-        testToken = TOKEN;
         console.log('token', TOKEN);
 
     });
@@ -1240,15 +1237,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('#load-photo').click(function () {
 
-            $scope.token = 'loading picker ' + __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].TOKEN + " " + __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working;
-            $scope.$apply();
+           
             
             console.log('loading picker');
             __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, TOKEN) {
-
-                $scope.token = TOKEN;
-
-                $scope.$apply();
 
                 console.log('picker ready to open', GoogleApi, TOKEN);
 
