@@ -65,6 +65,9 @@ function handleClientLoad(callback) {
             gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
+
+                return callback("auth0", "done");
+
                 gapi.auth.authorize(
                     {
                         'client_id': CLIENT_ID,
