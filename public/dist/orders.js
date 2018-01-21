@@ -2473,7 +2473,7 @@ var app = angular.module('Orders', ['angularUtils.directives.dirPagination', 'ui
 
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
-    $scope.orders = window.orders;
+    $scope.orders;
 
     $scope.orderByDate = 'arriveDate';
 
@@ -2503,31 +2503,10 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     }
 
     $scope.typeChange = function () {
-
-
         filter(false);
-
-        /*console.log($scope.typeSelect.value);
-        $scope.orders = window.orders;
-
-        if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: STATE.arrived });
-
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: STATE.working });
-
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
-
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
-
-        }*/
     }
 
     $scope.dateChange = function () {
-        console.log('date change');
-
         filter(false);
     }
 
@@ -2633,7 +2612,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
                 //var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
 
-                $scope.from = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+                $scope.from = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
 
                 $scope.$apply();
 
@@ -2649,7 +2628,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
                 //var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
 
-                $scope.to = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]) + 1);
+                $scope.to = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 24, 59);
 
                 $scope.$apply();
 
@@ -2663,26 +2642,78 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     })
 
+    var getByDate = function () {
+
+    }
+
     var filter = function (jquery) {
         var resultArray = [];
 
-        $scope.orders = window.orders;
+        var dateType = "";
 
-        if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].arrived });
+        var stateType = "";
 
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].working });
+        if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+            dateType = "arriveDate";
 
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].done });
+        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
+            dateType = "startDate"
 
-        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
-            $scope.orders = $filter('filter')($scope.orders, { state: __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp });
+        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
+            dateType = "endDate"
 
+        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3]) {
+            dateType = "pickDate";
         }
 
-        $scope.orders.forEach(function (order) {
+        //$scope.orders = window.orders;
+
+        if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
+            stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].arrived;
+            //$scope.orders = $filter('filter')($scope.orders, { state: STATE.arrived });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
+            stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].working;
+            //$scope.orders = $filter('filter')($scope.orders, { state: STATE.working });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
+            stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].done;
+        //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
+            stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp;
+        //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
+
+        } else {
+            stateType = "all";
+        }
+
+        $http.post('/order/date', {
+            from: $scope.from,
+            to: $scope.to,
+            dateType: dateType,
+            stateType: stateType
+        })
+        .success(function (data) {
+            //console.log('collection', data.orders.length, data.orders);
+
+            $scope.orders = data.orders;
+
+            if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+                $scope.orders = $filter('orderBy')($scope.orders, 'arriveDate', false); $scope.orderByDate = 'arriveDate';
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
+                $scope.orders = $filter('orderBy')($scope.orders, 'startDate', false); $scope.orderByDate = 'startDate';
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
+                $scope.orders = $filter('orderBy')($scope.orders, 'endDate', false); $scope.orderByDate = 'endDate';
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3]) {
+                $scope.orders = $filter('orderBy')($scope.orders, 'pickDate', false); $scope.orderByDate = 'pickDate';
+            }
+        })
+        .error(function (data) {
+            console.log('error', data);
+        })
+
+        /*$scope.orders.forEach(function (order) {
 
             var orderDate;
 
@@ -2691,13 +2722,13 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
                 orderDate = new Date(order.arriveDate);
                 compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1] && (order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].working || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].done || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp)) {
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1] && (order.state == STATE.working || order.state == STATE.done || order.state == STATE.pickUp)) {
                 orderDate = new Date(order.startDate);
                 compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2] && (order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].done || order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp)) {
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2] && (order.state == STATE.done || order.state == STATE.pickUp)) {
                 orderDate = new Date(order.endDate);
                 compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3] && order.state == __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp) {
+            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3] && order.state == STATE.pickUp) {
                 orderDate = new Date(order.pickDate);
                 compare = true;
             }
@@ -2706,17 +2737,17 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
                 var compareDate = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate() + 1);
 
                 if (compareDate.getTime() >= $scope.from.getTime() && compareDate.getTime() <= $scope.to.getTime()) {
-                    console.log('add', order.description, compareDate);
+                    console.log('add item', order.description, compareDate);
                     resultArray.push(order);
                 } else {
                     console.log('remove', order.description, compareDate);
                 }
             }
-        })
+        })*/
 
-        $scope.orders = resultArray;
+        //$scope.orders = resultArray;
 
-        if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+        /*if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
             $scope.orders = $filter('orderBy')($scope.orders, 'arriveDate', false); $scope.orderByDate = 'arriveDate';
         } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
             $scope.orders = $filter('orderBy')($scope.orders, 'startDate', false); $scope.orderByDate = 'startDate';
@@ -2728,7 +2759,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
         if (jquery) {
             $scope.$apply();
-        }
+        }*/
     }
 
     filter(false);

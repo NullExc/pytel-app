@@ -120,6 +120,13 @@ module.exports = {
         })
     },
 
+    getByDate(req, res, next) {
+        Order.byDateAndState(req.body.from, req.body.to, req.body.dateType, req.body.stateType, function (err, orders) {
+            if (err) return next(err);
+            res.send({orders: orders});
+        })
+    },
+
     getStats(req, res, next) {
         var totalCount = 0;
         var totalSum = 0;

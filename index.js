@@ -167,6 +167,7 @@ app.get('/stats', function (req, res, next) {
   res.render('pages/stats');
 })
 app.post('/stats', orderApi.getStats);
+app.post('/order/date', orderApi.getByDate);
 
 app.use(function(req, res, next){
   res.render('pages/not-found', { status: 404, url: req.url });

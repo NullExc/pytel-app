@@ -221,6 +221,24 @@ OrderSchema.statics.getStats = function (from, to, callback) {
     });
 }
 
+OrderSchema.statics.byDateAndState = function (from, to, dateType, stateType, callback) {
+
+    var orderDetails = [];
+
+    if (stateType === 'all') {
+        Order.find({}).where(dateType).gte(from).lte(to).exec(function (err, orders) {
+            console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
+            callback(err, orders);
+        });
+
+    } else {
+        Order.find({}).where("state").equals(stateType).where(dateType).gte(from).lte(to).exec(function (err, orders) {
+            console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
+            callback(err, orders);
+        });
+    }
+}
+
 OrderSchema.statics.filterOrders = function (dateType, from, to, callback) {
     
 }

@@ -143,7 +143,7 @@
                 </label>
             </div>
 
-            <div class="input-field col s12" ng-class="(newType === true)? 'z-depth-4' : ''" style="margin-top:0px;">
+            <div class="input-field col s12 panel" ng-class="(newType === true)? 'z-depth-4' : ''" style="margin-top:0px;">
                 <div class="" style="margin-top: 20px;">
                     <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
                         <i class="material-icons">add</i>
@@ -157,15 +157,15 @@
                 </div>
             </div>
 
-            <div class="input-field col s5" id="input-date">
+            <div class="input-field col s6" id="input-date">
                 <i class="material-icons prefix grey-text">event</i>
                 <input type="text" class="datepicker order-input" id="date">
-                <label id="date-label" for="date">Dátum prij.</label>
+                <label id="date-label" for="date">Dátum</label>
             </div>
-            <div class="input-field col s5" id="input-time">
+            <div class="input-field col s6" id="input-time">
                 <i class="material-icons prefix grey-text">schedule</i>
                 <input type="text" class="timepicker" id="time">
-                <label id="time-label" for="time">Čas prij.</label>
+                <label id="time-label" for="time">Čas</label>
             </div>
 
             <div id="price-div" class="input-field col s4">
