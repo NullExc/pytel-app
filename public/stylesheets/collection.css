@@ -4,6 +4,10 @@
         background-color: #efebe9;
         cursor: pointer;
     }
+
+    .item.collection-item {
+        font-size: 11px;
+    }
 }
 
 .collection.with-header .collection-item.avatar {

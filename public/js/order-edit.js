@@ -3,6 +3,7 @@ import http from '../lib/http.js';
 import googleAuth from '../lib/google-auth';
 import calendar from '../lib/calendar.js';
 import picker from '../lib/picker.js';
+import preloader from '../lib/preloader.js';
 
 var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
@@ -65,6 +66,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     var createWorkType = function () {
 
+        preloader.open('Vytvára sa typ práce ...');
+
         $http.post('/worktype', {
             name: $scope.newWorkName
         }).success(function (response) {
@@ -73,12 +76,16 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $("#work").val(response.name);
             $("#work-label").addClass('active');
             console.log(response);
+            preloader.close();
         }).error(function (error) {
             console.log(error);
+            preloader.close();
         })
     }
 
     var createOrderType = function () {
+
+        preloader.open('Vytvára sa typ zákazky ...');
 
         $http.post('/ordertype', {
             name: $scope.newOrderName
@@ -88,8 +95,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $("#order").val(response.name);
             $("#order-label").addClass('active');
             console.log(response);
+            preloader.close();
         }).error(function (error) {
             console.log(error);
+            preloader.close();
         })
     }
 
@@ -195,10 +204,94 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     $(document).ready(function () {
 
+        preloader.open('Pripravujú sa dáta ...');
+
         $('#date-label').addClass('active');
         $('#time-label').addClass('active');
 
         if (edit) {
+
+            if (customer) {
+                var doneLabel = $("#done-customer");
+                doneLabel.text(customer.fullName);
+                doneLabel.removeClass('orange');
+                doneLabel.addClass('green');
+            }
+    
+            if (workType) {
+                $("#work").val(workType.name);
+                $("#work-label").addClass('active');
+            }
+    
+            if (orderType) {
+                $("#order").val(orderType.name);
+                $("#order-label").addClass('active');
+            }
+    
+            if (order) {
+    
+                var arriveDate = order.arriveDate;
+    
+                if (order.description) {
+                    $("#description").val(order.description);
+                    $("#description-label").addClass('active');
+                }
+                if (order.contact) {
+                    if (order.contact.email) {
+                        $("#email").val(order.contact.email);
+                        $("#email-label").addClass('active');
+                    }
+                    if (order.contact.phone) {
+                        $("#phone").val(order.contact.phone);
+                        $("#phone-label").addClass('active');
+                    }
+                }
+                if (order.address) {
+                    if (order.address.street) {
+                        $("#street").val(order.address.street);
+                        $("#street-label").addClass('active');
+                    }
+                    if (order.address.streetNumber) {
+                        $("#num").val(order.address.streetNumber);
+                        $("#num-label").addClass('active');
+                    }
+                    if (order.address.city) {
+                        $("#city").val(order.address.city);
+                        $("#city-label").addClass('active');
+                    }
+                    if (order.address.zipCode) {
+                        $("#zip").val(order.address.zipCode);
+                        $("#zip-label").addClass('active');
+                    }
+                }
+                if (order.billData) {
+                    if (order.billData.ICO) {
+                        $("#ico").val(order.billData.ICO);
+                        $("#ico-label").addClass('active');
+                    }
+                    if (order.billData.ICDPH) {
+                        $("#icdph").val(order.billData.ICDPH);
+                        $("#icdph-label").addClass('active');
+                    }
+                    if (order.billData.DIC) {
+                        $("#dic").val(order.billData.DIC);
+                        $("#dic-label").addClass('active');
+                    }
+                }
+                if (order.price) {
+                    $("#price").val(order.price);
+                    $("#price-label").addClass('active');
+                }
+                if (order.notes) {
+                    $("#notes").val(order.notes);
+                    $("#notes-label").addClass('active');
+                }
+                if (order.facilities) {
+                    $("#facilities").val(order.facilities);
+                    $("#facilities-label").addClass('active');
+                }
+            }
+
             $('#date').attr('disabled', true);
             $('#time').attr('disabled', true);
             $('#check-sale').attr('disabled', 'disabled');
@@ -564,16 +657,21 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 });
 
                 options.data.order.arriveDate = utcDate;
+
+                preloader.open('Vytvára sa zákazka ...');
             }
             else {
 
                 var pathname = window.location.pathname.split("/");
                 var id = pathname[pathname.length - 1];
                 options.method = 'put';
-                options.url = '/order/' + id
+                options.url = '/order/' + id;
+
+                preloader.open('Edituje sa zákazka ...');
             }
 
             http.request(options, (err, response) => {
+                preloader.close();
                 if (err) console.log("error", err);
                 else if (response) {
                     console.log("response", response.data);
@@ -608,6 +706,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $('.pickup-state').addClass('light-green');
             state = STATE.pickUp;
         })
+
+        preloader.close();
     })
 
 })

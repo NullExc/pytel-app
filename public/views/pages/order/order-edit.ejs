@@ -27,118 +27,37 @@
 <body ng-app="OrderInput" ng-controller="OrderInputCtrl">
 
     <% include ../../partials/nav-in.ejs %>
-        <div class="row">
-            <div class="row col s12 light-blue darken-4 white-text header-layer">
+        <div class="row header-row">
+            <div class="col s12 light-blue darken-4 white-text header-layer">
                 <h5 class="col l3 s6" style="margin-left: 10px;">Upraviť zákazku</h5>
             </div>
+        </div>
 
-            <div id="state-div" class="row col s12 white-text">
-                <div class="row">
-                    <a style="margin: 5px;" class="col l2 m3 s12 start-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">build</i>Začať</a>
-                    <a style="margin: 5px;" class="col l2 m3 s12 end-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">done</i>Dokončiť</a>
-                    <a style="margin: 5px;" class="col l2 m3 s12 pickup-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">send</i>Odovzdať</a>
+        <% include ../../partials/loader.ejs %>
+
+            <div class="row">
+
+                <div id="state-div" class="row col s12 white-text">
+                    <div class="row">
+                        <a style="margin: 5px;" class="col l2 m3 s12 start-state light-blue darken-4 btn state-btn">
+                            <i class="material-icons left">build</i>Začať</a>
+                        <a style="margin: 5px;" class="col l2 m3 s12 end-state light-blue darken-4 btn state-btn">
+                            <i class="material-icons left">done</i>Dokončiť</a>
+                        <a style="margin: 5px;" class="col l2 m3 s12 pickup-state light-blue darken-4 btn state-btn">
+                            <i class="material-icons left">send</i>Odovzdať</a>
+                    </div>
                 </div>
+
+                <% include ./order-input.ejs %>
+
             </div>
 
-            <% include ./order-input.ejs %>
 
-        </div>
-
-
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large light-blue darken-4">
-                <i id="update" class="large material-icons">save</i>
-            </a>
-        </div>
-
-        <script>
-            window.onload = function () {
-
-                if (customer) {
-                    var doneLabel = $("#done-customer");
-                    doneLabel.text(customer.fullName);
-                    doneLabel.removeClass('orange');
-                    doneLabel.addClass('green');
-                }
-
-                if (workType) {
-                    $("#work").val(workType.name);
-                    $("#work-label").addClass('active');
-                }
-
-                if (orderType) {
-                    $("#order").val(orderType.name);
-                    $("#order-label").addClass('active');
-                }
-
-                if (order) {
-
-                    var arriveDate = order.arriveDate;
-
-                    if (order.description) {
-                        $("#description").val(order.description);
-                        $("#description-label").addClass('active');
-                    }
-                    if (order.contact) {
-                        if (order.contact.email) {
-                            $("#email").val(order.contact.email);
-                            $("#email-label").addClass('active');
-                        }
-                        if (order.contact.phone) {
-                            $("#phone").val(order.contact.phone);
-                            $("#phone-label").addClass('active');
-                        }
-                    }
-                    if (order.address) {
-                        if (order.address.street) {
-                            $("#street").val(order.address.street);
-                            $("#street-label").addClass('active');
-                        }
-                        if (order.address.streetNumber) {
-                            $("#num").val(order.address.streetNumber);
-                            $("#num-label").addClass('active');
-                        }
-                        if (order.address.city) {
-                            $("#city").val(order.address.city);
-                            $("#city-label").addClass('active');
-                        }
-                        if (order.address.zipCode) {
-                            $("#zip").val(order.address.zipCode);
-                            $("#zip-label").addClass('active');
-                        }
-                    }
-                    if (order.billData) {
-                        if (order.billData.ICO) {
-                            $("#ico").val(order.billData.ICO);
-                            $("#ico-label").addClass('active');
-                        }
-                        if (order.billData.ICDPH) {
-                            $("#icdph").val(order.billData.ICDPH);
-                            $("#icdph-label").addClass('active');
-                        }
-                        if (order.billData.DIC) {
-                            $("#dic").val(order.billData.DIC);
-                            $("#dic-label").addClass('active');
-                        }
-                    }
-                    if (order.price) {
-                        $("#price").val(order.price);
-                        $("#price-label").addClass('active');
-                    }
-                    if (order.notes) {
-                        $("#notes").val(order.notes);
-                        $("#notes-label").addClass('active');
-                    }
-                    if (order.facilities) {
-                        $("#facilities").val(order.facilities);
-                        $("#facilities-label").addClass('active');
-                    }
-                }
-            }
-        </script>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large light-blue darken-4">
+                    <i id="update" class="large material-icons">save</i>
+                </a>
+            </div>
 </body>
 
 </html>

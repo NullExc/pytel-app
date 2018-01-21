@@ -217,6 +217,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(167);
+
 
 
 
@@ -367,6 +369,8 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
     var createOrderType = function () {
 
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ zákazky ...');
+
         $http.post('/ordertype', {
             name: $scope.newOrderName
         }).success(function (response) {
@@ -377,12 +381,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             $scope.orderTypes.push(response);
 
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
         }).error(function (error) {
             console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         })
     }
 
     var createWorkType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ práce ...');
 
         $http.post('/worktype', {
             name: $scope.newWorkName
@@ -394,12 +404,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             $scope.workTypes.push(response);
 
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
         }).error(function (error) {
             console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         })
     }
 
     $scope.editOrderType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ zákazky ...');
 
         var id = $scope.selectOrderType._id;
 
@@ -415,12 +431,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             window.closeOrderModal();
 
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
         }, function error(err) {
             console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         })
     }
 
     $scope.editWorkType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ práce ...');
 
         var id = $scope.selectWorkType._id;
 
@@ -436,8 +458,12 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             window.closeWorkModal();
 
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
         }, function error(err) {
             console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         })
     }
 
@@ -447,6 +473,36 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
 
 
+
+/***/ }),
+
+/***/ 167:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    open: function (info) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'hidden',
+            height: '100%'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
+    },
+    close: function () {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'auto',
+            height: 'auto'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
+    }
+});
 
 /***/ }),
 

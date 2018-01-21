@@ -1,6 +1,7 @@
 import calendar from '../lib/calendar';
 import googleAuth from '../lib/google-auth';
 import $ from 'jquery';
+import preloader from '../lib/preloader.js';
 
 var app = angular.module('Settings', ['angularUtils.directives.dirPagination']);
 
@@ -148,6 +149,8 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
     var createOrderType = function () {
 
+        preloader.open('Vytvára sa typ zákazky ...');
+
         $http.post('/ordertype', {
             name: $scope.newOrderName
         }).success(function (response) {
@@ -158,12 +161,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             $scope.orderTypes.push(response);
 
+            preloader.close();
+
         }).error(function (error) {
             console.log(error);
+
+            preloader.close();
         })
     }
 
     var createWorkType = function () {
+
+        preloader.open('Vytvára sa typ práce ...');
 
         $http.post('/worktype', {
             name: $scope.newWorkName
@@ -175,12 +184,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             $scope.workTypes.push(response);
 
+            preloader.close();
+
         }).error(function (error) {
             console.log(error);
+
+            preloader.close();
         })
     }
 
     $scope.editOrderType = function () {
+
+        preloader.open('Edituje sa typ zákazky ...');
 
         var id = $scope.selectOrderType._id;
 
@@ -196,12 +211,18 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             window.closeOrderModal();
 
+            preloader.close();
+
         }, function error(err) {
             console.log(err);
+
+            preloader.close();
         })
     }
 
     $scope.editWorkType = function () {
+
+        preloader.open('Edituje sa typ práce ...');
 
         var id = $scope.selectWorkType._id;
 
@@ -217,8 +238,12 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
             window.closeWorkModal();
 
+            preloader.close();
+
         }, function error(err) {
             console.log(err);
+
+            preloader.close();
         })
     }
 

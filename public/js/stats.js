@@ -1,6 +1,7 @@
 import moment from 'moment';
 import picker from 'jquery-datepicker';
 import $ from 'jquery';
+import preloader from '../lib/preloader.js';
 
 var app = angular.module('myApp', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
@@ -38,6 +39,9 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
     console.log('from', firstDayDate.getUTCDate());
 
     $scope.getStats = function () {
+
+        preloader.open('Pripravujú sa údaje ...');
+
         $http.post('/stats', {
             from: $scope.from,
             to: $scope.to
@@ -65,8 +69,10 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
                     time: data.orderSum[prop].time
                 })
             }
+            preloader.close();
         }).error(function (data) {
             console.log(JSON.stringify(data));
+            preloader.close();
         })
     }
 

@@ -44,7 +44,7 @@
                     <li class="collection-header light-blue darken-4 white-text">
                         <h5>Zákazníci</h5>
                     </li>
-                    <li class="item collection-item avatar black-text" dir-paginate="customer in customers | itemsPerPage:5" pagination-id="customers">
+                    <li class="item collection-item avatar black-text" dir-paginate="customer in customers | itemsPerPage:5" pagination-id="customers" ng-click="clickCustomer(customer._id)">
 
                         <div>
                             <p class="title">{{customer.fullName}}</p>

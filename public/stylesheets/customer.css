@@ -3,6 +3,14 @@
     margin: 10px 0 10px 0;
 }
 
+.section {
+    padding-bottom: 0rem !important;
+}
+
+.collection a.collection-item {
+    color: #01579b;
+}
+
 .input-search label {
     color: rgb(255, 255, 255);
 }

@@ -29,7 +29,7 @@
                 </h5>
             </div>
 
-            <div class="row col s12 l8 offset-l2">
+            <div class="row col s12 l6 offset-l3">
 
                 <div>
                     <a class="show-photo light-blue darken-1 btn modal-trigger" href="#photo-modal">
@@ -77,84 +77,96 @@
             </div>
 
 
-            <div class="col l8 s12 offset-l2 panel z-depth-4">
+            <div class="col l6 s12 offset-l3 panel z-depth-4">
                 <div class="col s12">
-                    <h5>Zákazka</h5>
+                    <h5>Informácie</h5>
                 </div>
                 <div class="col s12">
                     <div class="section">
                         <h6 class="grey-text">Cena</h6>
+                        <div class="divider" style="width: 50%;"></div>
                         <p>{{order.price}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Typ práce</h6>
+                        <div class="divider"></div>
                         <p>{{workType.name}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Typ zákazky</h6>
+                        <div class="divider"></div>
                         <p>{{orderType.name}}</p>
                     </div>
                 </div>
                 <div class="col s12">
                     <div class="section">
                         <h6 class="grey-text">Poznámky</h6>
+                        <div class="divider"></div>
                         <p>{{order.notes}}</p>
                     </div>
                 </div>
                 <div class="col s12">
                     <div class="section">
                         <h6 class="grey-text">Pracovné pomôcky</h6>
+                        <div class="divider"></div>
                         <p>{{order.facilities}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col s12 l8 offset-l2 panel z-depth-4">
+            <div class="col s12 l6 offset-l3 panel z-depth-4">
                 <div class="col s12">
                     <h5>Zákazník</h5>
                 </div>
                 <div class="col s12">
                     <div class="section">
                         <h6 class="grey-text">Meno</h6>
+                        <div class="divider" style="width: 50%;"></div>
                         <p>{{customer.fullName}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Mobil</h6>
+                        <div class="divider"></div>
                         <p>{{order.contact.phone}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">E-mail</h6>
+                        <div class="divider"></div>
                         <p>{{order.contact.email}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Ulica</h6>
+                        <div class="divider"></div>
                         <p>{{order.address.street}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Číslo ulice</h6>
+                        <div class="divider"></div>
                         <p>{{order.address.streetNumber}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">Mesto</h6>
+                        <div class="divider"></div>
                         <p>{{order.address.city}}</p>
                     </div>
                 </div>
                 <div class="col s6">
                     <div class="section">
                         <h6 class="grey-text">PSČ</h6>
+                        <div class="divider"></div>
                         <p>{{order.address.zipCode}}</p>
                     </div>
                 </div>

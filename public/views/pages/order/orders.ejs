@@ -43,9 +43,9 @@
                     <li class="collection-header light-blue darken-4 white-text">
                         <h5>Zákazky</h5>
                     </li>
-                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 5" pagination-id="orders">
+                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 5" pagination-id="orders" ng-click="clickOrder(order._id)">
 
-                        <p class="title">
+                        <p>
                             {{order.description}}
                         </p>
                         <span ng-if="orderByDate === 'arriveDate'"> Prijatá : {{formatDate(order.arriveDate)}}</span>

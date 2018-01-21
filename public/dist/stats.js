@@ -28985,6 +28985,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(167);
+
 
 
 
@@ -29025,6 +29027,9 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
     console.log('from', firstDayDate.getUTCDate());
 
     $scope.getStats = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Pripravujú sa údaje ...');
+
         $http.post('/stats', {
             from: $scope.from,
             to: $scope.to
@@ -29052,8 +29057,10 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
                     time: data.orderSum[prop].time
                 })
             }
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         }).error(function (data) {
             console.log(JSON.stringify(data));
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
         })
     }
 
@@ -29201,6 +29208,36 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
 });
 
 
+
+/***/ }),
+/* 166 */,
+/* 167 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    open: function (info) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'hidden',
+            height: '100%'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
+    },
+    close: function () {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'auto',
+            height: 'auto'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
+    }
+});
 
 /***/ })
 /******/ ]);

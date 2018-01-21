@@ -16,6 +16,13 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
         choices: ['Všetky', 'Prijaté', 'Prebiehajúce', 'Čakajúce na vyzdvihnutie', 'Vyzdvihnuté']
     }
 
+    $scope.clickCustomer = function (id) {
+        console.log('click', id, screen.width);
+        if (screen.width < 600) {
+            location.href = '/customer/' + id;
+        }
+    }
+
     //ng-click="if (window.innerWidth <= 600) location.href='/customer/{{customer._id}}'"
 
     $scope.sortChange = function () {

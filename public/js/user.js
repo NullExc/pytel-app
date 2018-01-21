@@ -1,10 +1,13 @@
 import http from '../lib/http.js';
+import preloader from '../lib/preloader.js';
 
 //import angularCookies from 'angular-cookies';
 
 var app = angular.module('User', []);
 
 app.controller('UserCtrl', function ($scope, $http) {
+
+   // $scope.info = 'Prebieha prihlasovanie ...';
 
     $scope.loginEmail = "";
 
@@ -30,6 +33,8 @@ app.controller('UserCtrl', function ($scope, $http) {
 
     $scope.login = function () {
 
+        preloader.open('Prebieha prihlasovanie ...');
+
         $http.post('/login', {
             email: $scope.loginEmail,
             password: $scope.loginPassword
@@ -38,12 +43,16 @@ app.controller('UserCtrl', function ($scope, $http) {
             console.log('data', data);
 
             location.href = '/order-new';
+
+            preloader.close();
         })
         .error(function (error) {
 
             if (error) {
                 $scope.loginError = true;
             }
+
+            preloader.close();
 
             console.log('error', error);
         })

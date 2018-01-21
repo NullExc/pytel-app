@@ -2510,6 +2510,13 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
         filter(false);
     }
 
+    $scope.clickOrder = function (id) {
+        console.log('click', id, screen.width);
+        if (screen.width < 600) {
+            location.href = '/order/' + id;
+        }
+    }
+
     var date = new Date();
 
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
