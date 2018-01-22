@@ -128,6 +128,7 @@ module.exports = {
     },
 
     getStats(req, res, next) {
+        var totalTime = 0;
         var totalCount = 0;
         var totalSum = 0;
         var workTypes = [];
@@ -136,22 +137,29 @@ module.exports = {
         Order.getStats(req.body.from, req.body.to, function (err, orders) {
             if (err) return next(err);
             else {
-                /*OrderType.find({}, function (err, orderTypes) {
-                    if (err) return next(err);
-                    WorkType.find({}, function (err, workTypes) {
-                        if (err) return next(err);
-
-                    })
-                })*/
-                console.log('stats', orders[0]);
                 totalCount = orders.length;
                 orders.forEach(function (detail) {
+
                     var order = detail.order;
-                    console.log(detail.workType, detail.orderType);
+
                     totalSum += order.price ? order.price : 0;
+
                     if (detail.workType) workTypes.push(detail.workType);
+
                     if (detail.orderType) orderTypes.push(detail.orderType);
+
+                    if (order.startDate && order.endDate) {
+
+                        var start = moment.utc(order.startDate);
+
+                        var end = moment.utc(order.endDate);
+
+                        totalTime += end.diff(start);
+                    }
                 })
+                
+                console.log('total time', totalTime);
+
                 var groupWork = workTypes.reduce(function (rv, x) {
                     (rv[x["name"]] = rv[x["name"]] || []).push(x);
                     return rv;
@@ -216,6 +224,7 @@ module.exports = {
                 }
                 //console.log(workSum);
                 res.send({
+                    totalTime: totalTime,
                     totalCount: totalCount,
                     totalSum: totalSum,
                     orders: orders,

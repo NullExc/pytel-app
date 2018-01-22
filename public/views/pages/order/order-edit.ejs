@@ -29,7 +29,7 @@
     <% include ../../partials/nav-in.ejs %>
         <div class="row header-row">
             <div class="col s12 light-blue darken-4 white-text header-layer">
-                <h5 class="col l3 s6" style="margin-left: 10px;">Upraviť zákazku</h5>
+                <h5 class="col l3 s6">Upraviť zákazku</h5>
             </div>
         </div>
 
@@ -37,15 +37,19 @@
 
             <div class="row">
 
-                <div id="state-div" class="row col s12 white-text">
-                    <div class="row">
-                        <a style="margin: 5px;" class="col l2 m3 s12 start-state light-blue darken-4 btn state-btn">
-                            <i class="material-icons left">build</i>Začať</a>
-                        <a style="margin: 5px;" class="col l2 m3 s12 end-state light-blue darken-4 btn state-btn">
-                            <i class="material-icons left">done</i>Dokončiť</a>
-                        <a style="margin: 5px;" class="col l2 m3 s12 pickup-state light-blue darken-4 btn state-btn">
-                            <i class="material-icons left">send</i>Odovzdať</a>
-                    </div>
+                <div id="state-div" class="row col s8 l8 offset-l3 offset-s2 white-text">
+
+                    <a style="margin: 5px;" class="col l3 s12 start-state light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">build</i>Začať</a>
+
+
+                    <a style="margin: 5px;" class="col l3 s12 end-state light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">done</i>Dokončiť</a>
+
+
+                    <a style="margin: 5px;" class="col l3 s12 pickup-state light-blue darken-4 btn state-btn">
+                        <i class="material-icons left">send</i>Odovzdať</a>
+
                 </div>
 
                 <% include ./order-input.ejs %>

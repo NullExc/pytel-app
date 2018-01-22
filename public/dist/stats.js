@@ -28995,9 +28995,16 @@ var app = angular.module('myApp', ['angularUtils.directives.dirPagination', 'ui.
 
 app.controller('myCtrl', function ($scope, $http, $filter) {
 
+    $scope.totalCount;
+    $scope.totalSum;
+    $scope.orders;
+    $scope.workSum;
+    $scope.orderSum;
+    $scope.totalTime;
+
     $scope.orderPredicate = 'name';
     $scope.orderReverse = true;
-    
+
     $scope.orderSort = function (predicate) {
         $scope.orderReverse = ($scope.orderPredicate === predicate) ? !$scope.orderReverse : false;
         $scope.orderPredicate = predicate;
@@ -29034,7 +29041,8 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
             from: $scope.from,
             to: $scope.to
         }).success(function (data) {
-            console.log(JSON.stringify(data, 2, 2));
+            //console.log(JSON.stringify(data, 2, 2));
+            $scope.totalTime = data.totalTime;
             $scope.totalCount = data.totalCount;
             $scope.totalSum = data.totalSum;
             $scope.orders = data.orders;
@@ -29077,12 +29085,29 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
 
         var daysNumber = parseInt(days) - 1;
 
-        string = daysNumber + " dní, " + string;
+        if (daysNumber > 0) string = daysNumber + " dní, " + string;
 
         console.log(time, minutes);
 
         return string;
     }
+
+    $scope.timePercentage = function (time) {
+        var value = 100 / ($scope.totalTime / time);
+        return Math.round(value * 100) / 100;
+    }
+
+    $scope.countPercentage = function (count) {
+        var value = 100 / ($scope.totalCount / count);
+        return Math.round(value * 100) / 100;
+    }
+
+    $scope.pricePercentage = function (price) {
+        var value = 100 / ($scope.totalSum / price);
+        return Math.round(value * 100) / 100;
+    }
+
+    console.log('total time', $scope.parseDate(244724000));
 
     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(document).ready(function () {
 
@@ -29180,7 +29205,7 @@ app.controller('myCtrl', function ($scope, $http, $filter) {
                 $scope.$apply();
 
                 $scope.getStats();
-                
+
             }
         });
 

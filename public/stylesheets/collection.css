@@ -20,3 +20,9 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+th:hover {
+    color: #01579b;
+    cursor: pointer;
+    text-decoration: underline;
+}
