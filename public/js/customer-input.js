@@ -138,28 +138,29 @@ $(document).ready(function () {
             http.request(options, (err, response) => {
                 if (err) console.log(err);
                 else if (response) {
-                    console.log(response);
-                    //location.href = '/customer/' + response.data.id;
+                    //console.log(response);
+                    location.href = '/customer/' + response.data.id;
                 }
             })
 
         } else if (e.target.id === 'update') {
 
-            var id = localStorage.getItem('updateId');
+            var pathname = window.location.pathname.split("/");
+            var id = pathname[pathname.length - 1];
             options.url = '/customer/' + id;
             options.method = 'put';
 
-            console.log(JSON.stringify(options, 2, 2));
+            //console.log(JSON.stringify(options, 2, 2));
 
             http.request(options, (err, response) => {
 
-                localStorage.removeItem('updateId');
+                //localStorage.removeItem('updateId');
 
                 if (err) {
                     console.error(err);
                 } else if (response) {
                     console.log(response);
-                    //location.href = '/customer/' + id;
+                    location.href = '/customer/' + id;
                 }
             })
         }

@@ -4,13 +4,15 @@ var User = require('../models/User');
 
 var userNames = [
     "b3e23950ce9db836be58984b72a87d6f",
-    "dafd7ac512a735d64df89eef39fc0f8e"
+    "dafd7ac512a735d64df89eef39fc0f8e",
+    "49c82820ba6150fab3156b96b7456afc",
+    "21232f297a57a5a743894a0e4a801fc3"
 ]
 
 module.exports = {
 
     register(req, res, next) {
-    
+
         if (req.body.email &&
             req.body.password &&
             req.body.passwordConf) {
@@ -21,9 +23,10 @@ module.exports = {
 
                 var hash = md5(req.body.email);
 
-                console.log(hash);
-
-                if (hash === name) valid = true;
+                if (hash === name) {
+                   // console.log('match!', hash);
+                    valid = true;
+                }
 
             })
 
@@ -51,24 +54,32 @@ module.exports = {
                 return res.status(400).send(error);
 
             }
-    
-            var userData = { 
+
+            var userData = {
                 email: req.body.email,
                 password: req.body.password
             }
-    
-            //use schema.create to insert data into the db
-            User.create(userData, function (err, user) {
-                if (err) {
-                    return next(err)
-                } else {
-                    return res.json({message: 'user created'});
+
+            User.find({ email: req.body.email }, function (err, user) {
+                //use schema.create to insert data into the db
+                //console.log('user', user);
+                if (user && user.length > 0) {
+                    var error = new Error('User already exists');
+                    error.status = 404;
+                    return res.status(404).send(error);
                 }
-            });
+                User.create(userData, function (err, user) {
+                    if (err) {
+                        return next(err)
+                    } else {
+                        return res.json({ message: 'user created' });
+                    }
+                });
+            })
         }
     },
 
-    login(req, res,  next) {
+    login(req, res, next) {
         if (req.body.email && req.body.password) {
             User.authenticate(req.body.email, req.body.password, function (error, user) {
                 if (error || !user) {
@@ -76,20 +87,17 @@ module.exports = {
                     err.status = 401;
                     return res.status(401).send(err);
                 } else {
-                    var token = jwt.sign({data: user}, req.app.get('secret'), {
-                        expiresIn: 1440
+                    var token = jwt.sign({ data: user }, req.app.get('secret'), {
+                        expiresIn: '1 day' //86400
                     })
-    
-                    console.log(token);
-    
+
                     res.cookie('token', token, {
                         maxAge: 86400000, httpOnly: true
-    
-                      }).json({
-                        success: true,
-                        token: token
+
+                    }).json({
+                        success: true
                     })
-    
+
                 }
             });
         }

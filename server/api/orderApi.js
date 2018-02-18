@@ -102,7 +102,7 @@ module.exports = {
     },
 
     update(req, res, next) {
-        console.log(req.params.id, JSON.stringify(req.body));
+        //console.log(req.params.id, JSON.stringify(req.body));
         Order.update({ _id: req.params.id }, req.body.order, { multi: false, upsert: false })
             .then(order => {
                 res.status(200).send({ message: 'Order updated successfully to ' + JSON.stringify(order) });
@@ -133,7 +133,7 @@ module.exports = {
         var totalSum = 0;
         var workTypes = [];
         var orderTypes = [];
-        console.log(JSON.stringify(req.body));
+        //console.log(JSON.stringify(req.body));
         Order.getStats(req.body.from, req.body.to, function (err, orders) {
             if (err) return next(err);
             else {
@@ -158,7 +158,7 @@ module.exports = {
                     }
                 })
                 
-                console.log('total time', totalTime);
+                //console.log('total time', totalTime);
 
                 var groupWork = workTypes.reduce(function (rv, x) {
                     (rv[x["name"]] = rv[x["name"]] || []).push(x);

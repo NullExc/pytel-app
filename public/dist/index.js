@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 155);
+/******/ 	return __webpack_require__(__webpack_require__.s = 156);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 155:
+/***/ 156:
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
@@ -73,7 +73,23 @@ $(document).ready(function () {
       menuWidth: 200, // Default is 300
       edge: 'left', // Choose the horizontal origin
       closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-      draggable: true
+      draggable: true,
+      onClose: function (el) {
+        console.log('sidenav is closed');
+        
+        function showpanel() {     
+          $( "#sidenav-overlay" ).remove();
+          $( ".drag-target" ).each(function (el) {
+            if (!$(this).hasClass('ng-isolate-scope')) {
+              $(this).remove();
+            }
+            //console.log('target', $(this).hasClass('ng-isolate-scope'));
+          })
+       }
+      
+       // use setTimeout() to execute
+       setTimeout(showpanel, 500);
+      }
     }
   );
 })

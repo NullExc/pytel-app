@@ -27,6 +27,8 @@ app.controller('UserCtrl', function ($scope, $http) {
 
     $scope.registerMatchError = false;
 
+    $scope.registerExistError = false;
+
     $scope.registerSuccess = false;
 
    // console.log('cookies', $cookies);
@@ -40,7 +42,6 @@ app.controller('UserCtrl', function ($scope, $http) {
             password: $scope.loginPassword
         })
         .success(function (data) {
-            console.log('data', data);
 
             location.href = '/order-new';
 
@@ -56,10 +57,6 @@ app.controller('UserCtrl', function ($scope, $http) {
 
             console.log('error', error);
         })
-        
-
-       // console.log('login', $scope.loginEmail, $scope.loginPassword);
-
     }
 
     $scope.register = function () {
@@ -74,12 +71,16 @@ app.controller('UserCtrl', function ($scope, $http) {
             passwordConf: $scope.repeatPassword
         })
         .success(function (data) {
-            console.log('data', data);
 
             $scope.registerSuccess = true;
+
+            $scope.loginEmail = $scope.registerEmail;
+            $scope.loginPassword = $scope.registerPassword;
+
+            $scope.login();
         })
         .error(function (error) {
-            console.log('error', error);
+            console.log('error', error.status);
 
             if (error.status === 402) {
                 $scope.registerEmailError = true;
@@ -90,11 +91,11 @@ app.controller('UserCtrl', function ($scope, $http) {
             } else if (error.status === 400) {
                 $scope.registerMatchError = true;
 
+            } else if (error.status === 404) {
+                $scope.registerExistError = true;
+
             }
         })
-
-        console.log('register', $scope.registerEmail, $scope.registerPassword, $scope.repeatPassword);
-
     }
 
 

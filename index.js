@@ -1,5 +1,7 @@
 
+require('dotenv').config();
 
+var https = require('https');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -29,7 +31,7 @@ var app = express();
 mongoose.connect(config.url, {
 
   reconnectTries: 100,
-  
+
   reconnectInterval: 10000
 });
 
@@ -40,8 +42,8 @@ db.once('open', function () {
   console.log('database connected!');
 });
 
-app.set('secret', config.secret);
-app.set('port', (process.env.PORT || 5000));
+app.set('secret', process.env.SECRET);
+app.set('port', (5000));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -62,52 +64,72 @@ app.get('/logout', function (req, res, next) {
   if (req.cookies && req.cookies.token) {
     res.clearCookie("token");
 
-  } 
+  }
   res.redirect('/');
 
 })
 
 app.use(function (req, res, next) {
 
-  console.log('cookies', req.cookies.token);
-
   var token = req.body.token || req.query.token || req.headers['authorization'] || req.cookies.token;
 
   if (token) {
 
     jwt.verify(token, app.get('secret'), function (err, decoded) {
+
+      //console.log('tokenbbb', err);
+
       if (err) {
-      next(); //  return res.json({ success: false, message: 'Failed to authenticate token.' });
+
+        if (req.path === '/') return next();
+
+        return res.redirect('/');
+
+        //console.log('roken error', err);
+
+        /* var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
+ 
+         error.status = 509;
+         return next(error);*/
+
       } else {
+
         req.decoded = decoded;
+
+        var now = Math.floor(Date.now() / 1000);
+        var timeToExpire = (decoded.exp - now);
+
+        if (timeToExpire < (60 * 180)) {
+          var refreshToken = jwt.sign({ data: decoded.data }, req.app.get('secret'), {
+            expiresIn: '1 day' //86400
+          })
+
+          res.cookie('token', refreshToken, {
+            maxAge: 86400000, httpOnly: true
+          })
+        }
 
         if (req.path === '/') {
           return res.redirect('/order-new');
+        } else {
+          next();
         }
-        next();
       }
     });
 
   } else {
 
-    console.log('path', req.path);
-
     if (req.path === '/') {
       return next();
     }
 
-    var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
+    //var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
 
-    error.status = 509;
+    //error.status = 509;
 
-    //console.log('no token', req.headers);
+    //return next(error);
 
-    /*return res.status(403).send({
-      success: false,
-      message: 'No token provided.'
-    });*/
-
-    return next(error);
+    return res.redirect('/');
 
   }
 });
@@ -151,6 +173,7 @@ app.get('/customer/names', customerApi.getNames);
 app.get('/customer/name/:name', customerApi.getByName);
 
 app.post('/customer', customerApi.create);
+app.get('/customer', customerApi.getAllData);
 app.get('/customer/:id', customerApi.get);
 app.put('/customer/:id', customerApi.update);
 app.delete('/customer/:id', customerApi.delete);
@@ -169,7 +192,7 @@ app.get('/stats', function (req, res, next) {
 app.post('/stats', orderApi.getStats);
 app.post('/order/date', orderApi.getByDate);
 
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   res.render('pages/not-found', { status: 404, url: req.url });
 });
 
@@ -177,11 +200,21 @@ app.use(function (err, req, res, next) {
   if (err) {
     console.info('error handler', err);
   }
-  res.status(500).render('pages/error', {error : err});
+  res.status(500).render('pages/error', { error: err });
 })
 
 
-
+/*require('letsencrypt-express').create({
+ 
+  server: 'staging'
+ 
+, agreeTos: true
+ 
+, approveDomains: [ 'localhost' ]
+ 
+, app: app
+ 
+}).listen(80, 5000);*/
 
 app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));

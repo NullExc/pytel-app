@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 158);
+/******/ 	return __webpack_require__(__webpack_require__.s = 159);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 158:
+/***/ 159:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -77,7 +77,9 @@ var app = angular.module('Customers', ['angularUtils.directives.dirPagination', 
 
 app.controller('CustomersCtrl', function ($scope, $http, $filter) {
 
-    $scope.customers = window.customers;
+    $scope.customers = []; // = window.customers;
+
+
 
     $scope.sortSelect = {
         value: 'Vzostupne',
@@ -96,6 +98,10 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
         }
     }
 
+    $scope.newCustomer = function () {
+        location.href = '/customer-new';
+    }
+
     //ng-click="if (window.innerWidth <= 600) location.href='/customer/{{customer._id}}'"
 
     $scope.sortChange = function () {
@@ -109,8 +115,6 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
             $scope.customers = $filter('orderBy')($scope.customers, 'search', true);
         }
     }
-
-    $scope.sortChange();
 
     $scope.orderChange = function () {
 
@@ -150,6 +154,32 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
             url: '/customer/names',
             method: 'get'
         }
+
+     //   var slider = document.getElementById('test-slider');
+
+      /*  noUiSlider.create(slider, {
+            start: [20, 80],
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            format: wNumb({
+                decimals: 0
+            })
+        });
+
+        slider.noUiSlider.on('change', function(){
+            console.log('CHNAGE');
+        });*/
+
+        $http.get('/customer')
+            .success(function (data) {
+                $scope.customers = data.customers;
+                $scope.sortChange();
+            })
 
         $http.get('/customer/names')
             .success(function (data) {

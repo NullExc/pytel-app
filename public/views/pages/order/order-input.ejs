@@ -19,7 +19,7 @@
                     </div>
                     <div class="collapsible-body">
                         <ul class="collection" style="margin-top: 0px;">
-                            <li href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text" dir-paginate="customer in customers | itemsPerPage: 5"
+                            <li style="cursor:pointer; color:#01579b !important;" href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text" dir-paginate="customer in customers | itemsPerPage: 5"
                                 pagination-id="customers">
                                 {{customer.fullName}}
                             </li>
@@ -159,18 +159,18 @@
 
             <div class="input-field col s6" id="input-date">
                 <i class="material-icons prefix grey-text">event</i>
-                <input type="text" class="datepicker order-input" id="date">
+                <input type="text" class="datepicker order-input" id="date" readonly>
                 <label id="date-label" for="date">Dátum</label>
             </div>
             <div class="input-field col s6" id="input-time">
                 <i class="material-icons prefix grey-text">schedule</i>
-                <input type="text" class="timepicker" id="time">
+                <input type="text" class="timepicker" id="time" readonly>
                 <label id="time-label" for="time">Čas</label>
             </div>
 
             <div id="price-div" class="input-field col s4">
-                <input value="0" id="price" class="order-input" type="number">
-                <label id="price-label" for="price">Cena</label>
+                <input value="0" id="price" class="order-input validate" type="text">
+                <label id="price-label" for="price" data-error="Chybne zadaná cena.">Cena</label>
             </div>
         </div>
         <div class="col s12 panel z-depth-4">

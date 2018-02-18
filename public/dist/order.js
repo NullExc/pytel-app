@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 162);
+/******/ 	return __webpack_require__(__webpack_require__.s = 163);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -71,8 +71,8 @@
 "use strict";
 
 
-var bind = __webpack_require__(4);
-var isBuffer = __webpack_require__(14);
+var bind = __webpack_require__(5);
+var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
 
@@ -377,6 +377,33 @@ module.exports = {
 /***/ }),
 
 /***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+
+/***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -404,11 +431,10 @@ var clientCallback;
 function handleClientLoad(callback) {
 
     if (GoogleApi && TOKEN) {
-        console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
     } else {
-        console.log('client is loading ...');
-        gapi.load('client:auth2', initClient);
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
     }
 
     function initClient() {
@@ -417,7 +443,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-           /* gapi.load('auth', { 'callback': mobileApiLoad });
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
 
@@ -436,35 +462,37 @@ function handleClientLoad(callback) {
 
             //return callback("auth0", "done123");
 
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                scope: SCOPES
-            }).then(function () {
-
-                console.log('client init');
-
-                GoogleAuth = gapi.auth2.getAuthInstance();
-
-                GoogleAuth.isSignedIn.listen(updateSigninStatus);
-
-                updateSigninStatus(GoogleAuth.isSignedIn.get());
-
-                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-
-                if (!GoogleAuth.isSignedIn.get()) {
-                    callback(null);
-                } else {
-                    callback(GoogleApi, TOKEN);
-                }
-
-                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });
-        } else {
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
 
             
-
+        } else {
 
             gapi.load('auth', { 'callback': mobileApiLoad });
 
@@ -519,11 +547,11 @@ function isClientLogged() {
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
@@ -552,22 +580,22 @@ function isClientLogged() {
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(13);
+module.exports = __webpack_require__(14);
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(4);
-var Axios = __webpack_require__(15);
+var bind = __webpack_require__(5);
+var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
 /**
@@ -601,15 +629,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
-axios.CancelToken = __webpack_require__(29);
-axios.isCancel = __webpack_require__(8);
+axios.Cancel = __webpack_require__(10);
+axios.CancelToken = __webpack_require__(30);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(30);
+axios.spread = __webpack_require__(31);
 
 module.exports = axios;
 
@@ -619,7 +647,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports) {
 
 /*!
@@ -647,7 +675,70 @@ function isSlowBuffer (obj) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 152:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(11);
+
+
+var GoogleApi;
+var TOKEN;
+var photoUrl;
+var pickerApiLoaded = false;
+
+
+function setGoogleApi(api, token) {
+    GoogleApi = api;
+    TOKEN = token;
+}
+
+function loadPicker() {
+    console.log('waiting for callback');
+    gapi.load('picker', { 'callback': onPickerApiLoad });
+}
+
+function onPickerApiLoad() {
+    pickerApiLoaded = true;
+    console.log('callback was called');
+    createPicker();
+}
+
+function createPicker() {
+    if (pickerApiLoaded && TOKEN) {
+        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
+            .setOAuthToken(TOKEN)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
+            .setCallback(pickerCallback)
+            .build();
+        picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+        var fileId = data.docs[0].id;
+        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+    }
+}
+
+function getPhotoUrl() {
+    return photoUrl;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
+
+/***/ }),
+
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -655,10 +746,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(24);
-var dispatchRequest = __webpack_require__(25);
-var isAbsoluteURL = __webpack_require__(27);
-var combineURLs = __webpack_require__(28);
+var InterceptorManager = __webpack_require__(25);
+var dispatchRequest = __webpack_require__(26);
+var isAbsoluteURL = __webpack_require__(28);
+var combineURLs = __webpack_require__(29);
 
 /**
  * Create a new instance of Axios
@@ -741,100 +832,17 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ 151:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(10);
-
-
-var GoogleApi;
-var TOKEN;
-var photoUrl;
-var pickerApiLoaded = false;
-
-
-function setGoogleApi(api, token) {
-    GoogleApi = api;
-    TOKEN = token;
-}
-
-function loadPicker() {
-    console.log('waiting for callback');
-    gapi.load('picker', { 'callback': onPickerApiLoad });
-}
-
-function onPickerApiLoad() {
-    pickerApiLoaded = true;
-    console.log('callback was called');
-    createPicker();
-}
-
-function createPicker() {
-    if (pickerApiLoaded && TOKEN) {
-        console.log('picker is createing', TOKEN, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID, __WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY);
-        var view = new google.picker.View(google.picker.ViewId.DOCS);
-        view.setMimeTypes("image/png,image/jpeg,image/jpg");
-        var picker = new google.picker.PickerBuilder()
-            .enableFeature(google.picker.Feature.NAV_HIDDEN)
-            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-            .setAppId(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].PROJECT_ID)
-            .setOAuthToken(TOKEN)
-            .addView(view)
-            .addView(new google.picker.DocsUploadView())
-            .setDeveloperKey(__WEBPACK_IMPORTED_MODULE_0__google_auth_js__["a" /* default */].API_KEY)
-            .setCallback(pickerCallback)
-            .build();
-        picker.setVisible(true);
-    }
-}
-
-function pickerCallback(data) {
-    if (data.action == google.picker.Action.PICKED) {
-        var fileId = data.docs[0].id;
-        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
-    }
-}
-
-function getPhotoUrl() {
-    return photoUrl;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
-
-/***/ }),
-
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(1);
-
-module.exports = function normalizeHeaderName(headers, normalizedName) {
-  utils.forEach(headers, function processHeader(value, name) {
-    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
-      headers[normalizedName] = value;
-      delete headers[name];
-    }
-  });
-};
-
-
-/***/ }),
-
-/***/ 162:
+/***/ 163:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_jquery__);
 
 
@@ -853,9 +861,6 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
     $scope.orderType = window.orderType;
 
     $scope.sale = $scope.order.sale;
-
-    //var order = JSON.parse('{"_id":"5a5fd5b6f3cb94066c3d5dd7","description":"Klimatizacia","notes":"asdasdasd\n\nasdasdasd\nasdasdasddddddddddddddddd\n\nasdsadsadasdads ","facilities":"Garaz","price":120,"customerId":"5a3548a4d6a4d2403c6c2055","state":"arrived","__v":0,"sale":false,"billData":{"ICO":"neuvedené (FO)","ICDPH":"neuvedené (FO)","DIC":"neuvedené (FO)"},"address":{"street":"Chalupkova","streetNumber":"22","city":"Vrbov","zipCode":"08111"},"contact":{"email":"peter22894@azet.sk","phone":"0940554298"},"arriveDate":"2018-01-17T23:59:41.000Z"}');
-
 
     console.log('sale', $scope.sale, $scope.order.pickDate);
 
@@ -881,6 +886,10 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
         var pathname = window.location.pathname.split("/");
         var id = pathname[pathname.length - 1];
         location.href = '/order-edit/' + id;
+    }
+
+    $scope.showCustomer = function () {
+        location.href = '/customer/' + $scope.customer._id;
     }
 
 })
@@ -955,7 +964,27 @@ $(document).ready(function () {
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var utils = __webpack_require__(1);
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+
+/***/ 18:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -983,7 +1012,7 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1012,7 +1041,108 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 19:
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(1);
+var normalizeHeaderName = __webpack_require__(17);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(7);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(7);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ }),
+
+/***/ 20:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1088,108 +1218,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(16);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(6);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
-
-/***/ }),
-
-/***/ 20:
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1234,7 +1263,7 @@ module.exports = function parseHeaders(headers) {
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1310,7 +1339,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1354,7 +1383,7 @@ module.exports = btoa;
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1415,7 +1444,7 @@ module.exports = (
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1475,15 +1504,15 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(26);
-var isCancel = __webpack_require__(8);
+var transformData = __webpack_require__(27);
+var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1562,7 +1591,7 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1590,7 +1619,7 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ 27:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1612,7 +1641,7 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1634,13 +1663,27 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ 29:
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp'
+});
+
+/***/ }),
+
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(10);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1699,21 +1742,7 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp'
-});
-
-/***/ }),
-
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1748,7 +1777,61 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 31:
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(11);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
+
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -12009,61 +12092,7 @@ return jQuery;
 
 /***/ }),
 
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function insertEvent(order, customer) {
-    console.log('insert event ', order.description);
-
-    var date = new Date();
-
-    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
-    console.log(dateString);
-
-    var event = {
-        'summary': customer.fullName,
-        'description': order.description,
-        'start': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'end': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'recurrence': [
-            'RRULE:FREQ=DAILY;COUNT=1'
-        ]
-    }
-    var request = GoogleApi.client.calendar.events.insert({
-        'calendarId': 'primary',
-        'resource': event
-    });
-
-    request.execute(function (event) {
-        console.log('Event created: ', event);
-    });
-
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
-
-/***/ }),
-
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12082,7 +12111,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -12273,19 +12302,19 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(17);
-var buildURL = __webpack_require__(19);
-var parseHeaders = __webpack_require__(20);
-var isURLSameOrigin = __webpack_require__(21);
-var createError = __webpack_require__(7);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(22);
+var settle = __webpack_require__(18);
+var buildURL = __webpack_require__(20);
+var parseHeaders = __webpack_require__(21);
+var isURLSameOrigin = __webpack_require__(22);
+var createError = __webpack_require__(8);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -12382,7 +12411,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(23);
+      var cookies = __webpack_require__(24);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -12458,17 +12487,17 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(18);
+var enhanceError = __webpack_require__(19);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -12488,7 +12517,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12497,33 +12526,6 @@ module.exports = function createError(message, config, code, request, response) 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
-
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
 
 
 /***/ })

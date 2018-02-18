@@ -22,11 +22,10 @@ var clientCallback;
 function handleClientLoad(callback) {
 
     if (GoogleApi && TOKEN) {
-        console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
     } else {
-        console.log('client is loading ...');
-        gapi.load('client:auth2', initClient);
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
     }
 
     function initClient() {
@@ -35,7 +34,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-           /* gapi.load('auth', { 'callback': mobileApiLoad });
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
 
@@ -54,35 +53,37 @@ function handleClientLoad(callback) {
 
             //return callback("auth0", "done123");
 
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                scope: SCOPES
-            }).then(function () {
-
-                console.log('client init');
-
-                GoogleAuth = gapi.auth2.getAuthInstance();
-
-                GoogleAuth.isSignedIn.listen(updateSigninStatus);
-
-                updateSigninStatus(GoogleAuth.isSignedIn.get());
-
-                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-
-                if (!GoogleAuth.isSignedIn.get()) {
-                    callback(null);
-                } else {
-                    callback(GoogleApi, TOKEN);
-                }
-
-                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });
-        } else {
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
 
             
-
+        } else {
 
             gapi.load('auth', { 'callback': mobileApiLoad });
 

@@ -78,3 +78,13 @@
   margin-top: 190px;
   text-align: center;
 }
+
+.checkbox-blue[type="checkbox"].filled-in:checked + label:after{
+  border: 2px solid #01579b;
+  background-color: #01579b;
+}
+
+
+.dropdown-content li > span {
+  color: #01579b;
+}

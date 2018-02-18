@@ -8,9 +8,15 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
 
     $scope.orders = window.orders;
 
+    $scope.totalSum = window.totalSum;
+
+    $scope.orderCount = window.orderCount;
+
     $scope.STATE = STATE;
 
     $scope.person = $scope.customer.person ? true : false;
+
+    console.log('created', $scope.customer.date);
 
     $scope.deleteCustomer = function () {
 

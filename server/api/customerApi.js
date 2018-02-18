@@ -6,8 +6,6 @@ var async = require('async');
 module.exports = {
     create(req, res, next) {
 
-        console.log(JSON.stringify(req.body.customer, 2, 2));
-
         Customer.create(req.body.customer, function (err, customer) {
             if (err) {
                 return next(err);
@@ -38,17 +36,33 @@ module.exports = {
     },
 
     getAll(req, res, next) {
-        Customer.find({}, function (err, customers) {
+
+        res.render('pages/customer/customers');
+
+        /*Customer.find({}, function (err, customers) {
             if (err) {
                 return next(err);
             }
 
             res.render('pages/customer/customers', { customers: customers });
+        })*/
+    },
+    getAllData(req, res, next) {
+
+        Customer.find({}, function (err, customers) {
+
+            if (err) {
+                return next(err);
+            }
+
+            res.send( { customers: customers });
         })
     },
     get(req, res, next) {
         Customer.findById(req.params.id, function (err, customer) {
             var customerOrders = [];
+            var totalSum = 0;
+            var orderCount = 0;
             if (err) {
                 return next(err);
             }
@@ -56,9 +70,17 @@ module.exports = {
                 if (err) {
                     return next(err);
                 }
-                if (orders) customerOrders = orders;
+                if (orders && orders.length > 0) {
+                    customerOrders = orders;
+                    orders.forEach(function (order) {
+                        if (order.state === 'pickUp') {
+                            totalSum += order.price;
+                            orderCount++;
+                        }
+                    })
+                }
 
-                return res.render('pages/customer/customer', { customer: customer, orders: customerOrders });
+                return res.render('pages/customer/customer', { customer: customer, orders: customerOrders, totalSum: totalSum, orderCount: orderCount });
 
             })
         })

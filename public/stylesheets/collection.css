@@ -26,3 +26,7 @@ th:hover {
     cursor: pointer;
     text-decoration: underline;
 }
+
+.selected:hover {
+    background-color:#01579b
+}

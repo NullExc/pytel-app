@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 164);
+/******/ 	return __webpack_require__(__webpack_require__.s = 165);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -93,11 +93,10 @@ var clientCallback;
 function handleClientLoad(callback) {
 
     if (GoogleApi && TOKEN) {
-        console.log('client was loaded before');
         callback(GoogleApi, TOKEN);
     } else {
-        console.log('client is loading ...');
-        gapi.load('client:auth2', initClient);
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
     }
 
     function initClient() {
@@ -106,7 +105,7 @@ function handleClientLoad(callback) {
 
         if (gapi.client.init) {
 
-           /* gapi.load('auth', { 'callback': mobileApiLoad });
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
 
             function mobileApiLoad() {
 
@@ -125,35 +124,37 @@ function handleClientLoad(callback) {
 
             //return callback("auth0", "done123");
 
-            gapi.client.init({
-                discoveryDocs: DISCOVERY_DOCS,
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                scope: SCOPES
-            }).then(function () {
-
-                console.log('client init');
-
-                GoogleAuth = gapi.auth2.getAuthInstance();
-
-                GoogleAuth.isSignedIn.listen(updateSigninStatus);
-
-                updateSigninStatus(GoogleAuth.isSignedIn.get());
-
-                TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-
-                if (!GoogleAuth.isSignedIn.get()) {
-                    callback(null);
-                } else {
-                    callback(GoogleApi, TOKEN);
-                }
-
-                //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-            });
-        } else {
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
 
             
-
+        } else {
 
             gapi.load('auth', { 'callback': mobileApiLoad });
 
@@ -208,16 +209,16 @@ function isClientLogged() {
 
 /***/ }),
 
-/***/ 164:
+/***/ 165:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(33);
 
 
 
@@ -476,11 +477,65 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
 /***/ }),
 
-/***/ 167:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(11);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
+
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 
 
@@ -506,7 +561,7 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
 /***/ }),
 
-/***/ 31:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10764,60 +10819,6 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-
-/***/ }),
-
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function insertEvent(order, customer) {
-    console.log('insert event ', order.description);
-
-    var date = new Date();
-
-    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
-    console.log(dateString);
-
-    var event = {
-        'summary': customer.fullName,
-        'description': order.description,
-        'start': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'end': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'recurrence': [
-            'RRULE:FREQ=DAILY;COUNT=1'
-        ]
-    }
-    var request = GoogleApi.client.calendar.events.insert({
-        'calendarId': 'primary',
-        'resource': event
-    });
-
-    request.execute(function (event) {
-        console.log('Event created: ', event);
-    });
-
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
 
 /***/ })
 

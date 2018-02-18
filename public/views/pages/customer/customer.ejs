@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <% include ../../partials/header.ejs %>
         <script type="text/javascript"> 
             var customer = JSON.parse('<%- JSON.stringify(customer) %>');
             var orders = JSON.parse('<%- JSON.stringify(orders) %>');
-            console.log(JSON.stringify(orders));
+            var totalSum = JSON.parse('<%- JSON.stringify(totalSum) %>');
+            var orderCount = JSON.parse('<%- JSON.stringify(orderCount) %>');
+
+            //console.log(JSON.stringify(orders));
 
             $(document).ready(function () {
                 $('.modal').modal();
@@ -38,7 +42,7 @@
                     <div ng-show="person">
                         <div class="col s12 panel z-depth-4">
                             <div class="col s12">
-                                <h5>Kontakt</h5>
+                                <h5>Informácie</h5>
                             </div>
                             <div class="col s12 l6">
                                 <h6 class="grey-text">E-mail</h6>
@@ -49,6 +53,21 @@
                                 <h6 class="grey-text">Tel. číslo</h6>
                                 <div class="divider"></div>
                                 <p>{{customer.person.phone}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Počet zákaziek</h6>
+                                <div class="divider"></div>
+                                <p>{{orderCount}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Prijatá suma</h6>
+                                <div class="divider"></div>
+                                <p>{{totalSum}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Pridaný</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.date | date: 'd.M.yyyy'}}</p>
                             </div>
                         </div>
 
@@ -113,9 +132,24 @@
 
                         <div class="col s12 panel z-depth-4">
                             <div class="col s12" style="margin-top: 20px;">
-                                <h5>Fakturačné údaje</h5>
+                                <h5>Informácie</h5>
+                            </div>
+                            <div class="col s12" style="">
+                                <h6 class="grey-text">Pridaný</h6>
+                                <div class="divider" style="width: 50% !important"></div>
+                                <p>{{customer.date | date: 'd.M.yyyy'}}</p>
                             </div>
 
+                            <div class="col s6">
+                                <h6 class="grey-text">Počet zákaziek</h6>
+                                <div class="divider"></div>
+                                <p>{{orderCount}}</p>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">Prijatá suma</h6>
+                                <div class="divider"></div>
+                                <p>{{totalSum}}</p>
+                            </div>
                             <div class="col s12">
                                 <h6 class="grey-text">IČO</h6>
                                 <div class="divider"></div>
@@ -242,18 +276,13 @@
                 </a>
                 <ul>
                     <li>
-                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
-                            <i class="material-icons">delete</i>
-                        </a>
-                    </li>
-                    <li>
                         <a id="edit" ng-click="editCustomer()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
                             <i class="material-icons">mode_edit</i>
                         </a>
                     </li>
                     <li>
-                        <a class="btn-floating blue" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
-                            <i class="material-icons">description</i>
+                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">delete</i>
                         </a>
                     </li>
                 </ul>
@@ -269,7 +298,7 @@
                 <p>Potvrdením natrvalo vymažete zákazníka zo systému.</p>
             </div>
             <div style="float: right;">
-                <a id="deleteCustomer" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+                <a id="deleteCustomer" ng-click="deleteCustomer()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
                 <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
             </div>
         </div>

@@ -28,7 +28,7 @@
             <form class="col s10">
               <div class="input-field">
                 <input ng-model="loginEmail" id="email" type="text">
-                <label for="email">Email</label>
+                <label for="email">Meno</label>
               </div>
               <div class="input-field">
                 <input ng-model="loginPassword" id="password" type="password">
@@ -45,8 +45,8 @@
           <div class="row user-input">
             <form class="col s10">
               <div class="input-field">
-                <input ng-model="registerEmail" id="email" type="email">
-                <label for="email">Email</label>
+                <input ng-model="registerEmail" id="email" type="text">
+                <label for="email">Meno</label>
               </div>
               <div class="input-field">
                 <input ng-model="registerPassword" id="password" type="password">
@@ -64,6 +64,8 @@
               <h5 ng-show="registerPasswordError" class="red-text">Heslo musí obsahovať aspoň 6 znakov.</h5>
 
               <h5 ng-show="registerMatchError" class="red-text">Heslá sa nezhodujú.</h5>
+              
+              <h5 ng-show="registerExistError" class="red-text">Používateľ už je registrovaný.</h5>
 
               <h5 ng-show="registerSuccess" class="green-text">Registrácia prebehla úspešne, môžete sa prihlásiť.</h5>
 

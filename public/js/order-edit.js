@@ -10,7 +10,6 @@ var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination',
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-        console.log('token', TOKEN);
 
     });
 
@@ -33,8 +32,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     var selectedWork = edit ? workType : null;
 
     var selectedOrder = edit ? orderType : null;
-
-    console.log(selectedCustomer);
 
     $scope.pickCustomer = function (event) {
         var id = event.target.id;
@@ -494,18 +491,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('#load-photo').click(function () {
 
-           
-            
-            console.log('loading picker');
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-
-                console.log('picker ready to open', GoogleApi, TOKEN);
 
                 if (GoogleApi && TOKEN) {
                     picker.setGoogleApi(GoogleApi, TOKEN);
                     picker.loadPicker();
                 } else {
-                    $('#load-photo').addClass('disabled');
+                    //$('#load-photo').addClass('disabled');
                 }
             });
         })
@@ -529,10 +521,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#done-customer").removeClass('orange');
                 $("#done-customer").addClass('red');
 
-            }
-
-            if (!order.description || !selectedCustomer) {
-                return;
             }
 
             var email = $("#email").val();
@@ -571,7 +559,32 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 order.facilities = temp;
             }
 
-            if (price) order.price = price;
+            if (price) {
+
+                price = price.replace(/,/g, '.');
+
+                order.price = Number(price);
+
+                if (!order.price) {
+                    $("#price").addClass('invalid');
+
+                    $('#price-label').addClass('active');
+                }
+
+                console.log(order.price);
+
+            } else {
+
+                $("#price").addClass('invalid');
+
+                $('#price-label').addClass('active');
+
+            }
+
+            if (!order.description || !selectedCustomer || !order.price) {
+                return;
+            }
+
             if (email || phone) {
                 order.contact = {};
             }
@@ -651,7 +664,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 options.method = 'post';
 
                 googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-                    console.log('token', TOKEN);
                     calendar.setGoogleApi(GoogleApi);
                     calendar.insertEvent(order, selectedCustomer);
                 });
@@ -674,7 +686,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 preloader.close();
                 if (err) console.log("error", err);
                 else if (response) {
-                    console.log("response", response.data);
                     if (response.data.id) {
                         location.href = "/order/" + response.data.id;
                     } else {

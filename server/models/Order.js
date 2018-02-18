@@ -207,7 +207,6 @@ OrderSchema.statics.getStats = function (from, to, callback) {
     var orderDetails = [];
 
     Order.find({}).where('state').equals('pickUp').where('sale').equals(false).where('pickDate').gte(from).lte(to).exec(function (err, orders) {
-        console.log("orders", orders.length, 'from', from, 'to', to);
         async.each(orders, function (order, callback) {
             
             Order.getDetail(order._id, true, function (err, detail) {
@@ -227,13 +226,13 @@ OrderSchema.statics.byDateAndState = function (from, to, dateType, stateType, ca
 
     if (stateType === 'all') {
         Order.find({}).where(dateType).gte(from).lte(to).exec(function (err, orders) {
-            console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
+            //console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
             callback(err, orders);
         });
 
     } else {
         Order.find({}).where("state").equals(stateType).where(dateType).gte(from).lte(to).exec(function (err, orders) {
-            console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
+            //console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
             callback(err, orders);
         });
     }

@@ -29,55 +29,65 @@
                 </h5>
             </div>
 
-            <div class="row col s12 l6 offset-l3">
+            <div class="row col s12 l6 m8 offset-l3 offset-m2">
 
-                <div>
+                <div class="col s12" style="margin-bottom: 20px;">
                     <a class="show-photo light-blue darken-4 btn modal-trigger" href="#photo-modal">
                         <i class="material-icons left">photo_camera</i>fotka</a>
                 </div>
 
                 <div class="state-body black-text">
-                    <div id="arrive-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
-                        <div class="card-content black-text">
-                            <span class="card-title">Prijatie</span>
-                            <br>
-                            <span id="arrive-date"></span>
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="arrive-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Prijatie</span>
+                                <br>
+                                <span id="arrive-date"></span>
+                            </div>
                         </div>
                     </div>
-                    <div id="start-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
-                        <div class="card-content black-text">
-                            <span class="card-title">Začatie</span>
-                            <p id="work-progress">Na zákazke sa pracuje.</p>
-                            <span id="start-date"></span>
-                            <h5 id="diff-time"></h5>
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="start-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Začatie</span>
+                                <p id="work-progress">Na zákazke sa pracuje.</p>
+                                <span id="start-date"></span>
+                                <h5 id="diff-time"></h5>
+                            </div>
                         </div>
                     </div>
-                    <div id="end-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
-                        <div class="card-content black-text">
-                            <span class="card-title">Ukončenie</span>
-                            <br>
-                            <span id="end-date"></span>
+                    <div class="col m12 s12 l6" ng-show="!sale">
+                        <div id="end-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Ukončenie</span>
+                                <br>
+                                <span id="end-date"></span>
+                            </div>
                         </div>
                     </div>
-                    <div id="pick-body" class="card teal lighten-4 z-depth-3" ng-show="!sale">
-                        <div class="card-content black-text">
-                            <span class="card-title">Vyzdvihnutie</span>
-                            <br>
-                            <span id="pickup-date"></span>
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="pick-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Vyzdvihnutie</span>
+                                <br>
+                                <span id="pickup-date"></span>
+                            </div>
                         </div>
                     </div>
-                    <div id="sale-body" class="card green lighten-1 z-depth-3" ng-show="sale">
-                        <div class="card-content black-text">
-                            <span class="card-title">Predaj</span>
-                            <br>
-                            <span id="sale-date"></span>
+                    <div class="col m12 s12 l6" ng-show="sale">
+                        <div id="sale-body" class="card green lighten-1 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Predaj</span>
+                                <br>
+                                <span id="sale-date"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col l6 s12 offset-l3 panel z-depth-4">
+            <div class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Informácie</h5>
                 </div>
@@ -117,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col s12 l6 offset-l3 panel z-depth-4">
+            <div class="col s12 l6 m8 offset-l3 offset-m2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Zákazník</h5>
                 </div>
@@ -173,7 +183,7 @@
 
             </div>
         </div>
-        <div id="photo-modal" class="modal">
+        <div id="photo-modal" class="modal" style="overflow-y: scroll;">
             <div class="modal-content">
                 <img id="photo-pic" src="" style="max-width: 100%; max-height: 100%;">
             </div>
@@ -186,13 +196,18 @@
                 </a>
                 <ul>
                     <li>
-                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
-                            <i class="material-icons">delete</i>
+                        <a id="edit" ng-click="editOrder()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">mode_edit</i>
                         </a>
                     </li>
                     <li>
-                        <a id="edit" ng-click="editOrder()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
-                            <i class="material-icons">mode_edit</i>
+                        <a id="edit" ng-click="showCustomer()" class="btn-floating blue" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">person</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">delete</i>
                         </a>
                     </li>
                 </ul>

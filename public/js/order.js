@@ -16,9 +16,6 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
     $scope.sale = $scope.order.sale;
 
-    //var order = JSON.parse('{"_id":"5a5fd5b6f3cb94066c3d5dd7","description":"Klimatizacia","notes":"asdasdasd\n\nasdasdasd\nasdasdasddddddddddddddddd\n\nasdsadsadasdads ","facilities":"Garaz","price":120,"customerId":"5a3548a4d6a4d2403c6c2055","state":"arrived","__v":0,"sale":false,"billData":{"ICO":"neuvedené (FO)","ICDPH":"neuvedené (FO)","DIC":"neuvedené (FO)"},"address":{"street":"Chalupkova","streetNumber":"22","city":"Vrbov","zipCode":"08111"},"contact":{"email":"peter22894@azet.sk","phone":"0940554298"},"arriveDate":"2018-01-17T23:59:41.000Z"}');
-
-
     console.log('sale', $scope.sale, $scope.order.pickDate);
 
     if ($scope.order && $scope.order.photoUrl) {
@@ -43,6 +40,10 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
         var pathname = window.location.pathname.split("/");
         var id = pathname[pathname.length - 1];
         location.href = '/order-edit/' + id;
+    }
+
+    $scope.showCustomer = function () {
+        location.href = '/customer/' + $scope.customer._id;
     }
 
 })

@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 163);
+/******/ 	return __webpack_require__(__webpack_require__.s = 164);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 154:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! jQuery UI - v1.11.4 - 2016-06-28
@@ -77,7 +77,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(31) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -2455,14 +2455,14 @@ var datepicker = $.datepicker;
 
 /***/ }),
 
-/***/ 163:
+/***/ 164:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(3);
 
@@ -2472,6 +2472,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var app = angular.module('Orders', ['angularUtils.directives.dirPagination', 'ui.materialize']);
 
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
+
+    $scope.today = false;
 
     $scope.orders;
 
@@ -2485,6 +2487,10 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     $scope.dateSelect = {
         value: 'Dátum prijatia',
         choices: ['Dátum prijatia', 'Dátum začatia', 'Dátum ukončenia', 'Dátum vyzvihnutia']
+    }
+
+    $scope.newOrder = function () {
+        location.href = '/order-new';
     }
 
     $scope.formatDate = function (val) {
@@ -2502,6 +2508,10 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
         return string;
     }
 
+    $scope.todayChange = function () {
+        filter(false);
+    }
+
     $scope.typeChange = function () {
         filter(false);
     }
@@ -2511,7 +2521,6 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     }
 
     $scope.clickOrder = function (id) {
-        console.log('click', id, screen.width);
         if (screen.width < 600) {
             location.href = '/order/' + id;
         }
@@ -2531,8 +2540,6 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     $scope.fromString = $filter('date')(lastDayDate, 'yyyy-MM-dd');
 
     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
-
-        console.log("jquery loaded ");
 
         __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.datepicker.regional['sk'] = {
             closeText: 'Zavrieť',
@@ -2685,40 +2692,54 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
             stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].done;
-        //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
+            //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
             stateType = __WEBPACK_IMPORTED_MODULE_2__state__["default"].pickUp;
-        //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
+            //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
 
         } else {
             stateType = "all";
         }
 
+        var from = $scope.from;
+        var to = $scope.to;
+
+        if ($scope.today) {
+
+            var now = new Date();
+
+            from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 1, 1);
+
+            to = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 59);
+
+            console.log('today', from, to);
+
+        }
         $http.post('/order/date', {
-            from: $scope.from,
-            to: $scope.to,
+            from: from,
+            to: to,
             dateType: dateType,
             stateType: stateType
         })
-        .success(function (data) {
-            //console.log('collection', data.orders.length, data.orders);
+            .success(function (data) {
+                //console.log('collection', data.orders.length, data.orders);
 
-            $scope.orders = data.orders;
+                $scope.orders = data.orders;
 
-            if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
-                $scope.orders = $filter('orderBy')($scope.orders, 'arriveDate', false); $scope.orderByDate = 'arriveDate';
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
-                $scope.orders = $filter('orderBy')($scope.orders, 'startDate', false); $scope.orderByDate = 'startDate';
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
-                $scope.orders = $filter('orderBy')($scope.orders, 'endDate', false); $scope.orderByDate = 'endDate';
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3]) {
-                $scope.orders = $filter('orderBy')($scope.orders, 'pickDate', false); $scope.orderByDate = 'pickDate';
-            }
-        })
-        .error(function (data) {
-            console.log('error', data);
-        })
+                if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'arriveDate', false); $scope.orderByDate = 'arriveDate';
+                } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'startDate', false); $scope.orderByDate = 'startDate';
+                } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'endDate', false); $scope.orderByDate = 'endDate';
+                } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'pickDate', false); $scope.orderByDate = 'pickDate';
+                }
+            })
+            .error(function (data) {
+                console.log('error', data);
+            })
 
         /*$scope.orders.forEach(function (order) {
 
@@ -2789,7 +2810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 31:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!

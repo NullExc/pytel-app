@@ -62,7 +62,7 @@
                                         Počet
                                     </th>
                                     <th ng-click="orderSort('sum')">
-                                        Spolu
+                                        Suma (€)
                                     </th>
                                     <th ng-click="orderSort('time')">
                                         Čas
@@ -94,7 +94,7 @@
                                         Počet
                                     </th>
                                     <th ng-click="workSort('sum')">
-                                        Spolu
+                                        Suma (€)
                                     </th>
                                     <th ng-click="workSort('time')">
                                         Čas
@@ -121,7 +121,7 @@
                             <h5>Zákazky</h5>
                         </li>
                         <li class="item collection-item avatar black-text" ng-repeat="order in orders">
-                            <div>
+                            <div ng-click="clickOrder(order.order._id)">
                                 <p class="title">
                                     {{order.order.description}}
                                 </p>
@@ -132,7 +132,7 @@
                                     €
                                 </span>
 
-                                <a href="/order-edit/{{order.order._id}}" class="btn-floating right hide-on-small-only brown lighten-1" style="margin-right: 20px;">
+                                <a href="/order-edit/{{order.order._id}}" class="btn-floating right hide-on-small-only green lighten-1" style="margin-right: 20px;">
                                     <i class="material-icons">edit</i>
                                 </a>
                                 <a href="/order/{{order.order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">

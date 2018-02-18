@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 157);
+/******/ 	return __webpack_require__(__webpack_require__.s = 158);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 157:
+/***/ 158:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -81,9 +81,15 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
 
     $scope.orders = window.orders;
 
+    $scope.totalSum = window.totalSum;
+
+    $scope.orderCount = window.orderCount;
+
     $scope.STATE = __WEBPACK_IMPORTED_MODULE_0__state_js__["default"];
 
     $scope.person = $scope.customer.person ? true : false;
+
+    console.log('created', $scope.customer.date);
 
     $scope.deleteCustomer = function () {
 

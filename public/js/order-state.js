@@ -71,8 +71,8 @@ $(document).ready(function () {
                 $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
             }
 
-            $(id).removeClass("teal");
-            $(id).removeClass("lighten-4");
+            $(id).removeClass("grey");
+            $(id).removeClass("lighten-2");
             $(id).addClass("green");
             $(id).addClass("lighten-1");
 
