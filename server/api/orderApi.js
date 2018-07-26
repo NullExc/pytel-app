@@ -66,6 +66,16 @@ module.exports = {
             })
     },
 
+    print(req, res, next) {
+        Order.getDetail(req.params.id, false, function (err, detail) {
+            if (err) {
+                return next(err);
+            } else {
+                return res.render('pages/order/order-print', { detail: detail });
+            }
+        })
+    },
+
     get(req, res, next) {
         Order.getDetail(req.params.id, false, function (err, detail) {
             if (err) {

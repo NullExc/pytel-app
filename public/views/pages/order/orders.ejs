@@ -51,7 +51,7 @@
                     <li class="collection-header light-blue darken-4 white-text">
                         <h5>Zákazky</h5>
                     </li>
-                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 5" pagination-id="orders"
+                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 20" pagination-id="orders"
                         ng-click="clickOrder(order._id)">
 
                         <p>
@@ -62,7 +62,7 @@
                         <span ng-if="orderByDate === 'endDate'">Ukončená : {{formatDate(order.endDate)}}</span>
                         <span ng-if="orderByDate === 'pickDate'">Vyzdvihnutá : {{formatDate(order.pickDate)}}</span>
                         <br>
-                        <span>{{order.contact.phone}}</span>
+                        <span>{{order.contact.customerName}}</span>
 
                         <div class="secondary-content">
                             <span ng-if="order.state === 'arrived'" class="new badge grey" data-badge-caption="">Prijatá</span>
@@ -81,7 +81,7 @@
 
                     </li>
                 </ul>
-                <dir-pagination-controls pagination-id="orders" max-size="5" direction-links="true" boundary-links="true">
+                <dir-pagination-controls pagination-id="orders" max-size="20" direction-links="true" boundary-links="true">
                 </dir-pagination-controls>
             </div>
         </div>

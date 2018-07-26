@@ -43,7 +43,7 @@ db.once('open', function () {
 });
 
 app.set('secret', process.env.SECRET);
-app.set('port', (5000));
+app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -155,6 +155,7 @@ app.get('/order-new', orderApi.new);
 app.get('/order-edit/:id', orderApi.edit);
 app.get('/order/all', orderApi.getAll);
 app.get('/order/detail/:id', orderApi.getDetail);
+app.get('/order/print/:id', orderApi.print);
 
 app.post('/order', orderApi.create);
 app.put('/order/:id', orderApi.update);

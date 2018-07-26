@@ -552,9 +552,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#show-person').prop('checked', true);
-    $("#person-form").show();
-    $("#company-form").hide();
+    $('#show-company').prop('checked', true);
+    $("#person-form").hide();
+    $("#company-form").show();
 
     $("#create, #update").click(function (e) {
 

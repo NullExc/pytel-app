@@ -27,6 +27,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     $scope.sale = edit ? order.sale : false;
 
+    $scope.changedState = false;
+
     var selectedCustomer = edit ? customer : null;
 
     var selectedWork = edit ? workType : null;
@@ -486,7 +488,18 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#customer-search").val(null);
                 fillCustomerData();
             },
-            minLength: 3, // The minimum length of the input for the autocomplete to start. Default: 1.
+            minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+            sortFunction: function (a, b, inputString) {
+
+                //return a.indexOf(inputString) - b.indexOf(inputString);
+
+                if (a.indexOf(inputString) > b.indexOf(inputString)) {
+                    return -1;
+                } else if (a.indexOf(inputString) < b.indexOf(inputString)) {
+                    return 1;
+                }
+                return 0;
+            }
         });
 
         $('#load-photo').click(function () {
@@ -563,9 +576,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 price = price.replace(/,/g, '.');
 
+                console.log("cena", price);
+
                 order.price = Number(price);
 
-                if (!order.price) {
+                if (!order.price && order.price > 0) {
                     $("#price").addClass('invalid');
 
                     $('#price-label').addClass('active');
@@ -581,13 +596,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             }
 
-            if (!order.description || !selectedCustomer || !order.price) {
+            if (!order.description || !selectedCustomer || (!order.price && order.price > 0)) {
                 return;
             }
 
-            if (email || phone) {
-                order.contact = {};
-            }
+            order.contact = {};
+
+            order.contact.customerName = selectedCustomer.fullName;
+
             if (email) order.contact.email = email;
             if (phone) order.contact.phone = phone;
 
@@ -628,14 +644,17 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             //date.setUTCMonth(date.getMonth() + 1);
 
-            if (state === STATE.working) {
-                order.startDate = date;
-                //    order.startDate.
-            } else if (state === STATE.done) {
-                order.endDate = date;
-            } else if (state === STATE.pickUp) {
-                order.pickDate = date;
+            if (edit && $scope.changedState) {
+                if (state === STATE.working) {
+                    order.startDate = date;
+                    //    order.startDate.
+                } else if (state === STATE.done) {
+                    order.endDate = date;
+                } else if (state === STATE.pickUp) {
+                    order.pickDate = date;
+                }
             }
+
             order.photoUrl = picker.getPhotoUrl();
 
             var options = {
@@ -699,6 +718,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('.start-state').click(function () {
             console.log("start");
+            $scope.changedState = true;
             $('.start-state').removeClass('light-blue');
             $('.start-state').addClass('light-green');
             state = STATE.working;
@@ -706,6 +726,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('.end-state').click(function () {
             console.log("done");
+            $scope.changedState = true;
             $('.end-state').removeClass('light-blue');
             $('.end-state').addClass('light-green');
             state = STATE.done;
@@ -713,6 +734,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $('.pickup-state').click(function () {
             console.log("picked up");
+            $scope.changedState = true;
             $('.pickup-state').removeClass('light-blue');
             $('.pickup-state').addClass('light-green');
             state = STATE.pickUp;

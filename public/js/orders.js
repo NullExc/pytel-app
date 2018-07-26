@@ -8,6 +8,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     $scope.today = false;
 
+    
     $scope.orders;
 
     $scope.orderByDate = 'arriveDate';

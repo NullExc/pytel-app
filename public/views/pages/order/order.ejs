@@ -15,8 +15,8 @@
         </script>
         <script type="text/javascript" src="/dist/order.js"></script>
         <script type="text/javascript" src="/dist/order-state.js"></script>
-        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
-        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" media="all" />
 </head>
 
 <body ng-app="Order" ng-controller="OrderCtrl">
@@ -87,7 +87,7 @@
             </div>
 
 
-            <div class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+            <div id="informations" class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Informácie</h5>
                 </div>
@@ -121,7 +121,7 @@
                 </div>
                 <div class="col s12">
                     <div class="section">
-                        <h6 class="grey-text">Pracovné pomôcky</h6>
+                        <h6 class="grey-text">Príslušenstvo</h6>
                         <div class="divider"></div>
                         <p>{{order.facilities}}</p>
                     </div>
@@ -190,7 +190,7 @@
         </div>
 
         <div style="margin-bottom: 24px; height: 70px;">
-            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px;">
+            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px; margin-bottom:70px;">
                 <a class="btn-floating btn-large light-blue darken-4">
                     <i class="material-icons">menu</i>
                 </a>
@@ -211,6 +211,11 @@
                         </a>
                     </li>
                 </ul>
+            </div>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large light-blue darken-4" ng-click="printOrder()">
+                    <i id="print" class="large material-icons">print</i>
+                </a>
             </div>
         </div>
 

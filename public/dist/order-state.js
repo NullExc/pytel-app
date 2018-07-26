@@ -16350,25 +16350,28 @@ $(document).ready(function () {
 
     if (order) {
 
-        var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate);
+        var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate).add(1, "hours");
 
         var id;
 
         $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
 
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
-            $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
+
+            console.log("start date", order.startDate, order.state);
+
+            $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
         }
 
         if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
             $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
+            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
         if (order.sale) {
 
-            $("#sale-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+            $("#sale-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
 
         } else {
 
@@ -16412,7 +16415,7 @@ $(document).ready(function () {
                 $('.end-state').addClass('disabled');
                 $('.pickup-state').addClass('disabled');
 
-                $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+                $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
             }
 
             $(id).removeClass("grey");

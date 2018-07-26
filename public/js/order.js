@@ -16,6 +16,8 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
     $scope.sale = $scope.order.sale;
 
+    $scope.date = new Date();
+
     console.log('sale', $scope.sale, $scope.order.pickDate);
 
     if ($scope.order && $scope.order.photoUrl) {
@@ -33,7 +35,7 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
         }, function error(err) {
             console.log(err);
         })
-            
+
     }
 
     $scope.editOrder = function () {
@@ -44,6 +46,44 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
     $scope.showCustomer = function () {
         location.href = '/customer/' + $scope.customer._id;
+    }
+
+    $scope.printOrder = function () {
+
+        var pathname = window.location.pathname.split("/");
+
+        var id = pathname[pathname.length - 1];
+
+        //var printWin = window.open(location.origin + "/order/print/" + id);
+
+        if (!$scope.printFrame) {
+
+            $scope.printFrame = document.createElement("iframe");
+            $scope.printFrame.src = location.origin + "/order/print/" + id;
+            $scope.printFrame.name = "print_frame";
+            $scope.printFrame.style.display = "none";
+
+            window.document.body.appendChild($scope.printFrame);
+
+        }
+
+        if (document["print_frame"]) {
+
+            document["print_frame"].print();
+
+        } else if (window["print_frame"]) {
+
+            window["print_frame"].print();
+
+        }
+
+        /*setTimeout(function () {
+
+            console.log("printing ...");
+
+            printWin.print();
+        }, 1000);*/
+
     }
 
 })

@@ -6,25 +6,28 @@ $(document).ready(function () {
 
     if (order) {
 
-        var arriveDate = moment.utc(order.arriveDate);
+        var arriveDate = moment.utc(order.arriveDate).add(1, "hours");
 
         var id;
 
         $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
 
         if (order.state === STATE.working || order.state === STATE.done || order.state === STATE.pickUp) {
-            $("#start-date").text(moment.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
+
+            console.log("start date", order.startDate, order.state);
+
+            $("#start-date").text(moment.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
         }
 
         if (order.state === STATE.done || order.state === STATE.pickUp) {
             $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(moment.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
+            $("#end-date").text(moment.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
             $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
         }
 
         if (order.sale) {
 
-            $("#sale-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+            $("#sale-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
 
         } else {
 
@@ -68,7 +71,7 @@ $(document).ready(function () {
                 $('.end-state').addClass('disabled');
                 $('.pickup-state').addClass('disabled');
 
-                $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
+                $("#pickup-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
             }
 
             $(id).removeClass("grey");

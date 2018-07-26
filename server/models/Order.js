@@ -47,6 +47,9 @@ var OrderSchema = new mongoose.Schema({
         },
         phone: {
             type: String
+        },
+        customerName: {
+            type: String
         }
     },
     address: {
