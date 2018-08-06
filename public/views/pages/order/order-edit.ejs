@@ -9,11 +9,13 @@
             var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
             var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
             var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+            var facilities = JSON.parse('<%- JSON.stringify(result.form.facilities) %>');
 
             var order = JSON.parse('<%- JSON.stringify(result.detail.order) %>');
             var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
             var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
             var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
+            var customerFacilities = JSON.parse('<%- JSON.stringify(result.detail.customerFacilities) %>');
 
             var edit = true;
         </script>

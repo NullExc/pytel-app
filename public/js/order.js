@@ -3,7 +3,6 @@ import http from '../lib/http.js';
 import googleAuth from '../lib/google-auth';
 import calendar from '../lib/calendar.js';
 import picker from '../lib/picker.js';
-import $ from 'jquery';
 
 var app = angular.module('Order', ['ui.materialize']);
 
@@ -76,15 +75,27 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
             window["print_frame"].print();
 
         }
-
-        /*setTimeout(function () {
-
-            console.log("printing ...");
-
-            printWin.print();
-        }, 1000);*/
-
     }
+
+   $(document).ready(function () {
+
+        console.log("jquery loaded", facilities);
+
+        var data = [];
+
+        facilities.forEach(function (facility) {
+            data.push({ tag: facility.name });
+        })
+
+        $('.chips').chips();
+
+        $('.chips-initial').chips({
+            data: data,
+          });
+
+          $('#facility-chips input').remove(); 
+          $('#facility-chips .close').remove(); 
+    })
 
 })
 

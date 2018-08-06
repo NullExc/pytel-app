@@ -1,4 +1,13 @@
 
+[type="radio"]:checked + span::after, [type="radio"].with-gap:checked + span::after {
+	background-color: #01579b;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever)::after {
+	border: 2px solid #01579b;
+	background-color: #01579b;
+}
+
 .tabs .indicator {
     background-color: #01579b;
 }
@@ -20,6 +29,11 @@
    border-bottom: 1px solid #03a9f4 !important;
    box-shadow: 0 1px 0 0 #03a9f4 !important
  }
+
+#facility-chips input:focus {
+  border-bottom: 1px solid white !important;
+  box-shadow: 0 1px 0 0 white !important
+}
 
  .collection .collection-item.avatar {
     padding-left: 20px;

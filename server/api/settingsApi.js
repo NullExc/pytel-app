@@ -1,5 +1,6 @@
 var OrderType = require('../models/OrderType.js');
 var WorkType = require('../models/WorkType');
+var Facility = require('../models/Facility');
 
 module.exports.get = function (req, res, next) {
 
@@ -17,8 +18,14 @@ module.exports.get = function (req, res, next) {
 
             settings.workTypes = workTypes;
 
-            res.render('pages/settings/settings', { settings: settings });
+            Facility.find({}, function (err, facilities) {
 
+                if (err) return next(err);
+
+                settings.facilities = facilities;
+
+                res.render('pages/settings/settings', { settings: settings });
+            })
         })
     })
 }

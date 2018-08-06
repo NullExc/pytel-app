@@ -16,6 +16,9 @@ var OrderSchema = new mongoose.Schema({
     orderType: {
         type: mongoose.Schema.Types.ObjectId
     },
+    facilitiesArray: {
+        type: [mongoose.Schema.Types.ObjectId]
+    },
     price: {
         type: Number
     },
@@ -114,7 +117,18 @@ OrderSchema.statics.getFormData = function (callback) {
         })
     }
 
-    var prepareData = async.compose(orderTypes, workTypes, customerNames);
+    function facilities(result, callback) {
+        mongoose.model('Facility').find({}, function (err, facilities) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["facilities"] = facilities;
+                callback(null, result);
+            }
+        })
+    }
+
+    var prepareData = async.compose(orderTypes, workTypes, customerNames, facilities);
     prepareData({}, function (err, result) {
         callback(err, result);
     })
@@ -179,6 +193,22 @@ OrderSchema.statics.getDetail = function (id, skipCustomers, callback) {
         })
     }
 
+    function getFacilities(result, callback) {
+        if (!result.facilities) {
+            result["customerFacilities"] = [];
+            return callback(null, result);
+        }
+        mongoose.model('Facility').find({ _id: { $in: result.facilities }}, function (err, facilities) {
+            if (err) {
+                callback(err, null);
+            } else {
+                result["customerFacilities"] = facilities;
+                callback(null, result);
+            }
+        })
+
+    }
+
     Order.findById(id, function (err, order) {
         if (err) {
             return callback(err);
@@ -191,11 +221,12 @@ OrderSchema.statics.getDetail = function (id, skipCustomers, callback) {
             if (order.customerId) data.customerId = order.customerId;
             if (order.workType) data.workType = order.workType;
             if (order.orderType) data.orderType = order.orderType;
+            if (order.facilitiesArray) data.facilities = order.facilitiesArray;
 
             var detail;
 
-            if (!skipCustomers) detail = async.compose(getOrderType, getWorkType, getCustomers, getCustomer);
-            else detail = async.compose(getOrderType, getWorkType, getCustomer);
+            if (!skipCustomers) detail = async.compose(getFacilities, getOrderType, getWorkType, getCustomers, getCustomer);
+            else detail = async.compose(getFacilities, getOrderType, getWorkType, getCustomer);
 
             detail(data, function (err, result) {
                 result["order"] = order;

@@ -21,9 +21,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     $scope.newType = false;
 
+    $scope.newFacility = false;
+
     $scope.newWorkName = '';
 
     $scope.newOrderName = '';
+
+    $scope.newFacilityName = '';
 
     $scope.sale = edit ? order.sale : false;
 
@@ -35,8 +39,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     var selectedOrder = edit ? orderType : null;
 
+    var selectedFacilities = edit ? customerFacilities: [];
+
+    console.log("selectedFacilities", selectedFacilities);
+
     $scope.pickCustomer = function (event) {
         var id = event.target.id;
+        console.log("customer id", id);
         for (var i = 0; i < $scope.customers.length; i++) {
             if (id === $scope.customers[i]._id) {
                 selectedCustomer = $scope.customers[i];
@@ -60,6 +69,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             createOrderType();
         } else {
             $scope.newType = true;
+        }
+    }
+
+    $scope.facilityInput = function () {
+        if ($scope.newFacility === true) {
+            createFacility();
+        } else {
+            $scope.newFacility = true;
         }
     }
 
@@ -101,7 +118,35 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
     }
 
+    var createFacility = function () {
+
+        preloader.open('Vytvára sa príslušenstvo ...');
+
+        $http.post('/facility', {
+            name: $scope.newFacilityName
+        }).success(function (response) {
+
+            $scope.newFacility = false;
+           
+            console.log(response);
+
+            var instance = M.Chips.getInstance($("#facility-chips"));
+
+            instance.addChip({ tag: response.name })
+
+            selectedFacilities.push(response);
+
+            preloader.close();
+
+        }).error(function (error) {
+            console.log(error);
+            preloader.close();
+        })
+    }
+
     var fillCustomerData = function () {
+
+        $(".customer-input").val("");
 
         var doneLabel = $("#done-customer");
         doneLabel.text(selectedCustomer.fullName);
@@ -202,6 +247,19 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
 
     $(document).ready(function () {
+
+        $("#price").focus(function () {
+            $(this).val('');
+        })
+
+        $("#price").focusout(function () {
+
+            if (!$(this).val() || $(this).val().length < 1) {
+                console.log("no value for price");
+                $(this).val(0);
+            }
+
+        })
 
         preloader.open('Pripravujú sa dáta ...');
 
@@ -308,61 +366,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             prevText: '&lt; Predchádzajúci',
             nextText: 'Nasledujúci &gt;',
             currentText: 'Dnes',
-            monthNames: [
-                'Január',
-                'Február',
-                'Marec',
-                'Apríl',
-                'Máj',
-                'Jún',
-                'Júl',
-                'August',
-                'September',
-                'Október',
-                'November',
-                'December'
-            ],
-            monthNamesShort: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'Máj',
-                'Jún',
-                'Júl',
-                'Aug',
-                'Sep',
-                'Okt',
-                'Nov',
-                'Dec'
-            ],
-            dayNames: [
-                'Nedeľa',
-                'Pondelok',
-                'Utorok',
-                'Streda',
-                'Štvrtok',
-                'Piatok',
-                'Sobota'
-            ],
-            dayNamesShort: [
-                'Ned',
-                'Pon',
-                'Uto',
-                'Str',
-                'Štv',
-                'Pia',
-                'Sob'
-            ],
-            dayNamesMin: [
-                'Ne',
-                'Po',
-                'Ut',
-                'St',
-                'Št',
-                'Pia',
-                'So'
-            ],
+            monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November','December' ],
+            monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
+            dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
+            dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob'],
+            dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
             dateFormat: 'd.m.yy',
             firstDay: 0,
             isRTL: false
@@ -412,10 +420,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
         });
 
-        var names = {};
-        var workNames = {};
-        var orderNames = {};
-
         var state = STATE.arrived;
 
         var date = new Date();
@@ -433,6 +437,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         // $("#time").val((utcDate.getHours() >= 10 ? utcDate.getHours() + 1 : ('0' + utcDate.getHours()))
         //     + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
 
+        var names = {};
+        var workNames = {};
+        var orderNames = {};
+        var facilityNames = {};
+        var initialFacilityNames = [];
+
         customers.forEach(function (customer) {
             names[customer.fullName] = null;
         })
@@ -443,6 +453,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         orderTypes.forEach(function (ordertype) {
             orderNames[ordertype.name] = null;
+        })
+
+        facilities.forEach(function (facility) {
+            facilityNames[facility.name] = null;
+        })
+
+        selectedFacilities.forEach(function (facility) {
+            initialFacilityNames.push({ tag: facility.name });
         })
 
         $('#drop-up').click(function (event) {
@@ -459,7 +477,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     }
                 })
                 console.info(JSON.stringify(selectedWork));
-            }
+            },
+            minLength: 0
         })
 
         $('#order').autocomplete({
@@ -471,16 +490,20 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     }
                 })
                 console.info(JSON.stringify(selectedOrder));
-            }
+            },
+            minLength: 0
         })
 
         $('#customer-search').autocomplete({
             data: names,
             limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
             onAutocomplete: function (val) {
+                
                 for (var i = 0; i < customers.length; i++) {
+                    console.log("val", val, customers[i].fullName, val.length, customers[i].fullName.length);
                     if (val === customers[i].fullName) {
                         selectedCustomer = customers[i];
+                        console.log("auto found", selectedCustomer);
                         break;
                     }
                 }
@@ -501,6 +524,54 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 return 0;
             }
         });
+
+        console.log("facilities", facilities);
+
+        //$('.chips').chips();
+
+        $('.chips-autocomplete').chips({
+            placeholder: 'Príslušenstvo',
+            autocompleteOptions: {
+              data: facilityNames,
+              limit: Infinity,
+              minLength: 1,
+              onAutocomplete: function (val) {
+                  console.log("find facility", val);
+              }
+            },
+            onChipAdd: function (chips, elem) {
+                console.log("Chips was added", chips[0].M_Chips.chipsData);
+
+                var chipsData = chips[0].M_Chips.chipsData;
+
+                selectedFacilities = [];
+
+                chipsData.forEach(function (chip) {
+                    facilities.forEach(function (facility) {
+                        if (chip.tag == facility.name) {
+                            selectedFacilities.push(facility);
+                        }
+                    })
+                })
+            },
+            onChipDelete: function (chips, elem) {
+
+                console.log("Chips was deleted", chips[0].M_Chips.chipsData);
+
+                var chipsData = chips[0].M_Chips.chipsData;
+
+                selectedFacilities = [];
+
+                chipsData.forEach(function (chip) {
+                    facilities.forEach(function (facility) {
+                        if (chip.tag == facility.name) {
+                            selectedFacilities.push(facility);
+                        }
+                    })
+                })
+            },
+            data: initialFacilityNames
+          });
 
         $('#load-photo').click(function () {
 
@@ -636,6 +707,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             if (selectedOrder) order.orderType = selectedOrder._id;
             if (selectedWork) order.workType = selectedWork._id;
 
+            order.facilitiesArray = [];
+
+            selectedFacilities.forEach(function (selectedFacility) {
+                order.facilitiesArray.push(selectedFacility._id);
+            })
+
+            console.log("saving facilities", order.facilitiesArray);
+
             order.state = state;
 
             var help = new Date();
@@ -706,11 +785,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 if (err) console.log("error", err);
                 else if (response) {
                     if (response.data.id) {
-                        location.href = "/order/" + response.data.id;
+                       // location.href = "/order/" + response.data.id;
                     } else {
                         var pathname = window.location.pathname.split("/");
                         var id = pathname[pathname.length - 1];
-                        location.href = "/order/" + id;
+                      //  location.href = "/order/" + id;
                     }
                 }
             })

@@ -38,6 +38,7 @@
 
       </div>
 
+      <!-- order type collection -->
       <div class="col s12 l8 offset-l2 panel z-depth-4" style="margin-top: 30px;">
 
         <ul id="list" class="collection with-header">
@@ -77,6 +78,7 @@
 
       </div>
 
+      <!-- work types collection -->
       <div class="col s12 l8 offset-l2 panel z-depth-4" style="margin-top: 30px;">
 
         <ul id="list" class="collection with-header">
@@ -114,6 +116,47 @@
           </div>
         </div>
       </div>
+
+      <!-- facilities collection -->
+
+      <div class="col s12 l8 offset-l2 panel z-depth-4" style="margin-top: 30px;">
+
+        <ul id="list" class="collection with-header">
+          <li class="collection-header light-blue darken-4 white-text">
+            <h5>Príslušenstvo</h5>
+          </li>
+          <li class="collection-item  black-text" dir-paginate="facility in facilities | itemsPerPage:5" pagination-id="facilities">
+
+            <div>
+              {{facility.name}}
+              <a href="#!" class="secondary-content" style="margin-right: 20px;">
+                <i ng-click="pickFacility(facility.name)" class="material-icons modal-trigger red-text" href="#delete-facility-modal">delete</i>
+              </a>
+              <a href="#!" class="secondary-content">
+                <i ng-click="pickFacility(facility.name)" class="material-icons modal-trigger" href="#edit-facility-modal" style="margin-right: 15px;">edit</i>
+              </a>
+            </div>
+
+          </li>
+        </ul>
+        <dir-pagination-controls pagination-id="facilities" max-size="5" direction-links="true" boundary-links="true">
+        </dir-pagination-controls>
+
+        <div class="input-field col s12" ng-class="(newFacility === true)? 'z-depth-4' : ''" style="margin-bottom: 20px;">
+          <div class="col s1" style="margin-top: 10px;">
+            <a ng-show="!newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix">
+              <i class="material-icons">add</i>
+            </a>
+            <a ng-show="newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newFacilityName.length < 1) ? 'disabled' : ''">
+              <i class="material-icons">save</i>
+            </a>
+          </div>
+          <div class="col l11 s9 offset-s2">
+            <input ng-model="newFacilityName" ng-disabled="!newFacility" id="new-type" class="order-input" type="text">
+          </div>
+        </div>
+      </div>
+      
     </div>
 
     <div style="height: 45%;" id="edit-order-modal" class="modal">
@@ -164,6 +207,30 @@
       </div>
     </div>
 
+    <div style="height: 45%;" id="edit-facility-modal" class="modal">
+      <div style="margin: 20px;">
+        <h5>Editovať príslušenstvo</h5>
+        <div class="input-field" style="margin-top: 20px;">
+          <input id="edit-facility" type="text">
+        </div>
+      </div>
+      <div style="float: right;">
+        <a ng-click="editFacility()" class="modal-action waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
+    </div>
+
+    <div style="height: 45%;" id="delete-facility-modal" class="modal">
+      <div style="margin: 20px;">
+        <h5>Vymazať príslušenstvo</h5>
+        <p>Potvrdením natrvalo vymažete príslušenstvo zo systému.</p>
+      </div>
+      <div style="float: right;">
+        <a id="delete-facility" ng-click="deleteFacility()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+        <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+      </div>
+    </div>
+
     <script>
       $('.modal').modal();
 
@@ -177,12 +244,18 @@
         $("#edit-work-modal").modal('close');
       }
 
+      var closeFacilityModal = function () {
+
+        $("#edit-facility-modal").modal('close');
+      }
+
     </script>
 
     <script src="https://apis.google.com/js/api.js"></script>
     <script type="text/javascript">
       var orderTypes = JSON.parse('<%- JSON.stringify(settings.orderTypes) %>');
       var workTypes = JSON.parse('<%- JSON.stringify(settings.workTypes) %>');
+      var facilities = JSON.parse('<%- JSON.stringify(settings.facilities) %>');
     </script>
     <script type="text/javascript" src="/dist/settings.js"></script>
 </body>

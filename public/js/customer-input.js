@@ -122,7 +122,15 @@ $(document).ready(function () {
 
             data.person = person;
 
-            data.fullName = person.firstName + " " + person.lastName;
+            if (person.firstName && person.firstName.length > 0 && person.lastName && person.lastName) {
+                data.fullName = person.firstName + " " + person.lastName;
+
+            } else if ((person.firstName && person.firstName.length > 0) && !(person.lastName && person.lastName)) {
+                data.fullName = person.firstName;
+
+            } else if (!(person.firstName && person.firstName.length > 0) && (person.lastName && person.lastName)) {
+                data.fullName = person.lastName;
+            }
 
             data.search = person.lastName;
 

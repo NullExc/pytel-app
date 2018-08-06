@@ -10,6 +10,7 @@
             var customer = JSON.parse('<%- JSON.stringify(detail.customer) %>');
             var workType = JSON.parse('<%- JSON.stringify(detail.workType) %>');
             var orderType = JSON.parse('<%- JSON.stringify(detail.orderType) %>');
+            var facilities = JSON.parse('<%- JSON.stringify(detail.customerFacilities) %>');
 
             var edit = true;
         </script>
@@ -123,11 +124,13 @@
                     <div class="section">
                         <h6 class="grey-text">Príslušenstvo</h6>
                         <div class="divider"></div>
-                        <p>{{order.facilities}}</p>
+                        <div id="facility-chips" class="chips chips-initial" style="border: 0;">
+
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col s12 l6 m8 offset-l3 offset-m2 panel z-depth-4">
+            <div class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
                 <div class="col s12">
                     <h5>Zákazník</h5>
                 </div>
@@ -138,7 +141,7 @@
                         <p>{{customer.fullName}}</p>
                     </div>
                 </div>
-                <div class="col s6">
+                <div class="col s12">
                     <div class="section">
                         <h6 class="grey-text">Mobil</h6>
                         <div class="divider"></div>

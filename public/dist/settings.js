@@ -232,21 +232,31 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
     $scope.workTypes = window.workTypes;
 
+    $scope.facilities = window.facilities;
+
     $scope.selectWorkType;
 
     $scope.selectOrderType;
+
+    $scope.selectFacility;
 
     $scope.newWork = false;
 
     $scope.newType = false;
 
+    $scope.newFacility = false;
+
     $scope.newWorkName = '';
 
     $scope.newOrderName = '';
 
+    $scope.newFacilityName = '';
+
     $scope.orderTypes = $filter('orderBy')($scope.orderTypes, 'name', false);
 
     $scope.workTypes = $filter('orderBy')($scope.workTypes, 'name', false);
+
+    $scope.facilities = $filter('orderBy')($scope.facilities, 'name', false);
 
     $scope.googleLogin = function () {
 
@@ -305,15 +315,32 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
         $http.delete('/ordertype/' + id).then(function success(data) {
             console.log(data);
-
             if (index > -1) {
                 $scope.orderTypes.splice(index, 1);
             }
-
         }, function error(err) {
             console.log(err);
         })
+    }
 
+    $scope.pickFacility = function (name) {
+        getFacility(name);
+    }
+
+    $scope.deleteFacility = function () {
+
+        var id = $scope.selectFacility._id;
+
+        var index = $scope.facilities.indexOf($scope.selectFacility);
+
+        $http.delete('/facility/' + id).then(function success(data) {
+            console.log(data);
+            if (index > -1) {
+                $scope.facilities.splice(index, 1);
+            }
+        }, function error(err) {
+            console.log(err);
+        })
     }
 
     var getOrderType = function (name) {
@@ -352,6 +379,24 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
         return result;
     }
 
+    var getFacility = function (name) {
+        
+        var result;
+
+        $scope.facilities.forEach(function (facility) {
+
+            if (facility.name === name) {
+                $scope.selectFacility = facility;
+
+                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val(facility.name);
+
+                result = facility;
+            }
+
+        })
+        return result;
+    }
+
     $scope.workInput = function () {
         if ($scope.newWork === true) {
             createWorkType();
@@ -365,6 +410,14 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             createOrderType();
         } else {
             $scope.newType = true;
+        }
+    }
+
+    $scope.facilityInput = function () {
+        if ($scope.newFacility === true) {
+            createFacility();
+        } else {
+            $scope.newFacility = true;
         }
     }
 
@@ -404,6 +457,29 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             console.log(response);
 
             $scope.workTypes.push(response);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }).error(function (error) {
+            console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    var createFacility = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa príslušenstvo ...');
+
+        $http.post('/facility', {
+            name: $scope.newFacilityName
+        }).success(function (response) {
+
+            $scope.newFacility = false;
+           
+            console.log(response);
+
+            $scope.facilities.push(response);
 
             __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
 
@@ -458,6 +534,33 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             })
 
             window.closeWorkModal();
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }, function error(err) {
+            console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    $scope.editFacility = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa príslušenstvo ...');
+
+        var id = $scope.selectFacility._id;
+
+        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val();
+
+        $http.post('/facility/' + id, { name: name}).then(function success(data) {
+
+            $scope.facilities.forEach(function (facility) {
+                if (facility.name == $scope.selectFacility.name) {
+                    facility.name = name;
+                }
+            })
+
+            window.closeFacilityModal();
 
             __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
 

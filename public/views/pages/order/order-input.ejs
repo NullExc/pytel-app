@@ -8,7 +8,7 @@
             <div id="find-customer" class="input-field">
                 <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
                 <label for="customer-search" style="margin-top: 10px;">
-                    <i class="material-icons prefix">search</i>
+                    <i class="material-icons prefix" style="top: 0;">search</i>
                 </label>
             </div>
 
@@ -19,8 +19,8 @@
                     </div>
                     <div class="collapsible-body">
                         <ul class="collection" style="margin-top: 0px;">
-                            <li style="cursor:pointer; color:#01579b !important;" href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text" dir-paginate="customer in customers | itemsPerPage: 5"
-                                pagination-id="customers">
+                            <li style="cursor:pointer; color:#01579b !important;" href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text"
+                                dir-paginate="customer in customers | itemsPerPage: 5" pagination-id="customers">
                                 {{customer.fullName}}
                             </li>
                         </ul>
@@ -107,53 +107,72 @@
             <div class="col s12">
                 <form>
                     <p>
-                        <input type="checkbox" class="filled-in checkbox-blue" id="check-sale" ng-checked="sale" ng-model="sale" />
-                        <label for="check-sale">Predaj</label>
+                        <label>
+                            <input type="checkbox" class="filled-in checkbox-blue" id="check-sale" ng-checked="sale" ng-model="sale" />
+                            <span>Predaj</span>
+                        </label>
                     </p>
                 </form>
             </div>
 
-            <div class="input-field col s12">
-                <input id="work" class="order-input autocomplete" type="text" ng-disabled="sale">
-                <label id="work-label" for="work">
-                    <i class="material-icons">search</i>
-                    Typ práce
-                </label>
+
+            <div class="col s12">
+                <div class="card blue lighten-5">
+                    <div class="card-content gray-text">
+                        <span class="card-title">Typ práce</span>
+                        <div class="input-field">
+                            <input id="work" class="order-input autocomplete" type="text" ng-disabled="sale" style="margin: 0px;">
+                            <label id="work-label" for="work">
+                                <i class="material-icons">search</i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-action" style="padding: 0px 12px 1px 12px;">
+                        <div class="input-field" style="margin-top:0px;">
+                            <div style="margin-left: 0px;">
+                                <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''"
+                                    ng-disabled="sale">
+                                    <i class="material-icons">save</i>
+                                </a>
+                                <input style="padding-left: 5px;" ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text"
+                                    ng-disabled="sale">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-field col s12" ng-class="(newWork === true)? 'z-depth-4' : ''" style="margin-top:0px;">
-                <div style="margin-top: 10px;">
-                    <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
-                        <i class="material-icons">add</i>
-                    </a>
-                    <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''" ng-disabled="sale">
-                        <i class="material-icons">save</i>
-                    </a>
-                </div>
-                <div class="col l11 s9 offset-s2 offset-l1">
-                    <input ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text" ng-disabled="sale">
-                </div>
-            </div>
+            <div class="col s12" style="margin-bottom: 10px;">
+                <div class="card blue lighten-5">
+                    <div class="card-content gray-text">
+                        <span class="card-title">Typ zákazky</span>
+                        <div class="input-field">
+                            <input id="order" class="order-input autocomplete" type="text" ng-disabled="sale" style="margin: 0px;">
+                            <label id="order-label" for="order">
+                                <i class="material-icons">search</i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-action" style="padding: 0px 12px 1px 12px;">
+                        <div class="input-field" style="margin-top:0px;">
+                            <div style="margin-left: 0px;">
+                                <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''"
+                                    ng-disabled="sale">
+                                    <i class="material-icons">save</i>
+                                </a>
+                                <input style="padding-left: 5px;" ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text"
+                                    ng-disabled="sale">
+                            </div>
 
-            <div class="input-field col s12">
-                <input id="order" class="order-input autocomplete" type="text" ng-disabled="sale">
-                <label id="order-label" for="order">
-                    <i class="material-icons">search</i>
-                    Typ zákazky
-                </label>
-            </div>
-
-            <div class="input-field col s12 panel" ng-class="(newType === true)? 'z-depth-4' : ''" style="margin-top:0px;">
-                <div class="" style="margin-top: 20px;">
-                    <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
-                        <i class="material-icons">add</i>
-                    </a>
-                    <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''" ng-disabled="sale">
-                        <i class="material-icons">save</i>
-                    </a>
-                </div>
-                <div class="col l11 s9 offset-s2 offset-l1">
-                    <input ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text" ng-disabled="sale">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -174,13 +193,27 @@
             </div>
         </div>
         <div class="col s12 panel z-depth-4">
+            <div class="col s12">
+                <div id="facility-chips" class="chips chips-autocomplete">
+
+                </div>
+            </div>
+            <div class="input-field col s12">
+                <div>
+                    <a ng-show="!newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                        <i class="material-icons">add</i>
+                    </a>
+                    <a ng-show="newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newFacilityName.length < 1) ? 'disabled' : ''"
+                        ng-disabled="sale">
+                        <i class="material-icons">save</i>
+                    </a>
+                    <input placeholder="Vytvoriť príslušenstvo" style="padding-left: 5px;" ng-model="newFacilityName" ng-disabled="!newFacility" id="new-facility" class="order-input" type="text"
+                        ng-disabled="sale">
+                </div>
+            </div>
             <div class="input-field col s12">
                 <textarea id="notes" class="materialize-textarea" style="overflow-y: scroll;"></textarea>
                 <label id="notes-label" for="notes">Poznámky</label>
-            </div>
-            <div class="input-field col s12">
-                <textarea id="facilities" class="materialize-textarea" style="overflow-y: scroll;"></textarea>
-                <label id="facilities-label" for="facilities">Príslušenstvo</label>
             </div>
         </div>
     </div>

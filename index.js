@@ -15,6 +15,7 @@ var settingsApi = require('./server/api/settingsApi');
 var orderApi = require('./server/api/orderApi');
 var ordertypeApi = require('./server/api/ordertypeApi');
 var worktypeApi = require('./server/api/worktypeApi');
+var facilityApi = require('./server/api/facilityApi');
 var googleDriveApi = require('./server/google/googledrive');
 
 //boot mongoose models
@@ -23,6 +24,7 @@ require('./server/models/Order.js');
 require('./server/models/OrderType.js');
 require('./server/models/User.js');
 require('./server/models/WorkType.js');
+require('./server/models/Facility.js');
 
 var config = require('./config/config.js');
 
@@ -149,6 +151,12 @@ app.get('/ordertype/all', ordertypeApi.getAll);
 app.post('/ordertype', ordertypeApi.create);
 app.post('/ordertype/:id', ordertypeApi.edit);
 app.delete('/ordertype/:id', ordertypeApi.delete);
+
+//facility routes
+app.get('/facility/all', facilityApi.getAll);
+app.post('/facility', facilityApi.create);
+app.post('/facility/:id', facilityApi.edit);
+app.delete('/facility/:id', facilityApi.delete);
 
 //order routes
 app.get('/order-new', orderApi.new);

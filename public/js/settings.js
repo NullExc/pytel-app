@@ -11,21 +11,31 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
     $scope.workTypes = window.workTypes;
 
+    $scope.facilities = window.facilities;
+
     $scope.selectWorkType;
 
     $scope.selectOrderType;
+
+    $scope.selectFacility;
 
     $scope.newWork = false;
 
     $scope.newType = false;
 
+    $scope.newFacility = false;
+
     $scope.newWorkName = '';
 
     $scope.newOrderName = '';
 
+    $scope.newFacilityName = '';
+
     $scope.orderTypes = $filter('orderBy')($scope.orderTypes, 'name', false);
 
     $scope.workTypes = $filter('orderBy')($scope.workTypes, 'name', false);
+
+    $scope.facilities = $filter('orderBy')($scope.facilities, 'name', false);
 
     $scope.googleLogin = function () {
 
@@ -84,15 +94,32 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
         $http.delete('/ordertype/' + id).then(function success(data) {
             console.log(data);
-
             if (index > -1) {
                 $scope.orderTypes.splice(index, 1);
             }
-
         }, function error(err) {
             console.log(err);
         })
+    }
 
+    $scope.pickFacility = function (name) {
+        getFacility(name);
+    }
+
+    $scope.deleteFacility = function () {
+
+        var id = $scope.selectFacility._id;
+
+        var index = $scope.facilities.indexOf($scope.selectFacility);
+
+        $http.delete('/facility/' + id).then(function success(data) {
+            console.log(data);
+            if (index > -1) {
+                $scope.facilities.splice(index, 1);
+            }
+        }, function error(err) {
+            console.log(err);
+        })
     }
 
     var getOrderType = function (name) {
@@ -131,6 +158,24 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
         return result;
     }
 
+    var getFacility = function (name) {
+        
+        var result;
+
+        $scope.facilities.forEach(function (facility) {
+
+            if (facility.name === name) {
+                $scope.selectFacility = facility;
+
+                $("#edit-facility").val(facility.name);
+
+                result = facility;
+            }
+
+        })
+        return result;
+    }
+
     $scope.workInput = function () {
         if ($scope.newWork === true) {
             createWorkType();
@@ -144,6 +189,14 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             createOrderType();
         } else {
             $scope.newType = true;
+        }
+    }
+
+    $scope.facilityInput = function () {
+        if ($scope.newFacility === true) {
+            createFacility();
+        } else {
+            $scope.newFacility = true;
         }
     }
 
@@ -183,6 +236,29 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             console.log(response);
 
             $scope.workTypes.push(response);
+
+            preloader.close();
+
+        }).error(function (error) {
+            console.log(error);
+
+            preloader.close();
+        })
+    }
+
+    var createFacility = function () {
+
+        preloader.open('Vytvára sa príslušenstvo ...');
+
+        $http.post('/facility', {
+            name: $scope.newFacilityName
+        }).success(function (response) {
+
+            $scope.newFacility = false;
+           
+            console.log(response);
+
+            $scope.facilities.push(response);
 
             preloader.close();
 
@@ -237,6 +313,33 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
             })
 
             window.closeWorkModal();
+
+            preloader.close();
+
+        }, function error(err) {
+            console.log(err);
+
+            preloader.close();
+        })
+    }
+
+    $scope.editFacility = function () {
+
+        preloader.open('Edituje sa príslušenstvo ...');
+
+        var id = $scope.selectFacility._id;
+
+        var name = $("#edit-facility").val();
+
+        $http.post('/facility/' + id, { name: name}).then(function success(data) {
+
+            $scope.facilities.forEach(function (facility) {
+                if (facility.name == $scope.selectFacility.name) {
+                    facility.name = name;
+                }
+            })
+
+            window.closeFacilityModal();
 
             preloader.close();
 

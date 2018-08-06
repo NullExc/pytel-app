@@ -2,7 +2,7 @@ import $ from 'jquery';
 import picker from 'jquery-datepicker';
 import STATE from './state';
 
-var app = angular.module('Orders', ['angularUtils.directives.dirPagination', 'ui.materialize']);
+var app = angular.module('Orders', ['angularUtils.directives.dirPagination']);
 
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
@@ -80,68 +80,16 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             prevText: '&lt; Predchádzajúci',
             nextText: 'Nasledujúci &gt;',
             currentText: 'Dnes',
-            monthNames: [
-                'Január',
-                'Február',
-                'Marec',
-                'Apríl',
-                'Máj',
-                'Jún',
-                'Júl',
-                'August',
-                'September',
-                'Október',
-                'November',
-                'December'
-            ],
-            monthNamesShort: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'Máj',
-                'Jún',
-                'Júl',
-                'Aug',
-                'Sep',
-                'Okt',
-                'Nov',
-                'Dec'
-            ],
-            dayNames: [
-                'Nedeľa',
-                'Pondelok',
-                'Utorok',
-                'Streda',
-                'Štvrtok',
-                'Piatok',
-                'Sobota'
-            ],
-            dayNamesShort: [
-                'Ned',
-                'Pon',
-                'Uto',
-                'Str',
-                'Štv',
-                'Pia',
-                'Sob'
-            ],
-            dayNamesMin: [
-                'Ne',
-                'Po',
-                'Ut',
-                'St',
-                'Št',
-                'Pia',
-                'So'
-            ],
+            monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December' ],
+            monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
+            dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
+            dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob' ],
+            dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
             dateFormat: 'd.m.yy',
             firstDay: 0,
             isRTL: false
         };
         $.datepicker.setDefaults($.datepicker.regional['sk']);
-
-
 
         $("#from-label").addClass("active");
 
@@ -214,23 +162,17 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             dateType = "pickDate";
         }
 
-        //$scope.orders = window.orders;
-
         if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
             stateType = STATE.arrived;
-            //$scope.orders = $filter('filter')($scope.orders, { state: STATE.arrived });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
             stateType = STATE.working;
-            //$scope.orders = $filter('filter')($scope.orders, { state: STATE.working });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
             stateType = STATE.done;
-            //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.done });
 
         } else if ($scope.typeSelect.value == $scope.typeSelect.choices[4]) {
             stateType = STATE.pickUp;
-            //    $scope.orders = $filter('filter')($scope.orders, { state: STATE.pickUp });
 
         } else {
             stateType = "all";
@@ -274,54 +216,6 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             .error(function (data) {
                 console.log('error', data);
             })
-
-        /*$scope.orders.forEach(function (order) {
-
-            var orderDate;
-
-            var compare = false;
-
-            if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
-                orderDate = new Date(order.arriveDate);
-                compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1] && (order.state == STATE.working || order.state == STATE.done || order.state == STATE.pickUp)) {
-                orderDate = new Date(order.startDate);
-                compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2] && (order.state == STATE.done || order.state == STATE.pickUp)) {
-                orderDate = new Date(order.endDate);
-                compare = true;
-            } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3] && order.state == STATE.pickUp) {
-                orderDate = new Date(order.pickDate);
-                compare = true;
-            }
-
-            if (compare) {
-                var compareDate = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate() + 1);
-
-                if (compareDate.getTime() >= $scope.from.getTime() && compareDate.getTime() <= $scope.to.getTime()) {
-                    console.log('add item', order.description, compareDate);
-                    resultArray.push(order);
-                } else {
-                    console.log('remove', order.description, compareDate);
-                }
-            }
-        })*/
-
-        //$scope.orders = resultArray;
-
-        /*if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
-            $scope.orders = $filter('orderBy')($scope.orders, 'arriveDate', false); $scope.orderByDate = 'arriveDate';
-        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
-            $scope.orders = $filter('orderBy')($scope.orders, 'startDate', false); $scope.orderByDate = 'startDate';
-        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
-            $scope.orders = $filter('orderBy')($scope.orders, 'endDate', false); $scope.orderByDate = 'endDate';
-        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[3]) {
-            $scope.orders = $filter('orderBy')($scope.orders, 'pickDate', false); $scope.orderByDate = 'pickDate';
-        }
-
-        if (jquery) {
-            $scope.$apply();
-        }*/
     }
 
     filter(false);

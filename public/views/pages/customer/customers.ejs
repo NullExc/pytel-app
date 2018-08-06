@@ -18,17 +18,22 @@
 
             <div class="col s12 l8 offset-l2 panel z-depth-4">
                 <div class="col l3 s6">
-                    <div input-field>
-                        <select ng-model="sortSelect.value" ng-change="sortChange()" material-select>
-                            <option ng-repeat="option in sortSelect.choices">{{option}}</option>
+                    <div class="input-field">
+                        <select ng-model="sortSelect.value" ng-change="sortChange()">
+                                <option value="Vzostupne">Vzostupne</option>
+                                <option value="Zostupne">Zostupne</option>
                         </select>
                         <label>Podľa abecedy</label>
                     </div>
                 </div>
                 <div class="col l3 s6">
-                    <div input-field>
-                        <select ng-model="orderSelect.value" ng-change="orderChange()" material-select>
-                            <option ng-repeat="option in orderSelect.choices">{{option}}</option>
+                    <div class="input-field">
+                        <select ng-model="orderSelect.value" ng-change="orderChange()">
+                            <option value="Všetky">Všetky</option>
+                            <option value="Prijaté">Prijaté</option>
+                            <option value="Prebiehajúce">Prebiehajúce</option>
+                            <option value="Čakajúce na vyzdvihnutie">Čakajúce na vyzdvihnutie</option>
+                            <option value="Vyzdvihnuté">Vyzdvihnuté</option>
                         </select>
                         <label>Podľa zákazky</label>
                     </div>
@@ -52,7 +57,7 @@
                     <li class="collection-header light-blue darken-4 white-text">
                         <h5>Zákazníci</h5>
                     </li>
-                    <li class="item collection-item avatar black-text" dir-paginate="customer in customers | itemsPerPage:5" pagination-id="customers" ng-click="clickCustomer(customer._id)">
+                    <li class="item collection-item avatar black-text" dir-paginate="customer in customers | itemsPerPage:20" pagination-id="customers" ng-click="clickCustomer(customer._id)">
 
                         <div>
                             <p class="title">{{customer.fullName}}</p>
@@ -70,7 +75,7 @@
                         </div>
                     </li>
                 </ul>
-                <dir-pagination-controls pagination-id="customers" max-size="5" direction-links="true" boundary-links="true">
+                <dir-pagination-controls pagination-id="customers" max-size="20" direction-links="true" boundary-links="true">
                 </dir-pagination-controls>
             </div>
         </div>

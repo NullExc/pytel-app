@@ -30,3 +30,25 @@ th:hover {
 .selected:hover {
     background-color:#01579b
 }
+
+.collection .collection-item {
+    border-bottom: 3px solid #e0e0e0 !important;
+}
+
+.collection {
+    border: 3px solid #e0e0e0 !important;
+}
+
+.item-description {
+    font-size: 15px;
+}
+
+.item-state {
+    font-style: italic;
+}
+
+.item-customer {
+    font-weight: bold;
+    font-size: 18px;
+    font-style: italic;
+}

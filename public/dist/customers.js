@@ -73,17 +73,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(3);
 
 
-var app = angular.module('Customers', ['angularUtils.directives.dirPagination', 'ui.materialize']);
+var app = angular.module('Customers', ['angularUtils.directives.dirPagination']);
 
-app.controller('CustomersCtrl', function ($scope, $http, $filter) {
+app.controller('CustomersCtrl', [ "$scope", "$http", "$filter", function ($scope, $http, $filter) {
 
     $scope.customers = []; // = window.customers;
 
-
+    $scope.allCustomers = [];
 
     $scope.sortSelect = {
-        value: 'Vzostupne',
-        choices: ['Vzostupne', 'Zostupne']
+        value: "Vzostupne",
+        choices: [ 'Vzostupne', 'Zostupne']
     };
 
     $scope.orderSelect = {
@@ -119,9 +119,10 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
     $scope.orderChange = function () {
 
         if ($scope.orderSelect.value == $scope.orderSelect.choices[0]) {
-            $scope.customers = window.customers;
+            $scope.customers = $scope.allCustomers;
 
         } else if ($scope.orderSelect.value == $scope.orderSelect.choices[1]) {
+
             orderRequest(__WEBPACK_IMPORTED_MODULE_0__state__["default"].arrived);
 
         } else if ($scope.orderSelect.value == $scope.orderSelect.choices[2]) {
@@ -137,10 +138,9 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
     }
 
     var orderRequest = function (order) {
-        //console.log(order);
 
         $http.post('/customer/sort', {
-            customers: window.customers,
+            customers: $scope.allCustomers,
             order: order
         }).success(function (data) {
             //console.log('arrived', JSON.stringify(data));
@@ -178,6 +178,7 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
         $http.get('/customer')
             .success(function (data) {
                 $scope.customers = data.customers;
+                $scope.allCustomers = data.customers;
                 $scope.sortChange();
             })
 
@@ -211,7 +212,7 @@ app.controller('CustomersCtrl', function ($scope, $http, $filter) {
             })
     })
 
-})
+}])
 
 /***/ }),
 
