@@ -8,8 +8,25 @@
 	background-color: #01579b;
 }
 
+.indicator-item.active {
+  background-color: #01579b !important;
+}
+
+.indicator-item {
+  background-color: #90caf9  !important;
+}
+
 .tabs .indicator {
+    color: #01579b !important;
     background-color: #01579b;
+}
+
+.tabs .tab a {
+  color: #01579b !important;
+}
+
+.tabs .tab a:focus.active {
+  background-color: #e3f2fd 
 }
 
 .navbar-inverse {

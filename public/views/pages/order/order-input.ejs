@@ -1,7 +1,20 @@
 <div class="row">
     <div class="col s12 l6 offset-l3">
-        <div class="panel z-depth-4">
-            <h4>
+        <div class="row">
+            <div class="col s12">
+                <a id="load-photo" class="waves-effect waves-light btn light-blue darken-4">
+                    <i class="material-icons left">add_a_photo</i>nahrať
+                </a>
+            </div>
+            <div class="col s12">
+                <div id="photo-chips" class="chips chips-autocomplete">
+
+                </div>
+            </div>
+        </div>
+        <div id="assign-customer" class="row z-depth-4">
+
+            <h4 style="margin-top: 40px;">
                 <span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span>
             </h4>
 
@@ -207,8 +220,8 @@
                         ng-disabled="sale">
                         <i class="material-icons">save</i>
                     </a>
-                    <input placeholder="Vytvoriť príslušenstvo" style="padding-left: 5px;" ng-model="newFacilityName" ng-disabled="!newFacility" id="new-facility" class="order-input" type="text"
-                        ng-disabled="sale">
+                    <input placeholder="Vytvoriť príslušenstvo" style="padding-left: 5px;" ng-model="newFacilityName" ng-disabled="!newFacility"
+                        id="new-facility" class="order-input" type="text" ng-disabled="sale">
                 </div>
             </div>
             <div class="input-field col s12">
@@ -217,4 +230,10 @@
             </div>
         </div>
     </div>
+    <div id="photo-modal" class="modal" style="overflow-y: scroll;">
+        <div class="modal-content">
+            <img id="photo-pic" src="" style="max-width: 100%; max-height: 100%;">
+        </div>
+    </div>
+    <script>$('.modal').modal();</script>
 </div>

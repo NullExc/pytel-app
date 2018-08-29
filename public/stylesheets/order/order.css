@@ -49,6 +49,11 @@
     padding: 10px !important;
 }
 
+.carousel .carousel-item {
+    width: 400px;
+    height: 400px;
+}
+
 @media only screen and (max-device-width: 480px) {
 
     #price-div {

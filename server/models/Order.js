@@ -10,6 +10,12 @@ var OrderSchema = new mongoose.Schema({
     photoUrl: {
         type: String
     },
+    photoUrls: {
+        type: [{
+            tag: String,
+            url: String
+        }]
+    },
     workType: {
         type: mongoose.Schema.Types.ObjectId
     },

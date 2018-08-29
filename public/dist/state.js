@@ -74,7 +74,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     arrived: 'arrived',
     working: 'working',
     done: 'done',
-    pickUp: 'pickUp'
+    pickUp: 'pickUp',
+    all: 'all'
 });
 
 /***/ })

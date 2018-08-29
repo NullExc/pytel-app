@@ -1,14 +1,12 @@
 var Order = require('../models/Order');
-var OrderType = require('../models/OrderType');
-var WorkType = require('../models/WorkType');
 
 var calendar = require('../google/calendar.js');
 
-var async = require('async');
 var fs = require('fs');
-var readline = require('readline');
 
 var moment = require('moment');
+
+var userSettingsApi = require('./userSettingsApi');
 
 var auth;
 
@@ -87,13 +85,18 @@ module.exports = {
     },
 
     getAll(req, res, next) {
-        Order.find({})
+
+        var UserSettings = userSettingsApi.getUserSettings();
+
+        return res.render('pages/order/orders', { userSettings: UserSettings });
+
+        /*Order.find({})
             .then(orders => {
                 return res.render('pages/order/orders', { orders: orders });
             })
             .catch(err => {
                 return next(err);
-            })
+            })*/
     },
 
     edit(req, res, next) {

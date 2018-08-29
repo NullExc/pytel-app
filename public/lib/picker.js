@@ -5,14 +5,19 @@ var TOKEN;
 var photoUrl;
 var pickerApiLoaded = false;
 
+var photoUrls = [];
+
+var clientCallback;
+
 
 function setGoogleApi(api, token) {
     GoogleApi = api;
     TOKEN = token;
 }
 
-function loadPicker() {
+function loadPicker(callback) {
     console.log('waiting for callback');
+    clientCallback = callback;
     gapi.load('picker', { 'callback': onPickerApiLoad });
 }
 
@@ -44,12 +49,27 @@ function createPicker() {
 function pickerCallback(data) {
     if (data.action == google.picker.Action.PICKED) {
         var fileId = data.docs[0].id;
+
+        console.log("urls", data.docs);
+
         photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+
+        data.docs.forEach(function (doc) {
+            var id = doc.id;
+
+            photoUrls.push({
+                name: doc.name,
+                url: 'https://docs.google.com/uc?id=' + id
+            });
+        })
+
+        clientCallback(photoUrls);
+
     }
 }
 
-function getPhotoUrl() {
-    return photoUrl;
+function getPhotoUrls() {
+    return photoUrls;
 }
 
-export default { setGoogleApi, loadPicker, createPicker, getPhotoUrl }
+export default { setGoogleApi, loadPicker, createPicker, getPhotoUrls }

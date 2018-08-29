@@ -32,11 +32,6 @@
 
             <div class="row col s12 l6 m8 offset-l3 offset-m2">
 
-                <div class="col s12" style="margin-bottom: 20px;">
-                    <a class="show-photo light-blue darken-4 btn modal-trigger" href="#photo-modal">
-                        <i class="material-icons left">photo_camera</i>fotka</a>
-                </div>
-
                 <div class="state-body black-text">
                     <div class="col s12 m12 l6" ng-show="!sale">
                         <div id="arrive-body" class="card grey lighten-2 z-depth-3">
@@ -87,6 +82,21 @@
                 </div>
             </div>
 
+            <div ng-show="hasPhotos" id="photos-container" class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Fotky</h5>
+                </div>
+                <div class="carousel col s12 hide-on-small-only">
+                    <a class="carousel-item" href="#" ng-repeat="photo in order.photoUrls">
+                            <img ng-src="{{photo.url}}">
+                    </a>
+                </div>
+                <div class="col s12 hide-on-med-and-up">
+                    <div id="photo-chips" class="chips chips-autocomplete" style="border: 0;">
+
+                    </div>
+                </div>
+            </div>
 
             <div id="informations" class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
                 <div class="col s12">
@@ -233,7 +243,9 @@
             </div>
         </div>
 
-        <script>$('.modal').modal();</script>
+        <script>
+            $('.modal').modal();
+        </script>
 </body>
 
 </html>

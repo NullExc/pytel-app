@@ -71,7 +71,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(4);
 var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
@@ -377,33 +377,6 @@ module.exports = {
 /***/ }),
 
 /***/ 10:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ }),
-
-/***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -594,7 +567,7 @@ module.exports = __webpack_require__(14);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(4);
 var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
@@ -629,9 +602,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(10);
+axios.Cancel = __webpack_require__(9);
 axios.CancelToken = __webpack_require__(30);
-axios.isCancel = __webpack_require__(9);
+axios.isCancel = __webpack_require__(8);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -679,7 +652,7 @@ function isSlowBuffer (obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(10);
 
 
 var GoogleApi;
@@ -687,14 +660,19 @@ var TOKEN;
 var photoUrl;
 var pickerApiLoaded = false;
 
+var photoUrls = [];
+
+var clientCallback;
+
 
 function setGoogleApi(api, token) {
     GoogleApi = api;
     TOKEN = token;
 }
 
-function loadPicker() {
+function loadPicker(callback) {
     console.log('waiting for callback');
+    clientCallback = callback;
     gapi.load('picker', { 'callback': onPickerApiLoad });
 }
 
@@ -726,15 +704,30 @@ function createPicker() {
 function pickerCallback(data) {
     if (data.action == google.picker.Action.PICKED) {
         var fileId = data.docs[0].id;
+
+        console.log("urls", data.docs);
+
         photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+
+        data.docs.forEach(function (doc) {
+            var id = doc.id;
+
+            photoUrls.push({
+                name: doc.name,
+                url: 'https://docs.google.com/uc?id=' + id
+            });
+        })
+
+        clientCallback(photoUrls);
+
     }
 }
 
-function getPhotoUrl() {
-    return photoUrl;
+function getPhotoUrls() {
+    return photoUrls;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrl });
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, loadPicker, createPicker, getPhotoUrls });
 
 /***/ }),
 
@@ -839,8 +832,8 @@ module.exports = Axios;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(152);
 
 
@@ -881,7 +874,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(7);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -961,10 +954,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(6);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(6);
   }
   return adapter;
 }
@@ -1035,7 +1028,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
@@ -1409,7 +1402,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(27);
-var isCancel = __webpack_require__(9);
+var isCancel = __webpack_require__(8);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1569,7 +1562,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     arrived: 'arrived',
     working: 'working',
     done: 'done',
-    pickUp: 'pickUp'
+    pickUp: 'pickUp',
+    all: 'all'
 });
 
 /***/ }),
@@ -1580,7 +1574,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 
 
-var Cancel = __webpack_require__(10);
+var Cancel = __webpack_require__(9);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1674,11 +1668,11 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 32:
+/***/ 33:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
 
 
 
@@ -1720,15 +1714,28 @@ function insertEvent(order, customer) {
     request.execute(function (event) {
         console.log('Event created: ', event);
     });
-
-
 }
 
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent });
+var calendarSettings = {
+    closeText: 'Zavrieť',
+    prevText: '&lt; Predchádzajúci',
+    nextText: 'Nasledujúci &gt;',
+    currentText: 'Dnes',
+    monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December' ],
+    monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
+    dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
+    dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob' ],
+    dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
+    dateFormat: 'd.m.yy',
+    firstDay: 0,
+    isRTL: false
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent, calendarSettings });
 
 /***/ }),
 
-/***/ 5:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1747,7 +1754,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1938,7 +1945,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 7:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1949,7 +1956,7 @@ var settle = __webpack_require__(18);
 var buildURL = __webpack_require__(20);
 var parseHeaders = __webpack_require__(21);
 var isURLSameOrigin = __webpack_require__(22);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(7);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
@@ -2123,11 +2130,11 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2153,7 +2160,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 9:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2162,6 +2169,33 @@ module.exports = function createError(message, config, code, request, response) 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
+
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
 
 
 /***/ })

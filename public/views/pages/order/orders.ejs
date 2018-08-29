@@ -4,7 +4,7 @@
 <head>
     <% include ../../partials/header.ejs %>
         <script type="text/javascript">
-            var orders = JSON.parse('<%- JSON.stringify(orders) %>');
+            window.userSettings = JSON.parse('<%- JSON.stringify(userSettings) %>');
         </script>
         <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
         <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
@@ -12,12 +12,13 @@
 
 <body ng-app="Orders" ng-controller="OrdersCtrl">
     <% include ../../partials/nav-in.ejs %>
+    <% include ../../partials/loader.ejs %>
 
         <div class="row section">
             <div class="col l8 m8 s12 offset-l2 panel z-depth-4">
                 <div class="col s12 input-field">
-                    <select ng-model="typeSelect.value" ng-change="typeChange()">
-                        <option value="Všetky">Všetky</option>
+                    <select id="stateSelector" ng-model="typeSelect.value" ng-change="typeChange()">
+                        <option value="Všetky" selected>Všetky</option>
                         <option value="Prijaté">Prijaté</option>
                         <option value="Prebiehajúce">Prebiehajúce</option>
                         <option value="Čakajúce na vyzdvihnutie">Čakajúce na vyzdvihnutie</option>
@@ -26,7 +27,7 @@
                     <label>Filtrovať podľa zákazky.</label>
                 </div>
                 <div class="col s12 input-field">
-                    <select ng-model="dateSelect.value" ng-change="dateChange()">
+                    <select id="dateSelector" ng-model="dateSelect.value" ng-change="dateChange()">
                         <option value="Dátum prijatia">Dátum prijatia</option>
                         <option value="Dátum začatia">Dátum začatia</option>
                         <option value="Dátum ukončenia">Dátum ukončenia</option>
@@ -99,7 +100,12 @@
                 <i class="large material-icons">note_add</i>
             </a>
         </div>
-
+        <script>
+            window.updateSelectors = function () {
+                console.log("updating all selectors ....");
+                $('select').formSelect();
+            }
+        </script>
         <script type="text/javascript" src="/dist/orders.js"></script>
 </body>
 

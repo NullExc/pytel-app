@@ -16,6 +16,7 @@ var orderApi = require('./server/api/orderApi');
 var ordertypeApi = require('./server/api/ordertypeApi');
 var worktypeApi = require('./server/api/worktypeApi');
 var facilityApi = require('./server/api/facilityApi');
+var userSettingsApi = require('./server/api/userSettingsApi');
 var googleDriveApi = require('./server/google/googledrive');
 
 //boot mongoose models
@@ -36,6 +37,8 @@ mongoose.connect(config.url, {
 
   reconnectInterval: 10000
 });
+
+console.log("HOME UNIX", process.env.HOME);
 
 var db = mongoose.connection;
 
@@ -79,20 +82,11 @@ app.use(function (req, res, next) {
 
     jwt.verify(token, app.get('secret'), function (err, decoded) {
 
-      //console.log('tokenbbb', err);
-
       if (err) {
 
         if (req.path === '/') return next();
 
         return res.redirect('/');
-
-        //console.log('roken error', err);
-
-        /* var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
- 
-         error.status = 509;
-         return next(error);*/
 
       } else {
 
@@ -118,21 +112,12 @@ app.use(function (req, res, next) {
         }
       }
     });
-
   } else {
 
     if (req.path === '/') {
       return next();
     }
-
-    //var error = new Error("Vaše sedenie na stránke vypršalo. <a href='/'>Prihláste sa prosím.</a>");
-
-    //error.status = 509;
-
-    //return next(error);
-
     return res.redirect('/');
-
   }
 });
 
@@ -194,6 +179,7 @@ app.get('/customer/stats/:id', customerApi.stats);
 
 //settings routes
 app.get('/settings', settingsApi.get);
+app.post('/user-settings', userSettingsApi.saveUserSettings);
 
 app.get('/stats', function (req, res, next) {
   res.render('pages/stats');

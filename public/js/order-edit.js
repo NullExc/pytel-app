@@ -41,6 +41,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     var selectedFacilities = edit ? customerFacilities: [];
 
+    var selectedPhotoUrls = edit ? order.photoUrls: [];
+
+    if (!selectedPhotoUrls) selectedPhotoUrls = [];
+
     console.log("selectedFacilities", selectedFacilities);
 
     $scope.pickCustomer = function (event) {
@@ -132,7 +136,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             var instance = M.Chips.getInstance($("#facility-chips"));
 
-            instance.addChip({ tag: response.name })
+            instance.addChip({ tag: response.name });
 
             selectedFacilities.push(response);
 
@@ -361,20 +365,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         var utcDate = new Date();
 
-        $.datepicker.regional['sk'] = {
-            closeText: 'Zavrieť',
-            prevText: '&lt; Predchádzajúci',
-            nextText: 'Nasledujúci &gt;',
-            currentText: 'Dnes',
-            monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November','December' ],
-            monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
-            dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
-            dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob'],
-            dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
-            dateFormat: 'd.m.yy',
-            firstDay: 0,
-            isRTL: false
-        };
+        $.datepicker.regional['sk'] = calendar.calendarSettings;
+
         $.datepicker.setDefaults($.datepicker.regional['sk']);
 
         $("#date").datepicker({
@@ -384,8 +376,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 var dateParts = dateText.split('.');
 
                 var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]));
-
-                var resultArray = [];
 
                 utcDate.setFullYear(date.getFullYear());
 
@@ -527,9 +517,34 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         console.log("facilities", facilities);
 
+
+
         //$('.chips').chips();
 
-        $('.chips-autocomplete').chips({
+        $('#photo-chips').chips({
+            onChipSelect: function (chips, elem, selected) {
+
+                var chipsData = chips[0].M_Chips.chipsData;
+
+                var chipText = $(elem).clone().children().remove().end().text();
+
+                chipsData.forEach(function (chip) {
+                    if (chip.tag === chipText) {
+                        console.log("there is a match", chip);
+
+                        $('#photo-pic').attr('src', chip.url);
+
+                        var instance = M.Modal.getInstance($('#photo-modal'));
+
+                        instance.open();
+
+                    }
+                })
+            },
+            data: selectedPhotoUrls
+        })
+
+        $('#facility-chips').chips({
             placeholder: 'Príslušenstvo',
             autocompleteOptions: {
               data: facilityNames,
@@ -578,8 +593,20 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
 
                 if (GoogleApi && TOKEN) {
+
                     picker.setGoogleApi(GoogleApi, TOKEN);
-                    picker.loadPicker();
+
+                    picker.loadPicker(function (photos) {
+
+                        console.log("client callback", photos);
+
+                        var instance = M.Chips.getInstance($("#photo-chips"));
+
+                        photos.forEach(function (photo) {
+                            instance.addChip({ tag: photo.name, url: photo.url });
+                        })
+
+                    });
                 } else {
                     //$('#load-photo').addClass('disabled');
                 }
@@ -734,7 +761,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 }
             }
 
-            order.photoUrl = picker.getPhotoUrl();
+            var instance = M.Chips.getInstance($("#photo-chips"));
+
+            order.photoUrls = instance.chipsData;
+
+            console.log("before save", instance.chipsData)
 
             var options = {
                 url: '/order',
@@ -785,11 +816,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 if (err) console.log("error", err);
                 else if (response) {
                     if (response.data.id) {
-                       // location.href = "/order/" + response.data.id;
+                       location.href = "/order/" + response.data.id;
                     } else {
                         var pathname = window.location.pathname.split("/");
                         var id = pathname[pathname.length - 1];
-                      //  location.href = "/order/" + id;
+                        location.href = "/order/" + id;
                     }
                 }
             })

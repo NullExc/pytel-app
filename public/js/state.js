@@ -2,5 +2,6 @@ export default {
     arrived: 'arrived',
     working: 'working',
     done: 'done',
-    pickUp: 'pickUp'
+    pickUp: 'pickUp',
+    all: 'all'
 };

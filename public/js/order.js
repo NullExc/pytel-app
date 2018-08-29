@@ -15,15 +15,25 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
     $scope.sale = $scope.order.sale;
 
+    $scope.hasPhotos = false;
+
     $scope.date = new Date();
 
-    console.log('sale', $scope.sale, $scope.order.pickDate);
+    if (!$scope.order.photoUrls) {
+        $scope.order.photoUrls = [];
+    }
 
-    if ($scope.order && $scope.order.photoUrl) {
+    if ($scope.order.photoUrls.length > 0) {
+        $scope.hasPhotos = true;
+    }
+
+    console.log('photos', $scope.order.photoUrls);
+
+    /*if ($scope.order && $scope.order.photoUrl) {
         $('#photo-pic').attr('src', $scope.order.photoUrl);
     } else {
         $('.show-photo').addClass("disabled");
-    }
+    }*/
 
     $scope.deleteOrder = function () {
         var pathname = window.location.pathname.split("/");
@@ -81,6 +91,9 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
         console.log("jquery loaded", facilities);
 
+        $('.carousel').carousel({indicators: true});
+        $('.materialboxed').materialbox();
+
         var data = [];
 
         facilities.forEach(function (facility) {
@@ -89,10 +102,35 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
         $('.chips').chips();
 
-        $('.chips-initial').chips({
-            data: data,
+        $('#photo-chips').chips({
+            data: $scope.order.photoUrls,
+            onChipSelect: function (chips, elem, selected) {
+
+                var chipsData = chips[0].M_Chips.chipsData;
+
+                var chipText = $(elem).clone().children().remove().end().text();
+
+                chipsData.forEach(function (chip) {
+                    if (chip.tag === chipText) {
+                        console.log("there is a match", chip);
+
+                        $('#photo-pic').attr('src', chip.url);
+
+                        var instance = M.Modal.getInstance($('#photo-modal'));
+
+                        instance.open();
+
+                    }
+                })
+            }
           });
 
+        $('.chips-initial').chips({
+            data: data
+          });
+    
+          $('#photo-chips input').remove(); 
+          $('#photo-chips .close').remove();
           $('#facility-chips input').remove(); 
           $('#facility-chips .close').remove(); 
     })
