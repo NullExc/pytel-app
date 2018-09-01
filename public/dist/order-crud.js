@@ -71,7 +71,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(5);
 var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
@@ -377,146 +377,29 @@ module.exports = {
 /***/ }),
 
 /***/ 10:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
 
-var DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-];
-
-var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
-
-var PROJECT_ID = "594621902662";
-
-
-var TOKEN = null;
-var GoogleAuth;
-var GoogleApi;
-var isClientSigned = false;
-
-var clientCallback;
-
-function handleClientLoad(callback) {
-
-    if (GoogleApi && TOKEN) {
-        callback(GoogleApi, TOKEN);
-    } else {
-        //gapi.load('client:auth2', initClient);
-        gapi.load('client', initClient);
-    }
-
-    function initClient() {
-
-        GoogleApi = gapi;
-
-        if (gapi.client.init) {
-
-            /*gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-                        var token = authResult.access_token;
-                        return callback(GoogleApi, token);
-                    });
-
-            }*/
-
-            //return callback("auth0", "done123");
-
-         //   try {
-                gapi.client.init({
-                    discoveryDocs: DISCOVERY_DOCS,
-                    apiKey: API_KEY,
-                    clientId: CLIENT_ID,
-                    scope: SCOPES
-                }).then(function () {
-    
-                    GoogleAuth = gapi.auth2.getAuthInstance();
-    
-                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
-    
-                    updateSigninStatus(GoogleAuth.isSignedIn.get());
-    
-                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-    
-                    if (!GoogleAuth.isSignedIn.get()) {
-                        callback(null);
-                    } else {
-                        callback(GoogleApi, TOKEN);
-                    }
-    
-                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-                });
-         /*   }
-            catch(err) {
-                console.log('error', err);
-            }*/
-
-            
-        } else {
-
-            gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-
-                    });
-
-            }
-
-        }
-    }
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
 }
 
-function login() { }
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
 
-function updateSigninStatus(isSignedIn) {
-    if (!isSignedIn) {
-        isClientSigned = false;
-        GoogleAuth.signIn();
-    } else {
-        isSignedIn = true;
-    }
-    console.log('status change', isSignedIn);
-    //clientCallback();
-}
+Cancel.prototype.__CANCEL__ = true;
 
-function handleAuthClick(event) {
-    GoogleAuth.signIn();
-}
+module.exports = Cancel;
 
-function handleSignoutClick(event) {
-    GoogleAuth.signOut();
-
-    GoogleApi = null;
-}
-
-function isClientLogged() {
-    gapi.auth2.getAuthInstance().isSignedIn.get();
-}
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
 
 /***/ }),
 
@@ -567,7 +450,7 @@ module.exports = __webpack_require__(14);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(5);
 var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
@@ -602,9 +485,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
+axios.Cancel = __webpack_require__(10);
 axios.CancelToken = __webpack_require__(30);
-axios.isCancel = __webpack_require__(8);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -652,7 +535,7 @@ function isSlowBuffer (obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth_js__ = __webpack_require__(3);
 
 
 var GoogleApi;
@@ -830,10 +713,10 @@ module.exports = Axios;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(152);
 
 
@@ -874,7 +757,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -954,10 +837,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   }
   return adapter;
 }
@@ -1028,7 +911,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
@@ -1402,7 +1285,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(27);
-var isCancel = __webpack_require__(8);
+var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(2);
 
 /**
@@ -1557,14 +1440,143 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    arrived: 'arrived',
-    working: 'working',
-    done: 'done',
-    pickUp: 'pickUp',
-    all: 'all'
-});
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+var clientCallback;
+
+function handleClientLoad(callback) {
+
+    if (GoogleApi && TOKEN) {
+        callback(GoogleApi, TOKEN);
+    } else {
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
+    }
+
+    function initClient() {
+
+        GoogleApi = gapi;
+
+        if (gapi.client.init) {
+
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+                        var token = authResult.access_token;
+                        return callback(GoogleApi, token);
+                    });
+
+            }*/
+
+            //return callback("auth0", "done123");
+
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
+
+            
+        } else {
+
+            gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+
+                    });
+
+            }
+
+        }
+    }
+}
+
+function login() { }
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+    //clientCallback();
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+
+    GoogleApi = null;
+}
+
+function isClientLogged() {
+    gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
 
 /***/ }),
 
@@ -1574,7 +1586,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(10);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1668,11 +1680,11 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 33:
+/***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(3);
 
 
 
@@ -1736,6 +1748,21 @@ var calendarSettings = {
 /***/ }),
 
 /***/ 4:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    arrived: 'arrived',
+    working: 'working',
+    done: 'done',
+    pickUp: 'pickUp',
+    all: 'all'
+});
+
+/***/ }),
+
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1754,7 +1781,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1945,7 +1972,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1956,7 +1983,7 @@ var settle = __webpack_require__(18);
 var buildURL = __webpack_require__(20);
 var parseHeaders = __webpack_require__(21);
 var isURLSameOrigin = __webpack_require__(22);
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
@@ -2130,11 +2157,11 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2160,7 +2187,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2169,33 +2196,6 @@ module.exports = function createError(message, config, code, request, response) 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
-
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
 
 
 /***/ })

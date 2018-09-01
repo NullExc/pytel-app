@@ -78,9 +78,7 @@ $(document).ready(function () {
             console.log(JSON.stringify(company, 2, 2));
 
             data.company = company;
-
             data.fullName = company.name;
-
             data.search = company.name;
 
         } else if (form === 'person' || (customer && customer.person)) {

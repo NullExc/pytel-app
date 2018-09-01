@@ -71,7 +71,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(5);
 var isBuffer = __webpack_require__(15);
 
 /*global toString:true*/
@@ -372,6 +372,33 @@ module.exports = {
   extend: extend,
   trim: trim
 };
+
+
+/***/ }),
+
+/***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
 
 
 /***/ }),
@@ -10684,7 +10711,7 @@ module.exports = __webpack_require__(14);
 
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(4);
+var bind = __webpack_require__(5);
 var Axios = __webpack_require__(16);
 var defaults = __webpack_require__(2);
 
@@ -10719,9 +10746,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
+axios.Cancel = __webpack_require__(10);
 axios.CancelToken = __webpack_require__(30);
-axios.isCancel = __webpack_require__(8);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -10865,7 +10892,7 @@ module.exports = Axios;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_http_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_preloader_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_preloader_js__ = __webpack_require__(33);
 
 
 
@@ -10998,7 +11025,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -11078,10 +11105,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(7);
   }
   return adapter;
 }
@@ -11152,7 +11179,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
@@ -11526,7 +11553,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(27);
-var isCancel = __webpack_require__(8);
+var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(2);
 
 /**
@@ -11683,7 +11710,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(10);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -11777,7 +11804,7 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 32:
+/***/ 33:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11807,7 +11834,7 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11826,7 +11853,7 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -12017,7 +12044,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12028,7 +12055,7 @@ var settle = __webpack_require__(18);
 var buildURL = __webpack_require__(20);
 var parseHeaders = __webpack_require__(21);
 var isURLSameOrigin = __webpack_require__(22);
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
@@ -12202,11 +12229,11 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12232,7 +12259,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12241,33 +12268,6 @@ module.exports = function createError(message, config, code, request, response) 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
-
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
 
 
 /***/ })

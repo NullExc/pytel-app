@@ -25,6 +25,10 @@
   color: #01579b !important;
 }
 
+.tabs .tab.disabled a {
+  color: grey !important;
+}
+
 .tabs .tab a:focus.active {
   background-color: #e3f2fd 
 }

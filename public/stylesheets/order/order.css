@@ -54,6 +54,14 @@
     height: 400px;
 }
 
+.customer-panel-title {
+    font-size: 20px;
+}
+
+.tab-panel {
+    border: 1px solid gray;
+}
+
 @media only screen and (max-device-width: 480px) {
 
     #price-div {

@@ -78,7 +78,9 @@ $(document).ready(function () {
 
   $('.fixed-action-btn').floatingActionButton();
 
-  $('.tabs').tabs();
+  //$('.tabs').tabs();
+
+  M.Tabs.init($('.tabs'), {});
 
   window.addEventListener('load', function () {
     console.log('document was not ready, place code here!!');

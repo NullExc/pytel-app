@@ -14,19 +14,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     });
 
     $scope.token = "nothing";
-
     $scope.customers = window.customers;
 
     $scope.newWork = false;
-
     $scope.newType = false;
-
     $scope.newFacility = false;
-
     $scope.newWorkName = '';
-
     $scope.newOrderName = '';
-
     $scope.newFacilityName = '';
 
     $scope.sale = edit ? order.sale : false;
@@ -34,13 +28,9 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     $scope.changedState = false;
 
     var selectedCustomer = edit ? customer : null;
-
     var selectedWork = edit ? workType : null;
-
     var selectedOrder = edit ? orderType : null;
-
     var selectedFacilities = edit ? customerFacilities: [];
-
     var selectedPhotoUrls = edit ? order.photoUrls: [];
 
     if (!selectedPhotoUrls) selectedPhotoUrls = [];
@@ -165,7 +155,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             if (selectedCustomer.person) {
                 var person = selectedCustomer.person;
-
                 if (person.phone) phone = person.phone;
                 if (person.email) email = person.email;
 
@@ -180,7 +169,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 ico = "neuvedené (FO)";
                 icdph = "neuvedené (FO)";
                 dic = "neuvedené (FO)";
-
             }
 
             if (selectedCustomer.company) {
@@ -188,13 +176,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 if (company.contactPerson) {
                     var contactPerson = company.contactPerson;
-
                     if (contactPerson.phone) phone = contactPerson.phone;
                     if (contactPerson.email) email = contactPerson.email;
                 }
                 if (company.address) {
                     var address = company.address;
-
                     if (address.street) street = address.street;
                     if (address.streetNumber) number = address.streetNumber;
                     if (address.city) city = address.city;
@@ -202,7 +188,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 }
                 if (company.billData) {
                     var billData = company.billData;
-
                     if (billData.ICO) ico = billData.ICO;
                     if (billData.ICDPH) icdph = billData.ICDPH;
                     if (billData.DIC) dic = billData.DIC;
@@ -257,12 +242,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
 
         $("#price").focusout(function () {
-
             if (!$(this).val() || $(this).val().length < 1) {
                 console.log("no value for price");
                 $(this).val(0);
             }
-
         })
 
         preloader.open('Pripravujú sa dáta ...');
@@ -272,23 +255,22 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         if (edit) {
 
+            $("#create-tab").addClass('disabled');
+
             if (customer) {
                 var doneLabel = $("#done-customer");
                 doneLabel.text(customer.fullName);
                 doneLabel.removeClass('orange');
                 doneLabel.addClass('green');
             }
-    
             if (workType) {
                 $("#work").val(workType.name);
                 $("#work-label").addClass('active');
             }
-    
             if (orderType) {
                 $("#order").val(orderType.name);
                 $("#order-label").addClass('active');
             }
-    
             if (order) {
     
                 var arriveDate = order.arriveDate;
@@ -366,7 +348,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         var utcDate = new Date();
 
         $.datepicker.regional['sk'] = calendar.calendarSettings;
-
         $.datepicker.setDefaults($.datepicker.regional['sk']);
 
         $("#date").datepicker({
@@ -378,9 +359,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 var date = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]));
 
                 utcDate.setFullYear(date.getFullYear());
-
                 utcDate.setMonth(date.getMonth());
-
                 utcDate.setDate(date.getDate());
 
                 console.log('from selected ', utcDate);
@@ -398,14 +377,9 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 console.log('check', $scope.sale);
 
                 if (utcDate) {
-                
                     time.setUTCHours(time.getUTCHours() + 1);
-
                     utcDate.setHours(time.getHours());
-
                     utcDate.setMinutes(time.getMinutes());
-
-                    console.log('hm', utcDate);
                 }
             }
         });
@@ -517,10 +491,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         console.log("facilities", facilities);
 
-
-
-        //$('.chips').chips();
-
         $('#photo-chips').chips({
             onChipSelect: function (chips, elem, selected) {
 
@@ -530,14 +500,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 chipsData.forEach(function (chip) {
                     if (chip.tag === chipText) {
-                        console.log("there is a match", chip);
 
                         $('#photo-pic').attr('src', chip.url);
 
                         var instance = M.Modal.getInstance($('#photo-modal'));
-
                         instance.open();
-
                     }
                 })
             },
@@ -595,17 +562,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 if (GoogleApi && TOKEN) {
 
                     picker.setGoogleApi(GoogleApi, TOKEN);
-
                     picker.loadPicker(function (photos) {
 
                         console.log("client callback", photos);
 
                         var instance = M.Chips.getInstance($("#photo-chips"));
-
                         photos.forEach(function (photo) {
                             instance.addChip({ tag: photo.name, url: photo.url });
                         })
-
                     });
                 } else {
                     //$('#load-photo').addClass('disabled');
@@ -620,18 +584,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             order.description = $("#description").val();
 
             if (!order.description) {
-
                 $('#description').addClass('invalid');
-
                 $('#description-label').addClass('active');
-
             }
 
             if (!selectedCustomer) {
-
                 $("#done-customer").removeClass('orange');
                 $("#done-customer").addClass('red');
-
             }
 
             var email = $("#email").val();
@@ -639,7 +598,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             var price = $("#price").val();
             var notes = $("#notes").val();
             var facilities = $("#facilities").val();
-
 
             if (notes) {
 
@@ -680,18 +638,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 if (!order.price && order.price > 0) {
                     $("#price").addClass('invalid');
-
                     $('#price-label').addClass('active');
                 }
 
                 console.log(order.price);
 
             } else {
-
                 $("#price").addClass('invalid');
-
                 $('#price-label').addClass('active');
-
             }
 
             if (!order.description || !selectedCustomer || (!order.price && order.price > 0)) {
@@ -753,7 +707,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             if (edit && $scope.changedState) {
                 if (state === STATE.working) {
                     order.startDate = date;
-                    //    order.startDate.
                 } else if (state === STATE.done) {
                     order.endDate = date;
                 } else if (state === STATE.pickUp) {
@@ -783,11 +736,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     if (order.workType) delete order.workType;
 
                     order.sale = true;
-
                     order.state = STATE.pickUp;
-
                     order.pickDate = utcDate;
-
                 }
 
                 options.method = 'post';
@@ -851,6 +801,118 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
 
         preloader.close();
+
+        $('input[type=radio][name=legal-form]').change(function () {
+            if (this.value == 'person') {
+                $("#person-form").show();
+                $("#company-form").hide();
+            }
+            else if (this.value == 'company') {
+                $("#person-form").hide();
+                $("#company-form").show();
+            }
+        });
+    
+        $('#show-company').prop('checked', true);
+        $("#person-form").hide();
+        $("#company-form").show();
+
+        $("#create-customer-btn").click(function (e) {
+
+            var data = {};
+
+            var form = $('input[name=legal-form]:checked', '#customer-form').val();
+
+            if (form === 'company') {
+
+                var company = {};
+
+                company.name = $("#name").val();
+
+                if (!company.name) {
+
+                    $('#name').addClass('invalid');
+                    $('#name-label').addClass('active');
+
+                    return;
+                }
+
+                var firstName = $("#contact-first").val();
+                var lastName = $("#contact-last").val();
+                var email = $("#contact-email").val();
+                var phone = $("#contact-phone").val();
+
+                if (firstName || lastName || email || phone) {
+                    company.contactPerson = {};
+                }
+                if (firstName) company.contactPerson.firstName = firstName;
+                if (lastName) company.contactPerson.lastName = lastName;
+                if (email) company.contactPerson.email = email;
+                if (phone) company.contactPerson.phone = phone;
+
+                data.company = company;
+                data.fullName = company.name;
+                data.search = company.name;
+
+            } else if (form === 'person') {
+
+                var person = {};
+
+                person.firstName = $("#first").val();
+                person.lastName = $("#last").val();
+
+                if (!person.lastName) {
+
+                    $('#last').addClass('invalid');
+                    $('#last-label').addClass('active');
+
+                    return;
+                }
+
+                var email = $("#customer-email").val();
+                var phone = $("#customer-phone").val();
+
+                if (email) person.email = email;
+                if (phone) person.phone = phone;
+
+                data.person = person;
+
+                if (person.firstName && person.firstName.length > 0 && person.lastName && person.lastName) {
+                    data.fullName = person.firstName + " " + person.lastName;
+
+                } else if ((person.firstName && person.firstName.length > 0) && !(person.lastName && person.lastName)) {
+                    data.fullName = person.firstName;
+
+                } else if (!(person.firstName && person.firstName.length > 0) && (person.lastName && person.lastName)) {
+                    data.fullName = person.lastName;
+                }
+
+                data.search = person.lastName;
+            }
+
+            var options = { data: {customer: data} };
+
+            options.url = '/customer';
+            options.method = 'post';
+
+            http.request(options, (err, response) => {
+                if (err) console.log(err);
+                else if (response) {
+                    console.log("created", response);
+                    //location.href = '/customer/' + response.data.id;
+                    data._id = response.data.id;
+                    selectedCustomer = data;
+
+                    fillCustomerData();
+
+                    $('#order-tab-container').tabs('select', 'assign-customer');
+
+                    console.log(JSON.stringify(data, 2, 2));
+
+                }
+            })
+        })
+        
     })
 
 })

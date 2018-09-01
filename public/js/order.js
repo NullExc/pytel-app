@@ -27,7 +27,38 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
         $scope.hasPhotos = true;
     }
 
-    console.log('photos', $scope.order.photoUrls);
+    console.log('customer', $scope.customer);
+
+    $scope.contact = {};
+    $scope.address = {};
+
+    if ($scope.customer.company) {
+
+        if ($scope.customer.company.contactPerson) {
+            $scope.contact.phone = $scope.customer.company.contactPerson.phone;
+            $scope.contact.email = $scope.customer.company.contactPerson.email;
+        }
+        if ($scope.customer.company.address) {
+            $scope.address.street =  $scope.customer.company.address.street;
+            $scope.address.streetNumber = $scope.customer.company.address.streetNumber;
+            $scope.address.city = $scope.customer.company.address.city;
+            $scope.address.zipCode = $scope.customer.company.address.zipCode;
+        }
+
+    } else if ($scope.customer.person) {
+
+        $scope.contact.phone = $scope.customer.person.phone;
+        $scope.contact.email = $scope.customer.person.email;
+
+        if ($scope.customer.person.address) {
+            $scope.address.street =  $scope.customer.person.address.street;
+            $scope.address.streetNumber = $scope.customer.person.address.streetNumber;
+            $scope.address.city = $scope.customer.person.address.city;
+            $scope.address.zipCode = $scope.customer.person.address.zipCode;
+        }
+    }
+
+
 
     /*if ($scope.order && $scope.order.photoUrl) {
         $('#photo-pic').attr('src', $scope.order.photoUrl);
@@ -63,8 +94,6 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
         var id = pathname[pathname.length - 1];
 
-        //var printWin = window.open(location.origin + "/order/print/" + id);
-
         if (!$scope.printFrame) {
 
             $scope.printFrame = document.createElement("iframe");
@@ -73,17 +102,12 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
             $scope.printFrame.style.display = "none";
 
             window.document.body.appendChild($scope.printFrame);
-
         }
 
         if (document["print_frame"]) {
-
             document["print_frame"].print();
-
         } else if (window["print_frame"]) {
-
             window["print_frame"].print();
-
         }
     }
 
@@ -107,7 +131,6 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
             onChipSelect: function (chips, elem, selected) {
 
                 var chipsData = chips[0].M_Chips.chipsData;
-
                 var chipText = $(elem).clone().children().remove().end().text();
 
                 chipsData.forEach(function (chip) {
@@ -117,9 +140,7 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
                         $('#photo-pic').attr('src', chip.url);
 
                         var instance = M.Modal.getInstance($('#photo-modal'));
-
                         instance.open();
-
                     }
                 })
             }
@@ -134,67 +155,4 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
           $('#facility-chips input').remove(); 
           $('#facility-chips .close').remove(); 
     })
-
 })
-
-/*
-$(document).ready(function () {
-
-    var state = STATE.arrived;
-
-    //console.log(JSON.stringify(selectedCustomer), JSON.stringify(selectedWork), JSON.stringify(selectedOrder), state);
-
-    var date = new Date();
-    var utcDate;
-
-    $('.modal').modal();
-
-    if (order && order.photoUrl) {
-        $('#photo-pic').attr('src', order.photoUrl);
-    } else {
-        $('.show-photo').addClass("disabled");
-    }
-
-    $('.start-state, .end-state, .pickup-state').click(function () {
-        $(this).removeClass("light-blue");
-        $(this).addClass("green");
-    })
-
-    $('.start-state').click(function () {
-        console.log("start");
-        state = STATE.working;
-    })
-
-    $('.end-state').click(function () {
-        console.log("done");
-        state = STATE.done;
-    })
-
-    $('.pickup-state').click(function () {
-        console.log("picked up");
-        state = STATE.pickUp;
-    })
-
-    $("#deleteOrder").click(function () {
-        var pathname = window.location.pathname.split("/");
-        var id = pathname[pathname.length - 1];
-        console.log(id);
-
-        http.request({
-            url: '/order/' + id,
-            method: 'delete'
-        }, (err, response) => {
-            if (err) {
-                console.log(err);
-            } else {
-                location.href = '/order/all';
-            }
-        })
-    });
-
-    $("#edit").click(function () {
-        var pathname = window.location.pathname.split("/");
-        var id = pathname[pathname.length - 1];
-        location.href = '/order-edit/' + id;
-    });
-})*/

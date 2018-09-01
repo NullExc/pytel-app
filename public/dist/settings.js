@@ -65,150 +65,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
-
-var DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-];
-
-var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
-
-var PROJECT_ID = "594621902662";
-
-
-var TOKEN = null;
-var GoogleAuth;
-var GoogleApi;
-var isClientSigned = false;
-
-var clientCallback;
-
-function handleClientLoad(callback) {
-
-    if (GoogleApi && TOKEN) {
-        callback(GoogleApi, TOKEN);
-    } else {
-        //gapi.load('client:auth2', initClient);
-        gapi.load('client', initClient);
-    }
-
-    function initClient() {
-
-        GoogleApi = gapi;
-
-        if (gapi.client.init) {
-
-            /*gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-                        var token = authResult.access_token;
-                        return callback(GoogleApi, token);
-                    });
-
-            }*/
-
-            //return callback("auth0", "done123");
-
-         //   try {
-                gapi.client.init({
-                    discoveryDocs: DISCOVERY_DOCS,
-                    apiKey: API_KEY,
-                    clientId: CLIENT_ID,
-                    scope: SCOPES
-                }).then(function () {
-    
-                    GoogleAuth = gapi.auth2.getAuthInstance();
-    
-                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
-    
-                    updateSigninStatus(GoogleAuth.isSignedIn.get());
-    
-                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-    
-                    if (!GoogleAuth.isSignedIn.get()) {
-                        callback(null);
-                    } else {
-                        callback(GoogleApi, TOKEN);
-                    }
-    
-                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-                });
-         /*   }
-            catch(err) {
-                console.log('error', err);
-            }*/
-
-            
-        } else {
-
-            gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-
-                    });
-
-            }
-
-        }
-    }
-}
-
-function login() { }
-
-function updateSigninStatus(isSignedIn) {
-    if (!isSignedIn) {
-        isClientSigned = false;
-        GoogleAuth.signIn();
-    } else {
-        isSignedIn = true;
-    }
-    console.log('status change', isSignedIn);
-    //clientCallback();
-}
-
-function handleAuthClick(event) {
-    GoogleAuth.signIn();
-}
-
-function handleSignoutClick(event) {
-    GoogleAuth.signOut();
-
-    GoogleApi = null;
-}
-
-function isClientLogged() {
-    gapi.auth2.getAuthInstance().isSignedIn.get();
-}
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
-
-/***/ }),
-
 /***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10475,11 +10331,11 @@ return jQuery;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(33);
 
 
 
@@ -10841,41 +10697,155 @@ app.controller('SettingsCtrl', function ($scope, $http, $filter) {
 
 /***/ }),
 
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+var clientCallback;
+
+function handleClientLoad(callback) {
+
+    if (GoogleApi && TOKEN) {
+        callback(GoogleApi, TOKEN);
+    } else {
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
+    }
+
+    function initClient() {
+
+        GoogleApi = gapi;
+
+        if (gapi.client.init) {
+
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+                        var token = authResult.access_token;
+                        return callback(GoogleApi, token);
+                    });
+
+            }*/
+
+            //return callback("auth0", "done123");
+
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
+
+            
+        } else {
+
+            gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+
+                    });
+
+            }
+
+        }
+    }
+}
+
+function login() { }
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+    //clientCallback();
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+
+    GoogleApi = null;
+}
+
+function isClientLogged() {
+    gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
+
+/***/ }),
+
 /***/ 32:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    open: function (info) {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
-            overflow: 'hidden',
-            height: '100%'
-        });
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
-    },
-    close: function () {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
-            overflow: 'auto',
-            height: 'auto'
-        });
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
-    }
-});
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(3);
 
 
 
@@ -10935,6 +10905,36 @@ var calendarSettings = {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent, calendarSettings });
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    open: function (info) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'hidden',
+            height: '100%'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
+    },
+    close: function () {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'auto',
+            height: 'auto'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
+    }
+});
 
 /***/ })
 
