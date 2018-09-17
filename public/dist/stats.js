@@ -29020,7 +29020,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var app = angular.module('myApp', ['angularUtils.directives.dirPagination', 'ui.materialize']);
+var app = angular.module('myApp', ['angularUtils.directives.dirPagination']);
 
 app.controller('myCtrl', function ($scope, $http, $filter) {
 

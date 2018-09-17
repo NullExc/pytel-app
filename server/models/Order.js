@@ -265,7 +265,7 @@ OrderSchema.statics.byDateAndState = function (from, to, dateType, stateType, ca
     var orderDetails = [];
 
     if (stateType === 'all') {
-        Order.find({}).where(dateType).gte(from).lte(to).exec(function (err, orders) {
+        Order.find({ "state": { $ne: "pickUp" }}).where(dateType).gte(from).lte(to).exec(function (err, orders) {
             //console.log("collect orders", orders.length, 'from', from, 'to', to, 'dateType', dateType, 'stateType ' + stateType);
             callback(err, orders);
         });

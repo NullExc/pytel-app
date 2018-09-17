@@ -3,7 +3,7 @@ import picker from 'jquery-datepicker';
 import $ from 'jquery';
 import preloader from '../lib/preloader.js';
 
-var app = angular.module('myApp', ['angularUtils.directives.dirPagination', 'ui.materialize']);
+var app = angular.module('myApp', ['angularUtils.directives.dirPagination']);
 
 app.controller('myCtrl', function ($scope, $http, $filter) {
 
