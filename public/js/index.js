@@ -1,10 +1,15 @@
 console.log(document.readyState);
 
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('select');
+  var instances = M.FormSelect.init(elems, {});
+});
+
 $(document).ready(function () {
 
   $(".dropdown-trigger").dropdown();
 
-  $('select').formSelect();
+  //$('select').formSelect();
 
   $('.fixed-action-btn').floatingActionButton();
 

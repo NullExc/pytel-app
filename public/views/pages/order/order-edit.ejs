@@ -3,67 +3,147 @@
 
 <head>
     <% include ../../partials/header.ejs %>
-        <script src="https://apis.google.com/js/api.js"></script>
-        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
-        <script type="text/javascript">
-            var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
-            var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
-            var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
-            var facilities = JSON.parse('<%- JSON.stringify(result.form.facilities) %>');
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+    <script type="text/javascript">
+        var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+        var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+        var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+        var facilities = JSON.parse('<%- JSON.stringify(result.form.facilities) %>');
 
-            var order = JSON.parse('<%- JSON.stringify(result.detail.order) %>');
-            var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
-            var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
-            var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
-            var customerFacilities = JSON.parse('<%- JSON.stringify(result.detail.customerFacilities) %>');
+        var order = JSON.parse('<%- JSON.stringify(result.detail.order) %>');
+        var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
+        var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
+        var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
+        var customerFacilities = JSON.parse('<%- JSON.stringify(result.detail.customerFacilities) %>');
 
-            var edit = true;
-        </script>
-        <script type="text/javascript" src="/dist/order-edit.js"></script>
-        <script type="text/javascript" src="/dist/order-crud.js"></script>
-        <script type="text/javascript" src="/dist/order-state.js"></script>
-        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
-        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+        var edit = true;
+    </script>
+    <script type="text/javascript" src="/dist/order-edit.js"></script>
+    <script type="text/javascript" src="/dist/order-date.js"></script>
+    <script type="text/javascript" src="/dist/order-crud.js"></script>
+    <script type="text/javascript" src="/dist/order-state.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+    <style>
+
+        .date-row {
+            margin-bottom: 0px !important;
+            padding-top: 15px;
+        }
+
+        .date-row-active {
+            border: green solid 2px;
+            border-radius: 15px;
+        }
+
+    </style>
 </head>
 
 <body ng-app="OrderInput" ng-controller="OrderInputCtrl">
 
     <% include ../../partials/nav-in.ejs %>
-        <div class="row header-row">
-            <div class="col s12 light-blue darken-4 white-text header-layer">
-                <h5 class="col l3 s6">Upraviť zákazku</h5>
-            </div>
+    <div class="row header-row">
+        <div class="col s12 light-blue darken-4 white-text header-layer">
+            <h5 class="col l3 s6">Upraviť zákazku</h5>
         </div>
+    </div>
 
-        <% include ../../partials/loader.ejs %>
+    <% include ../../partials/loader.ejs %>
 
-            <div class="row">
+    <div class="row">
 
-                <div id="state-div" class="row col s8 l8 offset-l3 offset-s2 white-text" style="margin-bottom: 40px;">
-
-                    <a style="margin: 5px;" class="col l3 s12 start-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">build</i>Začať</a>
-
-
-                    <a style="margin: 5px;" class="col l3 s12 end-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">done</i>Dokončiť</a>
-
-
-                    <a style="margin: 5px;" class="col l3 s12 pickup-state light-blue darken-4 btn state-btn">
-                        <i class="material-icons left">send</i>Odovzdať</a>
-
+        <div id="state-div" class="col s12 l6 offset-l3">
+            <div class="col s12 panel z-depth-2">
+                <div class="col s12">
+                    <h5>
+                        Aktuálny stav zákazky
+                    </h5>
+                    <h4>
+                        <span id="state-info-span" class="label label-primary green lighten-3">{{stateName}}</span>
+                    </h4>
+                </div>
+                <div id="state-select-div" class="input-field col s12">
+                    <select id="state-selector" required="required" class="validate" ng-change="stateSelectChange()"
+                        ng-model="stateSelect.value" style="color:black !important">
+                        <option value="Vybrať nový stav" disabled selected>Vybrať nový stav</option>
+                        <option id="arrived-option" value="Prijať">Prijať</option>
+                        <option id="start-option" value="Začať">Začať</option>
+                        <option id="end-option" value="Dokončiť">Dokončiť</option>
+                        <option id="pickup-option" value="Odovzdať">Odovzdať</option>
+                    </select>
+                    <label>Vybrať stav zákazky</label>
+                    <span id="state-selector-span" class="helper-text red-text hide"></span>
                 </div>
 
-                <% include ./order-input.ejs %>
-
+                <div id="state-date-div" class="col s12" ng-controller="DateInputCtrl">
+                    <div id="arrived-date-div" class="row date-row">
+                        <div input-field class="col s6">
+                            <label id="arrived-label" for="arrived-date">Dátum prijatia</label>
+                            <input id="arrived-date" type="text" readonly>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" class="timepicker" id="arrived-time" readonly>
+                            <label class="time-label" for="arrived-time">Čas prijatia</label>
+                        </div>
+                    </div>
+                    <div id="start-date-div" class="row date-row">
+                        <div input-field class="col s6">
+                            <label id="start-label" for="start-date">Dátum začatia</label>
+                            <input id="start-date" type="text" readonly>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" class="timepicker" id="start-time" readonly>
+                            <label class="time-label" for="start-time">Čas začatia</label>
+                        </div>
+                    </div>
+                    <div id="end-date-div" class="row date-row">
+                        <div input-field class="col s6">
+                            <label id="end-label" for="end-date">Dátum ukončenia</label>
+                            <input id="end-date" type="text" readonly>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" class="timepicker" id="end-time" readonly>
+                            <label class="time-label" for="end-time">Čas ukončenia</label>
+                        </div>
+                    </div>
+                    <div id="pickup-date-div" class="row date-row">
+                        <div input-field class="col s6">
+                            <label id="pickup-label" for="pickup-date">Dátum vyzdvihnutia</label>
+                            <input id="pickup-date" type="text" readonly>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" class="timepicker" id="pickup-time" readonly>
+                            <label class="time-label" for="pickup-time">Čas vyzdvihnutia</label>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!--<div class="white-text">
+                <a style="margin: 5px;" class="col l3 s12 start-state light-blue darken-4 btn state-btn">
+                    <i class="material-icons left">build</i>Začať</a>
 
 
-            <div class="fixed-action-btn">
-                <a class="btn-floating btn-large light-blue darken-4">
-                    <i id="update" class="large material-icons">save</i>
-                </a>
-            </div>
+                <a style="margin: 5px;" class="col l3 s12 end-state light-blue darken-4 btn state-btn">
+                    <i class="material-icons left">done</i>Dokončiť</a>
+
+
+                <a style="margin: 5px;" class="col l3 s12 pickup-state light-blue darken-4 btn state-btn">
+                    <i class="material-icons left">send</i>Odovzdať</a>
+            </div>-->
+
+        </div>
+
+        <% include ./order-input.ejs %>
+
+    </div>
+
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large light-blue darken-4">
+            <i id="update" class="large material-icons">save</i>
+        </a>
+    </div>
 </body>
 
 </html>

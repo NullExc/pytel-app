@@ -10,7 +10,6 @@ var app = angular.module('OrderInput', ['angularUtils.directives.dirPagination',
 app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     googleAuth.handleClientLoad(function (GoogleApi, TOKEN) {
-
     });
 
     $scope.token = "nothing";
@@ -23,19 +22,112 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     $scope.newOrderName = '';
     $scope.newFacilityName = '';
 
+    $scope.order = edit ? order : false;
     $scope.sale = edit ? order.sale : false;
+    $scope.stateName = "";
 
     $scope.changedState = false;
 
     var selectedCustomer = edit ? customer : null;
     var selectedWork = edit ? workType : null;
     var selectedOrder = edit ? orderType : null;
-    var selectedFacilities = edit ? customerFacilities: [];
-    var selectedPhotoUrls = edit ? order.photoUrls: [];
+    var selectedFacilities = edit ? customerFacilities : [];
+    var selectedPhotoUrls = edit ? order.photoUrls : [];
+
+    $scope.originState = edit ? order.state : STATE.arrived;
+    $scope.saveState = edit ? order.state : STATE.arrived;
+
+    $scope.child = {};
+    $scope.jquery = $;
+
+    console.log("$scope.saveState", $scope.saveState);
 
     if (!selectedPhotoUrls) selectedPhotoUrls = [];
 
     console.log("selectedFacilities", selectedFacilities);
+
+    if (edit && order) {
+        if (order.state === STATE.arrived) {
+            $scope.stateName = "Prijatá";
+        } else if (order.state === STATE.working) {
+            $scope.stateName = "Prebieha práca";
+        } else if (order.state === STATE.done) {
+            $scope.stateName = "Dokončená";
+        } else if (order.state === STATE.pickUp) {
+            $scope.stateName = "Vyzdvihnuta";
+        }
+    }
+
+    $scope.stateSelect = {
+        value: 'Vybrať nový stav',
+        choices: ['Vybrať nový stav', 'Prijať', 'Začať', 'Dokončiť', 'Odovzdať']
+    }
+
+    $scope.stateSelectChange = function () {
+
+        $scope.changedState = true;
+
+        if ($scope.stateSelect.value === $scope.stateSelect.choices[1]) {
+            $scope.saveState = STATE.arrived;
+
+            $('#start-date-div').addClass('hide');
+            $('#end-date-div').addClass('hide');
+            $('#pickup-date-div').addClass('hide');
+
+            $('#arrived-date-div').addClass('date-row-active');
+            $('#start-date-div').removeClass('date-row-active');
+            $('#end-date-div').removeClass('date-row-active');
+            $('#pickup-date-div').removeClass('date-row-active');
+
+        } else if ($scope.stateSelect.value === $scope.stateSelect.choices[2]) {
+            $scope.saveState = STATE.working;
+
+            $('#start-date-div').removeClass('hide');
+            $('#end-date-div').addClass('hide');
+            $('#pickup-date-div').addClass('hide');
+
+            $('#arrived-date-div').removeClass('date-row-active');
+            $('#start-date-div').addClass('date-row-active');
+            $('#end-date-div').removeClass('date-row-active');
+            $('#pickup-date-div').removeClass('date-row-active');
+
+            if ($scope.originState === STATE.arrived) {
+                $scope.child.currentInputData("#start-date", "#start-time");
+            }
+
+        } else if ($scope.stateSelect.value === $scope.stateSelect.choices[3]) {
+            $scope.saveState = STATE.done;
+
+            $('#start-date-div').removeClass('hide');
+            $('#end-date-div').removeClass('hide');
+            $('#pickup-date-div').addClass('hide');
+
+            $('#arrived-date-div').removeClass('date-row-active');
+            $('#start-date-div').removeClass('date-row-active');
+            $('#end-date-div').addClass('date-row-active');
+            $('#pickup-date-div').removeClass('date-row-active');
+
+            if ($scope.originState === STATE.working) {
+                $scope.child.currentInputData("#end-date", "#end-time");
+            }
+
+        } else if ($scope.stateSelect.value === $scope.stateSelect.choices[4]) {
+            $scope.saveState = STATE.pickUp;
+
+            $('#start-date-div').removeClass('hide');
+            $('#end-date-div').removeClass('hide');
+            $('#pickup-date-div').removeClass('hide');
+
+            $('#arrived-date-div').removeClass('date-row-active');
+            $('#start-date-div').removeClass('date-row-active');
+            $('#end-date-div').removeClass('date-row-active');
+            $('#pickup-date-div').addClass('date-row-active');
+
+            if ($scope.originState === STATE.done) {
+                $scope.child.currentInputData("#pickup-date", "#pickup-time");
+            }
+        }
+    }
 
     $scope.pickCustomer = function (event) {
         var id = event.target.id;
@@ -121,7 +213,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         }).success(function (response) {
 
             $scope.newFacility = false;
-           
+
             console.log(response);
 
             var instance = M.Chips.getInstance($("#facility-chips"));
@@ -233,8 +325,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         }
     }
 
-
-
     $(document).ready(function () {
 
         $("#price").focus(function () {
@@ -255,6 +345,9 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         if (edit) {
 
+            $("#input-time").addClass('hide');
+            $("#input-date").addClass('hide');
+
             $("#create-tab").addClass('disabled');
 
             if (customer) {
@@ -272,9 +365,9 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#order-label").addClass('active');
             }
             if (order) {
-    
+
                 var arriveDate = order.arriveDate;
-    
+
                 if (order.description) {
                     $("#description").val(order.description);
                     $("#description-label").addClass('active');
@@ -345,7 +438,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
         }
 
+        /*var date1 = new Date();
+        var utcDate = Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), date1.getUTCDate(),
+        date1.getUTCHours(), date1.getUTCMinutes(), date1.getUTCSeconds());*/
+        //tcDate = new Date(utcDate);
         var utcDate = new Date();
+
 
         $.datepicker.regional['sk'] = calendar.calendarSettings;
         $.datepicker.setDefaults($.datepicker.regional['sk']);
@@ -368,7 +466,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
         $("#date").datepicker($.datepicker.regional["sk"]);
 
-        $('input.timepicker').timepicker({
+        $('#time').timepicker({
             timeFormat: 'HH:mm',
             defaultTime: 'now',
             interval: 15,
@@ -392,7 +490,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             date = new Date(order.arriveDate);
             state = order.state;
         }
-        utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours() + 1, date.getUTCMinutes(), date.getUTCSeconds());
+        utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
         $("#date").val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
             + '/' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
@@ -462,7 +560,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             data: names,
             limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
             onAutocomplete: function (val) {
-                
+
                 for (var i = 0; i < customers.length; i++) {
                     console.log("val", val, customers[i].fullName, val.length, customers[i].fullName.length);
                     if (val === customers[i].fullName) {
@@ -514,12 +612,12 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         $('#facility-chips').chips({
             placeholder: 'Príslušenstvo',
             autocompleteOptions: {
-              data: facilityNames,
-              limit: Infinity,
-              minLength: 1,
-              onAutocomplete: function (val) {
-                  console.log("find facility", val);
-              }
+                data: facilityNames,
+                limit: Infinity,
+                minLength: 1,
+                onAutocomplete: function (val) {
+                    console.log("find facility", val);
+                }
             },
             onChipAdd: function (chips, elem) {
                 console.log("Chips was added", chips[0].M_Chips.chipsData);
@@ -553,7 +651,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 })
             },
             data: initialFacilityNames
-          });
+        });
 
         $('#load-photo').click(function () {
 
@@ -587,7 +685,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $('#description').addClass('invalid');
                 $('#description-label').addClass('active');
             }
-
             if (!selectedCustomer) {
                 $("#done-customer").removeClass('orange');
                 $("#done-customer").addClass('red');
@@ -624,24 +721,18 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     .replace(/[\n]/g, '\\n')
                     .replace(/[\r]/g, '\\r')
                     .replace(/[\t]/g, '\\t');
-
                 order.facilities = temp;
             }
 
             if (price) {
 
                 price = price.replace(/,/g, '.');
-
-                console.log("cena", price);
-
                 order.price = Number(price);
 
                 if (!order.price && order.price > 0) {
                     $("#price").addClass('invalid');
                     $('#price-label').addClass('active');
                 }
-
-                console.log(order.price);
 
             } else {
                 $("#price").addClass('invalid');
@@ -694,31 +785,57 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 order.facilitiesArray.push(selectedFacility._id);
             })
 
-            console.log("saving facilities", order.facilitiesArray);
-
-            order.state = state;
+            if (edit && $scope.saveState != state) {
+                order.state = $scope.saveState;
+            } else {
+                order.state = state;
+            }
 
             var help = new Date();
 
             date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth(), help.getUTCDate(), help.getUTCHours() + 1, help.getUTCMinutes(), help.getUTCSeconds()));
 
-            //date.setUTCMonth(date.getMonth() + 1);
+            console.log("state to save", order.state, edit, $scope.changedState);
 
-            if (edit && $scope.changedState) {
-                if (state === STATE.working) {
-                    order.startDate = date;
-                } else if (state === STATE.done) {
-                    order.endDate = date;
-                } else if (state === STATE.pickUp) {
-                    order.pickDate = date;
+            if (edit) {
+
+                var timezoneOffset = $scope.child.arrivedDate.getTimezoneOffset() * 60000;
+                order.arriveDate = new Date($scope.child.arrivedDate.getTime() - timezoneOffset);
+
+                if (order.state === STATE.working ||
+                    order.state === STATE.done ||
+                    order.state === STATE.pickUp) {
+
+                    var timezoneOffset = $scope.child.startDate.getTimezoneOffset() * 60000;
+                    order.startDate = new Date($scope.child.startDate.getTime() - timezoneOffset);
+
+                }
+                if (order.state === STATE.done ||
+                    order.state === STATE.pickUp) {
+
+                    var timezoneOffset = $scope.child.endDate.getTimezoneOffset() * 60000;
+                    order.endDate = new Date($scope.child.endDate.getTime() - timezoneOffset);
+                }
+                if (order.state === STATE.pickUp) {
+
+                    var timezoneOffset = $scope.child.pickupDate.getTimezoneOffset() * 60000;
+                    order.pickDate = new Date($scope.child.pickupDate.getTime() - timezoneOffset);
+                }
+
+                var isDateCorrect = $scope.child.checkDates(order);
+
+                if (!isDateCorrect.check) {
+                    console.log("Incorrect dates", isDateCorrect);
+                    $("#state-selector-span").removeClass('hide');
+                    $("#state-selector-span").text(isDateCorrect.text);
+
+                    return;
                 }
             }
 
             var instance = M.Chips.getInstance($("#photo-chips"));
 
             order.photoUrls = instance.chipsData;
-
-            console.log("before save", instance.chipsData)
 
             var options = {
                 url: '/order',
@@ -747,7 +864,10 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     calendar.insertEvent(order, selectedCustomer);
                 });
 
-                options.data.order.arriveDate = utcDate;
+                var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+
+                //options.data.order.arriveDate = utcDate;
+                options.data.order.arriveDate = new Date(utcDate.getTime() - userTimezoneOffset);
 
                 preloader.open('Vytvára sa zákazka ...');
             }
@@ -760,6 +880,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 preloader.open('Edituje sa zákazka ...');
             }
+
+            console.log("options", options);
 
             http.request(options, (err, response) => {
                 preloader.close();
@@ -777,7 +899,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
 
         $('.start-state').click(function () {
-            console.log("start");
             $scope.changedState = true;
             $('.start-state').removeClass('light-blue');
             $('.start-state').addClass('light-green');
@@ -785,7 +906,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
 
         $('.end-state').click(function () {
-            console.log("done");
             $scope.changedState = true;
             $('.end-state').removeClass('light-blue');
             $('.end-state').addClass('light-green');
@@ -793,7 +913,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         })
 
         $('.pickup-state').click(function () {
-            console.log("picked up");
             $scope.changedState = true;
             $('.pickup-state').removeClass('light-blue');
             $('.pickup-state').addClass('light-green');
@@ -812,7 +931,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#company-form").show();
             }
         });
-    
+
         $('#show-company').prop('checked', true);
         $("#person-form").hide();
         $("#company-form").show();
@@ -820,20 +939,16 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         $("#create-customer-btn").click(function (e) {
 
             var data = {};
-
             var form = $('input[name=legal-form]:checked', '#customer-form').val();
 
             if (form === 'company') {
 
                 var company = {};
-
                 company.name = $("#name").val();
 
                 if (!company.name) {
-
                     $('#name').addClass('invalid');
                     $('#name-label').addClass('active');
-
                     return;
                 }
 
@@ -862,10 +977,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 person.lastName = $("#last").val();
 
                 if (!person.lastName) {
-
                     $('#last').addClass('invalid');
                     $('#last-label').addClass('active');
-
                     return;
                 }
 
@@ -879,18 +992,15 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                 if (person.firstName && person.firstName.length > 0 && person.lastName && person.lastName) {
                     data.fullName = person.firstName + " " + person.lastName;
-
                 } else if ((person.firstName && person.firstName.length > 0) && !(person.lastName && person.lastName)) {
                     data.fullName = person.firstName;
-
                 } else if (!(person.firstName && person.firstName.length > 0) && (person.lastName && person.lastName)) {
                     data.fullName = person.lastName;
                 }
-
                 data.search = person.lastName;
             }
 
-            var options = { data: {customer: data} };
+            var options = { data: { customer: data } };
 
             options.url = '/customer';
             options.method = 'post';
@@ -906,13 +1016,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     fillCustomerData();
 
                     $('#order-tab-container').tabs('select', 'assign-customer');
-
-                    console.log(JSON.stringify(data, 2, 2));
-
                 }
             })
         })
-        
     })
-
 })

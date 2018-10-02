@@ -32,8 +32,7 @@ var OrderSchema = new mongoose.Schema({
         type: String
     },
     arriveDate: {
-        type: Date,
-        default: Date.now
+        type: Date
     },
     pickDate: {
         type: Date,

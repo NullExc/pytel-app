@@ -3,6 +3,7 @@ import picker from 'jquery-datepicker';
 import STATE from './state';
 import preloader from '../lib/preloader.js';
 import calendar from '../lib/calendar.js';
+import moment from 'moment';
 
 var app = angular.module('Orders', ['angularUtils.directives.dirPagination']);
 
@@ -177,11 +178,15 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
         var date = new Date(val);
 
-        var string = (date.getDate() >= 10 ? date.getDate() : ('0' + (date.getDate())))
+        //date = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+        /*var string = (date.getDate() >= 10 ? date.getDate() : ('0' + (date.getDate())))
             + '.' + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : ('0' + (date.getMonth() + 1)))
             + '.' + date.getFullYear() + ' '
-            + (date.getHours() - 1 >= 10 ? date.getHours() - 1 : ('0' + (date.getHours() - 1))) + ':'
-            + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + (date.getMinutes())));
+            + (date.getHours() >= 10 ? date.getHours() : ('0' + (date.getHours()))) + ':'
+            + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + (date.getMinutes())));*/
+
+        var string = moment.utc(date).format('DD.MM.YYYY k:mm');
 
         return string;
     }

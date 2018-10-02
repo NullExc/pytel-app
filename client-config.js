@@ -9,6 +9,7 @@ module.exports = {
         'order-state',
         'order-crud',
         'order-edit',
+        'order-date',
         'order',
         'orders',
         'state',

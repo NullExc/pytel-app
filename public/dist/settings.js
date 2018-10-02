@@ -60,12 +60,624 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 165);
+/******/ 	return __webpack_require__(__webpack_require__.s = 166);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 11:
+/***/ 12:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(3);
+
+
+
+var GoogleApi;
+
+function setGoogleApi(api) {
+    GoogleApi = api;
+}
+
+function insertEvent(order, customer) {
+    console.log('insert event ', order.description);
+
+    var date = new Date();
+
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    console.log(dateString);
+
+    var event = {
+        'summary': customer.fullName,
+        'description': order.description,
+        'start': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'end': {
+            'date': dateString,
+            'timeZone': 'Europe/Bratislava'
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=1'
+        ]
+    }
+    var request = GoogleApi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function (event) {
+        console.log('Event created: ', event);
+    });
+}
+
+var calendarSettings = {
+    closeText: 'Zavrieť',
+    prevText: '&lt; Predchádzajúci',
+    nextText: 'Nasledujúci &gt;',
+    currentText: 'Dnes',
+    monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December' ],
+    monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
+    dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
+    dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob' ],
+    dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
+    dateFormat: 'd.m.yy',
+    firstDay: 0,
+    isRTL: false
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent, calendarSettings });
+
+/***/ }),
+
+/***/ 166:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(33);
+
+
+
+
+
+var app = angular.module('Settings', ['angularUtils.directives.dirPagination']);
+
+app.controller('SettingsCtrl', function ($scope, $http, $filter) {
+
+    $scope.orderTypes = window.orderTypes;
+
+    $scope.workTypes = window.workTypes;
+
+    $scope.facilities = window.facilities;
+
+    $scope.selectWorkType;
+
+    $scope.selectOrderType;
+
+    $scope.selectFacility;
+
+    $scope.newWork = false;
+
+    $scope.newType = false;
+
+    $scope.newFacility = false;
+
+    $scope.newWorkName = '';
+
+    $scope.newOrderName = '';
+
+    $scope.newFacilityName = '';
+
+    $scope.orderTypes = $filter('orderBy')($scope.orderTypes, 'name', false);
+
+    $scope.workTypes = $filter('orderBy')($scope.workTypes, 'name', false);
+
+    $scope.facilities = $filter('orderBy')($scope.facilities, 'name', false);
+
+    $scope.googleLogin = function () {
+
+        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, token) {
+
+            console.log('googleapi', GoogleApi);
+
+            console.log('token', token);
+
+        })
+
+        console.log('google login', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].isClientSigned);
+    }
+
+    $scope.googleLogout = function () {
+    
+        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleSignoutClick();
+    }
+
+    $scope.pickWorkType = function (name) {
+
+        getWorkType(name);
+    }
+
+    $scope.deleteWorkType = function () {
+
+        var id = $scope.selectWorkType._id;
+
+        var index = $scope.workTypes.indexOf($scope.selectWorkType);
+
+        console.log(id);
+
+        $http.delete('/worktype/' + id).then(function success(data) {
+            console.log(data);
+
+            if (index > -1) {
+                $scope.workTypes.splice(index, 1);
+            }
+
+        }, function error(err) {
+            console.log(err);
+        })
+
+    }
+
+    $scope.pickOrderType = function (name) {
+
+        getOrderType(name);
+    }
+
+    $scope.deleteOrderType = function () {
+
+        var id = $scope.selectOrderType._id;
+
+        var index = $scope.orderTypes.indexOf($scope.selectOrderType);
+
+        $http.delete('/ordertype/' + id).then(function success(data) {
+            console.log(data);
+            if (index > -1) {
+                $scope.orderTypes.splice(index, 1);
+            }
+        }, function error(err) {
+            console.log(err);
+        })
+    }
+
+    $scope.pickFacility = function (name) {
+        getFacility(name);
+    }
+
+    $scope.deleteFacility = function () {
+
+        var id = $scope.selectFacility._id;
+
+        var index = $scope.facilities.indexOf($scope.selectFacility);
+
+        $http.delete('/facility/' + id).then(function success(data) {
+            console.log(data);
+            if (index > -1) {
+                $scope.facilities.splice(index, 1);
+            }
+        }, function error(err) {
+            console.log(err);
+        })
+    }
+
+    var getOrderType = function (name) {
+
+        var result;
+
+        $scope.orderTypes.forEach(function (orderType) {
+
+            if (orderType.name === name) {
+                
+                $scope.selectOrderType = orderType;
+                
+                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-ordertype").val(orderType.name);
+                
+                result = orderType;
+            }
+        })
+        return result;
+    }
+
+    var getWorkType = function (name) {
+
+        var result;
+
+        $scope.workTypes.forEach(function (workType) {
+
+            if (workType.name === name) {
+                
+                $scope.selectWorkType = workType;
+                
+                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-worktype").val(workType.name);
+                
+                result = workType;
+            }
+        })
+        return result;
+    }
+
+    var getFacility = function (name) {
+        
+        var result;
+
+        $scope.facilities.forEach(function (facility) {
+
+            if (facility.name === name) {
+                $scope.selectFacility = facility;
+
+                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val(facility.name);
+
+                result = facility;
+            }
+
+        })
+        return result;
+    }
+
+    $scope.workInput = function () {
+        if ($scope.newWork === true) {
+            createWorkType();
+        } else {
+            $scope.newWork = true;
+        }
+    }
+
+    $scope.typeInput = function () {
+        if ($scope.newType === true) {
+            createOrderType();
+        } else {
+            $scope.newType = true;
+        }
+    }
+
+    $scope.facilityInput = function () {
+        if ($scope.newFacility === true) {
+            createFacility();
+        } else {
+            $scope.newFacility = true;
+        }
+    }
+
+    var createOrderType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ zákazky ...');
+
+        $http.post('/ordertype', {
+            name: $scope.newOrderName
+        }).success(function (response) {
+
+            $scope.newType = false;
+            
+            console.log(response);
+
+            $scope.orderTypes.push(response);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }).error(function (error) {
+            console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    var createWorkType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ práce ...');
+
+        $http.post('/worktype', {
+            name: $scope.newWorkName
+        }).success(function (response) {
+
+            $scope.newWork = false;
+           
+            console.log(response);
+
+            $scope.workTypes.push(response);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }).error(function (error) {
+            console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    var createFacility = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa príslušenstvo ...');
+
+        $http.post('/facility', {
+            name: $scope.newFacilityName
+        }).success(function (response) {
+
+            $scope.newFacility = false;
+           
+            console.log(response);
+
+            $scope.facilities.push(response);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }).error(function (error) {
+            console.log(error);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    $scope.editOrderType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ zákazky ...');
+
+        var id = $scope.selectOrderType._id;
+
+        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-ordertype").val();
+
+        $http.post('/ordertype/' + id, { name: name}).then(function success(data) {
+
+            $scope.orderTypes.forEach(function (orderType) {
+                if (orderType.name == $scope.selectOrderType.name) {
+                    orderType.name = name;
+                }
+            })
+
+            window.closeOrderModal();
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }, function error(err) {
+            console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    $scope.editWorkType = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ práce ...');
+
+        var id = $scope.selectWorkType._id;
+
+        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-worktype").val();
+
+        $http.post('/worktype/' + id, { name: name}).then(function success(data) {
+
+            $scope.workTypes.forEach(function (workType) {
+                if (workType.name == $scope.selectWorkType.name) {
+                    workType.name = name;
+                }
+            })
+
+            window.closeWorkModal();
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }, function error(err) {
+            console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+    $scope.editFacility = function () {
+
+        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa príslušenstvo ...');
+
+        var id = $scope.selectFacility._id;
+
+        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val();
+
+        $http.post('/facility/' + id, { name: name}).then(function success(data) {
+
+            $scope.facilities.forEach(function (facility) {
+                if (facility.name == $scope.selectFacility.name) {
+                    facility.name = name;
+                }
+            })
+
+            window.closeFacilityModal();
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+
+        }, function error(err) {
+            console.log(err);
+
+            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
+        })
+    }
+
+})
+
+
+
+
+
+
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
+var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
+
+var DISCOVERY_DOCS = [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+];
+
+var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
+
+var PROJECT_ID = "594621902662";
+
+
+var TOKEN = null;
+var GoogleAuth;
+var GoogleApi;
+var isClientSigned = false;
+
+var clientCallback;
+
+function handleClientLoad(callback) {
+
+    if (GoogleApi && TOKEN) {
+        callback(GoogleApi, TOKEN);
+    } else {
+        //gapi.load('client:auth2', initClient);
+        gapi.load('client', initClient);
+    }
+
+    function initClient() {
+
+        GoogleApi = gapi;
+
+        if (gapi.client.init) {
+
+            /*gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+                        var token = authResult.access_token;
+                        return callback(GoogleApi, token);
+                    });
+
+            }*/
+
+            //return callback("auth0", "done123");
+
+         //   try {
+                gapi.client.init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES
+                }).then(function () {
+    
+                    GoogleAuth = gapi.auth2.getAuthInstance();
+    
+                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
+    
+                    updateSigninStatus(GoogleAuth.isSignedIn.get());
+    
+                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
+    
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        callback(null);
+                    } else {
+                        callback(GoogleApi, TOKEN);
+                    }
+    
+                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
+                });
+         /*   }
+            catch(err) {
+                console.log('error', err);
+            }*/
+
+            
+        } else {
+
+            gapi.load('auth', { 'callback': mobileApiLoad });
+
+            function mobileApiLoad() {
+
+                gapi.auth.authorize(
+                    {
+                        'client_id': CLIENT_ID,
+                        'scope': SCOPES,
+                        'immediate': false
+                    },
+                    function (authResult) {
+
+                    });
+
+            }
+
+        }
+    }
+}
+
+function login() { }
+
+function updateSigninStatus(isSignedIn) {
+    if (!isSignedIn) {
+        isClientSigned = false;
+        GoogleAuth.signIn();
+    } else {
+        isSignedIn = true;
+    }
+    console.log('status change', isSignedIn);
+    //clientCallback();
+}
+
+function handleAuthClick(event) {
+    GoogleAuth.signIn();
+}
+
+function handleSignoutClick(event) {
+    GoogleAuth.signOut();
+
+    GoogleApi = null;
+}
+
+function isClientLogged() {
+    gapi.auth2.getAuthInstance().isSignedIn.get();
+}
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    open: function (info) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'hidden',
+            height: '100%'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
+    },
+    close: function () {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
+            overflow: 'auto',
+            height: 'auto'
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
+    }
+});
+
+/***/ }),
+
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10323,618 +10935,6 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-
-/***/ }),
-
-/***/ 165:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_calendar__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__ = __webpack_require__(33);
-
-
-
-
-
-var app = angular.module('Settings', ['angularUtils.directives.dirPagination']);
-
-app.controller('SettingsCtrl', function ($scope, $http, $filter) {
-
-    $scope.orderTypes = window.orderTypes;
-
-    $scope.workTypes = window.workTypes;
-
-    $scope.facilities = window.facilities;
-
-    $scope.selectWorkType;
-
-    $scope.selectOrderType;
-
-    $scope.selectFacility;
-
-    $scope.newWork = false;
-
-    $scope.newType = false;
-
-    $scope.newFacility = false;
-
-    $scope.newWorkName = '';
-
-    $scope.newOrderName = '';
-
-    $scope.newFacilityName = '';
-
-    $scope.orderTypes = $filter('orderBy')($scope.orderTypes, 'name', false);
-
-    $scope.workTypes = $filter('orderBy')($scope.workTypes, 'name', false);
-
-    $scope.facilities = $filter('orderBy')($scope.facilities, 'name', false);
-
-    $scope.googleLogin = function () {
-
-        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleClientLoad(function (GoogleApi, token) {
-
-            console.log('googleapi', GoogleApi);
-
-            console.log('token', token);
-
-        })
-
-        console.log('google login', __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].isClientSigned);
-    }
-
-    $scope.googleLogout = function () {
-    
-        __WEBPACK_IMPORTED_MODULE_1__lib_google_auth__["a" /* default */].handleSignoutClick();
-    }
-
-    $scope.pickWorkType = function (name) {
-
-        getWorkType(name);
-    }
-
-    $scope.deleteWorkType = function () {
-
-        var id = $scope.selectWorkType._id;
-
-        var index = $scope.workTypes.indexOf($scope.selectWorkType);
-
-        console.log(id);
-
-        $http.delete('/worktype/' + id).then(function success(data) {
-            console.log(data);
-
-            if (index > -1) {
-                $scope.workTypes.splice(index, 1);
-            }
-
-        }, function error(err) {
-            console.log(err);
-        })
-
-    }
-
-    $scope.pickOrderType = function (name) {
-
-        getOrderType(name);
-    }
-
-    $scope.deleteOrderType = function () {
-
-        var id = $scope.selectOrderType._id;
-
-        var index = $scope.orderTypes.indexOf($scope.selectOrderType);
-
-        $http.delete('/ordertype/' + id).then(function success(data) {
-            console.log(data);
-            if (index > -1) {
-                $scope.orderTypes.splice(index, 1);
-            }
-        }, function error(err) {
-            console.log(err);
-        })
-    }
-
-    $scope.pickFacility = function (name) {
-        getFacility(name);
-    }
-
-    $scope.deleteFacility = function () {
-
-        var id = $scope.selectFacility._id;
-
-        var index = $scope.facilities.indexOf($scope.selectFacility);
-
-        $http.delete('/facility/' + id).then(function success(data) {
-            console.log(data);
-            if (index > -1) {
-                $scope.facilities.splice(index, 1);
-            }
-        }, function error(err) {
-            console.log(err);
-        })
-    }
-
-    var getOrderType = function (name) {
-
-        var result;
-
-        $scope.orderTypes.forEach(function (orderType) {
-
-            if (orderType.name === name) {
-                
-                $scope.selectOrderType = orderType;
-                
-                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-ordertype").val(orderType.name);
-                
-                result = orderType;
-            }
-        })
-        return result;
-    }
-
-    var getWorkType = function (name) {
-
-        var result;
-
-        $scope.workTypes.forEach(function (workType) {
-
-            if (workType.name === name) {
-                
-                $scope.selectWorkType = workType;
-                
-                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-worktype").val(workType.name);
-                
-                result = workType;
-            }
-        })
-        return result;
-    }
-
-    var getFacility = function (name) {
-        
-        var result;
-
-        $scope.facilities.forEach(function (facility) {
-
-            if (facility.name === name) {
-                $scope.selectFacility = facility;
-
-                __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val(facility.name);
-
-                result = facility;
-            }
-
-        })
-        return result;
-    }
-
-    $scope.workInput = function () {
-        if ($scope.newWork === true) {
-            createWorkType();
-        } else {
-            $scope.newWork = true;
-        }
-    }
-
-    $scope.typeInput = function () {
-        if ($scope.newType === true) {
-            createOrderType();
-        } else {
-            $scope.newType = true;
-        }
-    }
-
-    $scope.facilityInput = function () {
-        if ($scope.newFacility === true) {
-            createFacility();
-        } else {
-            $scope.newFacility = true;
-        }
-    }
-
-    var createOrderType = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ zákazky ...');
-
-        $http.post('/ordertype', {
-            name: $scope.newOrderName
-        }).success(function (response) {
-
-            $scope.newType = false;
-            
-            console.log(response);
-
-            $scope.orderTypes.push(response);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }).error(function (error) {
-            console.log(error);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-    var createWorkType = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa typ práce ...');
-
-        $http.post('/worktype', {
-            name: $scope.newWorkName
-        }).success(function (response) {
-
-            $scope.newWork = false;
-           
-            console.log(response);
-
-            $scope.workTypes.push(response);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }).error(function (error) {
-            console.log(error);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-    var createFacility = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Vytvára sa príslušenstvo ...');
-
-        $http.post('/facility', {
-            name: $scope.newFacilityName
-        }).success(function (response) {
-
-            $scope.newFacility = false;
-           
-            console.log(response);
-
-            $scope.facilities.push(response);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }).error(function (error) {
-            console.log(error);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-    $scope.editOrderType = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ zákazky ...');
-
-        var id = $scope.selectOrderType._id;
-
-        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-ordertype").val();
-
-        $http.post('/ordertype/' + id, { name: name}).then(function success(data) {
-
-            $scope.orderTypes.forEach(function (orderType) {
-                if (orderType.name == $scope.selectOrderType.name) {
-                    orderType.name = name;
-                }
-            })
-
-            window.closeOrderModal();
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }, function error(err) {
-            console.log(err);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-    $scope.editWorkType = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa typ práce ...');
-
-        var id = $scope.selectWorkType._id;
-
-        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-worktype").val();
-
-        $http.post('/worktype/' + id, { name: name}).then(function success(data) {
-
-            $scope.workTypes.forEach(function (workType) {
-                if (workType.name == $scope.selectWorkType.name) {
-                    workType.name = name;
-                }
-            })
-
-            window.closeWorkModal();
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }, function error(err) {
-            console.log(err);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-    $scope.editFacility = function () {
-
-        __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].open('Edituje sa príslušenstvo ...');
-
-        var id = $scope.selectFacility._id;
-
-        var name = __WEBPACK_IMPORTED_MODULE_2_jquery___default()("#edit-facility").val();
-
-        $http.post('/facility/' + id, { name: name}).then(function success(data) {
-
-            $scope.facilities.forEach(function (facility) {
-                if (facility.name == $scope.selectFacility.name) {
-                    facility.name = name;
-                }
-            })
-
-            window.closeFacilityModal();
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-
-        }, function error(err) {
-            console.log(err);
-
-            __WEBPACK_IMPORTED_MODULE_3__lib_preloader_js__["a" /* default */].close();
-        })
-    }
-
-})
-
-
-
-
-
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-var CLIENT_ID = '594621902662-b4e9v1girln9pv681qq6ropifl3isv8i.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyCATpJdLXMjzH-IcDzAeCgxAk-ZC-agdhg';
-
-var DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-];
-
-var SCOPES = "https://www.googleapis.com/auth/admin.directory.device.mobile https://www.googleapis.com/auth/photos https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.login";
-
-var PROJECT_ID = "594621902662";
-
-
-var TOKEN = null;
-var GoogleAuth;
-var GoogleApi;
-var isClientSigned = false;
-
-var clientCallback;
-
-function handleClientLoad(callback) {
-
-    if (GoogleApi && TOKEN) {
-        callback(GoogleApi, TOKEN);
-    } else {
-        //gapi.load('client:auth2', initClient);
-        gapi.load('client', initClient);
-    }
-
-    function initClient() {
-
-        GoogleApi = gapi;
-
-        if (gapi.client.init) {
-
-            /*gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-                        var token = authResult.access_token;
-                        return callback(GoogleApi, token);
-                    });
-
-            }*/
-
-            //return callback("auth0", "done123");
-
-         //   try {
-                gapi.client.init({
-                    discoveryDocs: DISCOVERY_DOCS,
-                    apiKey: API_KEY,
-                    clientId: CLIENT_ID,
-                    scope: SCOPES
-                }).then(function () {
-    
-                    GoogleAuth = gapi.auth2.getAuthInstance();
-    
-                    GoogleAuth.isSignedIn.listen(updateSigninStatus);
-    
-                    updateSigninStatus(GoogleAuth.isSignedIn.get());
-    
-                    TOKEN = GoogleAuth.currentUser.get().getAuthResponse().access_token;
-    
-                    if (!GoogleAuth.isSignedIn.get()) {
-                        callback(null);
-                    } else {
-                        callback(GoogleApi, TOKEN);
-                    }
-    
-                    //console.log('token loaded from external file!', GoogleAuth.currentUser.get().getAuthResponse());
-                });
-         /*   }
-            catch(err) {
-                console.log('error', err);
-            }*/
-
-            
-        } else {
-
-            gapi.load('auth', { 'callback': mobileApiLoad });
-
-            function mobileApiLoad() {
-
-                gapi.auth.authorize(
-                    {
-                        'client_id': CLIENT_ID,
-                        'scope': SCOPES,
-                        'immediate': false
-                    },
-                    function (authResult) {
-
-                    });
-
-            }
-
-        }
-    }
-}
-
-function login() { }
-
-function updateSigninStatus(isSignedIn) {
-    if (!isSignedIn) {
-        isClientSigned = false;
-        GoogleAuth.signIn();
-    } else {
-        isSignedIn = true;
-    }
-    console.log('status change', isSignedIn);
-    //clientCallback();
-}
-
-function handleAuthClick(event) {
-    GoogleAuth.signIn();
-}
-
-function handleSignoutClick(event) {
-    GoogleAuth.signOut();
-
-    GoogleApi = null;
-}
-
-function isClientLogged() {
-    gapi.auth2.getAuthInstance().isSignedIn.get();
-}
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({ TOKEN, handleClientLoad, GoogleApi, isClientSigned, PROJECT_ID, API_KEY, CLIENT_ID, handleSignoutClick, clientCallback });
-
-/***/ }),
-
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__google_auth__ = __webpack_require__(3);
-
-
-
-var GoogleApi;
-
-function setGoogleApi(api) {
-    GoogleApi = api;
-}
-
-function insertEvent(order, customer) {
-    console.log('insert event ', order.description);
-
-    var date = new Date();
-
-    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
-    console.log(dateString);
-
-    var event = {
-        'summary': customer.fullName,
-        'description': order.description,
-        'start': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'end': {
-            'date': dateString,
-            'timeZone': 'Europe/Bratislava'
-        },
-        'recurrence': [
-            'RRULE:FREQ=DAILY;COUNT=1'
-        ]
-    }
-    var request = GoogleApi.client.calendar.events.insert({
-        'calendarId': 'primary',
-        'resource': event
-    });
-
-    request.execute(function (event) {
-        console.log('Event created: ', event);
-    });
-}
-
-var calendarSettings = {
-    closeText: 'Zavrieť',
-    prevText: '&lt; Predchádzajúci',
-    nextText: 'Nasledujúci &gt;',
-    currentText: 'Dnes',
-    monthNames: [ 'Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December' ],
-    monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ],
-    dayNames: [ 'Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota' ],
-    dayNamesShort: [ 'Ned', 'Pon', 'Uto', 'Str', 'Štv', 'Pia', 'Sob' ],
-    dayNamesMin: [ 'Ne', 'Po', 'Ut', 'St', 'Št', 'Pia', 'So' ],
-    dateFormat: 'd.m.yy',
-    firstDay: 0,
-    isRTL: false
-}
-
-/* harmony default export */ __webpack_exports__["a"] = ({ setGoogleApi, insertEvent, calendarSettings });
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    open: function (info) {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.preloader-info').text(info);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
-            overflow: 'hidden',
-            height: '100%'
-        });
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 0);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').show();
-    },
-    close: function () {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('html, body').css({
-            overflow: 'auto',
-            height: 'auto'
-        });
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.header-row').css('margin-bottom', 20);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loader-wrapper').hide();
-    }
-});
 
 /***/ })
 
