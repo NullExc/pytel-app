@@ -1,0 +1,56 @@
+<div id="sale-div" class="col s12 l6 offset-l3">
+    <div class="col s12 panel z-depth-2">
+        <div class="col s12">
+            <h5>
+                Aktuálny stav predaja zákazky
+            </h5>
+            <h4>
+                <span id="sale-info-span" class="label label-primary green lighten-3">{{saleStateName}}</span>
+            </h4>
+        </div>
+        <div id="sale-select-div" class="input-field col s12">
+            <select id="sale-selector" required="required" class="validate" ng-change="saleStateSelectChange()"
+                ng-model="saleSelect.value" style="color:black !important">
+                <option value="Vybrať nový stav predaja" disabled selected>Vybrať nový stav predaja</option>
+                <option id="saleOrdered-option" value="Objednané">Objednané</option>
+                <option id="saleObtained-option" value="Obdržané">Obdržané</option>
+                <option id="saleLeaved-option" value="Vyzdvihnuté">Vyzdvihnuté</option>
+            </select>
+            <label>Vybrať stav predaja</label>
+            <span id="sale-selector-span" class="helper-text red-text hide"></span>
+        </div>
+
+        <div id="sale-date-div" class="col s12" ng-controller="SaleDateInputCtrl">
+            <div id="saleOrdered-date-div" class="row date-row">
+                <div input-field class="col s6">
+                    <label id="saleOrdered-label" for="saleOrdered-date">Dátum objednania</label>
+                    <input id="saleordered-date" type="text" readonly>
+                </div>
+                <div class="input-field col s6">
+                    <input type="text" class="timepicker" id="saleOrdered-time" readonly>
+                    <label class="time-label" for="saleOrdered-time">Čas objednania</label>
+                </div>
+            </div>
+            <div id="saleObtained-date-div" class="row date-row">
+                <div input-field class="col s6">
+                    <label id="saleObtained-label" for="saleObtained-date">Dátum obdržania</label>
+                    <input id="saleObtained-date" type="text" readonly>
+                </div>
+                <div class="input-field col s6">
+                    <input type="text" class="timepicker" id="saleObtained-time" readonly>
+                    <label class="time-label" for="saleObtained-time">Čas obdržania</label>
+                </div>
+            </div>
+            <div id="saleLeaved-date-div" class="row date-row">
+                <div input-field class="col s6">
+                    <label id="saleLeaved-label" for="saleLeaved-date">Dátum vyzdvihnutia</label>
+                    <input id="saleLeaved-date" type="text" readonly>
+                </div>
+                <div class="input-field col s6">
+                    <input type="text" class="timepicker" id="saleLeaved-time" readonly>
+                    <label class="time-label" for="saleLeaved-time">Čas vyzdvihnutia</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

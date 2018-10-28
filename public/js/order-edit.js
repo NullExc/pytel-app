@@ -26,8 +26,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     $scope.sale = edit ? order.sale : false;
     $scope.stateName = "";
 
-    $scope.changedState = false;
-
     var selectedCustomer = edit ? customer : null;
     var selectedWork = edit ? workType : null;
     var selectedOrder = edit ? orderType : null;
@@ -36,11 +34,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
     $scope.originState = edit ? order.state : STATE.arrived;
     $scope.saveState = edit ? order.state : STATE.arrived;
+    $scope.saleOriginState = edit ? order.state : STATE.saleOrdered;
+    $scope.saleSaveState = edit ? order.state : STATE.saleOrdered;
 
-    $scope.child = {};
+    $scope.stateChild = {};
+    $scope.saleChild = {};
     $scope.jquery = $;
 
-    console.log("$scope.saveState", $scope.saveState);
+    console.log("$scope.order", $scope.order);
 
     if (!selectedPhotoUrls) selectedPhotoUrls = [];
 
@@ -63,9 +64,37 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         choices: ['Vybrať nový stav', 'Prijať', 'Začať', 'Dokončiť', 'Odovzdať']
     }
 
-    $scope.stateSelectChange = function () {
+    $scope.saleSelect = {
+        value: 'Vybrať nový stav predaja',
+        choices: ['Vybrať nový stav predaja', 'Objednané', 'Obdržané', 'Vyzdvihnuté']
+    }
 
-        $scope.changedState = true;
+    $scope.saleChange = function (e) {
+        console.log("Zemna predaja", $scope.sale);
+        if ($scope.sale) {
+            $scope.state = STATE.saleOrdered;
+        } else {
+            $scope.state = STATE.arrived;
+        }
+    }
+
+    $scope.currentInputData = function (dateInputId, timeInputId) {
+
+        var date = new Date();
+
+        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+        $(dateInputId).val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+            + '.' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+            + '.' + utcDate.getFullYear());
+
+        $(timeInputId).val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+            + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+
+        console.log("current PARENT CONTRL", utcDate);
+    }
+
+    $scope.stateSelectChange = function () {
 
         if ($scope.stateSelect.value === $scope.stateSelect.choices[1]) {
             $scope.saveState = STATE.arrived;
@@ -92,7 +121,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $('#pickup-date-div').removeClass('date-row-active');
 
             if ($scope.originState === STATE.arrived) {
-                $scope.child.currentInputData("#start-date", "#start-time");
+                $scope.currentInputData("#start-date", "#start-time");
             }
 
         } else if ($scope.stateSelect.value === $scope.stateSelect.choices[3]) {
@@ -108,7 +137,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $('#pickup-date-div').removeClass('date-row-active');
 
             if ($scope.originState === STATE.working) {
-                $scope.child.currentInputData("#end-date", "#end-time");
+                $scope.currentInputData("#end-date", "#end-time");
             }
 
         } else if ($scope.stateSelect.value === $scope.stateSelect.choices[4]) {
@@ -124,7 +153,49 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $('#pickup-date-div').addClass('date-row-active');
 
             if ($scope.originState === STATE.done) {
-                $scope.child.currentInputData("#pickup-date", "#pickup-time");
+                $scope.currentInputData("#pickup-date", "#pickup-time");
+            }
+        }
+    }
+
+    $scope.saleStateSelectChange = function () {
+        console.log("saleStateSelectChange", $scope.saleSelect.value);
+        if ($scope.saleSelect.value === $scope.saleSelect.choices[1]) {
+            $scope.saleSaveState = STATE.saleOrdered;
+
+            $('#saleObtained-date-div').addClass('hide');
+            $('#saleLeaved-date-div').addClass('hide');
+
+            $('#saleOrdered-date-div').addClass('date-row-active');
+            $('#saleObtained-date-div').removeClass('date-row-active');
+            $('#saleLeaved-date-div').removeClass('date-row-active');
+
+        } else if ($scope.saleSelect.value === $scope.saleSelect.choices[2]) {
+            $scope.saleSaveState = STATE.saleObtained;
+
+            $('#saleObtained-date-div').removeClass('hide');
+            $('#saleLeaved-date-div').addClass('hide');
+
+            $('#saleOrdered-date-div').removeClass('date-row-active');
+            $('#saleObtained-date-div').addClass('date-row-active');
+            $('#saleLeaved-date-div').removeClass('date-row-active');
+
+            if ($scope.saleOriginState === STATE.saleOrdered) {
+                $scope.currentInputData("#saleObtained-date", "#saleObtained-time");
+            }
+
+        } else if ($scope.saleSelect.value === $scope.saleSelect.choices[3]) {
+            $scope.saleSaveState = STATE.saleLeaved;
+
+            $('#saleObtained-date-div').removeClass('hide');
+            $('#saleLeaved-date-div').removeClass('hide');
+
+            $('#saleOrdered-date-div').removeClass('date-row-active');
+            $('#saleObtained-date-div').removeClass('date-row-active');
+            $('#saleLeaved-date-div').addClass('date-row-active');
+
+            if ($scope.saleOriginState === STATE.saleObtained) {
+                $scope.currentInputData("#saleLeaved-date", "#saleLeaved-time");
             }
         }
     }
@@ -141,7 +212,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         fillCustomerData();
         $('#select-customer').collapsible('close', 0);
     }
-
     $scope.workInput = function () {
         if ($scope.newWork === true) {
             createWorkType();
@@ -149,7 +219,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $scope.newWork = true;
         }
     }
-
     $scope.typeInput = function () {
         if ($scope.newType === true) {
             createOrderType();
@@ -157,7 +226,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             $scope.newType = true;
         }
     }
-
     $scope.facilityInput = function () {
         if ($scope.newFacility === true) {
             createFacility();
@@ -177,7 +245,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             selectedWork = response;
             $("#work").val(response.name);
             $("#work-label").addClass('active');
-            console.log(response);
             preloader.close();
         }).error(function (error) {
             console.log(error);
@@ -196,7 +263,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             selectedOrder = response;
             $("#order").val(response.name);
             $("#order-label").addClass('active');
-            console.log(response);
             preloader.close();
         }).error(function (error) {
             console.log(error);
@@ -214,14 +280,9 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             $scope.newFacility = false;
 
-            console.log(response);
-
             var instance = M.Chips.getInstance($("#facility-chips"));
-
             instance.addChip({ tag: response.name });
-
             selectedFacilities.push(response);
-
             preloader.close();
 
         }).error(function (error) {
@@ -366,8 +427,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
             if (order) {
 
-                var arriveDate = order.arriveDate;
-
                 if (order.description) {
                     $("#description").val(order.description);
                     $("#description-label").addClass('active');
@@ -435,6 +494,14 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
             if ($scope.sale) {
                 $("#state-div").addClass('hide');
+                $("#state-div").removeClass('show');
+                $("#sale-div").addClass('show');
+                $("#sale-div").removeClass('hide');
+            } else {
+                $("#state-div").addClass('show');
+                $("#state-div").removeClass('hide');
+                $("#sale-div").addClass('hide');
+                $("#sale-div").removeClass('show');
             }
         }
 
@@ -482,13 +549,17 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
         });
 
-        var state = STATE.arrived;
+        $scope.state = STATE.arrived;
 
         var date = new Date();
 
         if (edit) {
-            date = new Date(order.arriveDate);
-            state = order.state;
+            if ($scope.sale) {
+                date = new Date(order.orderedDate);
+            } else {
+                date = new Date(order.arriveDate);
+            }
+            $scope.state = order.state;
         }
         utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
@@ -697,30 +768,11 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             var facilities = $("#facilities").val();
 
             if (notes) {
-
-                var temp = notes.replace(/[\\]/g, '\\\\')
-                    .replace(/[\"]/g, '\\\"')
-                    .replace(/[\/]/g, '\\/')
-                    .replace(/[\b]/g, '\\b')
-                    .replace(/[\f]/g, '\\f')
-                    .replace(/[\n]/g, '\\n')
-                    .replace(/[\r]/g, '\\r')
-                    .replace(/[\t]/g, '\\t');
-
+                var temp = notes.replace(/[\\]/g, '\\\\').replace(/[\"]/g, '\\\"').replace(/[\/]/g, '\\/').replace(/[\b]/g, '\\b').replace(/[\f]/g, '\\f').replace(/[\n]/g, '\\n').replace(/[\r]/g, '\\r').replace(/[\t]/g, '\\t');
                 order.notes = temp;
-
-                console.log('notes', order.notes);
             }
             if (facilities) {
-
-                var temp = facilities.replace(/[\\]/g, '\\\\')
-                    .replace(/[\"]/g, '\\\"')
-                    .replace(/[\/]/g, '\\/')
-                    .replace(/[\b]/g, '\\b')
-                    .replace(/[\f]/g, '\\f')
-                    .replace(/[\n]/g, '\\n')
-                    .replace(/[\r]/g, '\\r')
-                    .replace(/[\t]/g, '\\t');
+                var temp = facilities.replace(/[\\]/g, '\\\\').replace(/[\"]/g, '\\\"').replace(/[\/]/g, '\\/').replace(/[\b]/g, '\\b').replace(/[\f]/g, '\\f').replace(/[\n]/g, '\\n').replace(/[\r]/g, '\\r').replace(/[\t]/g, '\\t');
                 order.facilities = temp;
             }
 
@@ -733,7 +785,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     $("#price").addClass('invalid');
                     $('#price-label').addClass('active');
                 }
-
             } else {
                 $("#price").addClass('invalid');
                 $('#price-label').addClass('active');
@@ -744,7 +795,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
 
             order.contact = {};
-
             order.contact.customerName = selectedCustomer.fullName;
 
             if (email) order.contact.email = email;
@@ -770,7 +820,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             if (ico || icdph || dic) {
                 order.billData = {};
             }
-
             if (ico) order.billData.ICO = ico;
             if (icdph) order.billData.ICDPH = icdph;
             if (dic) order.billData.DIC = dic;
@@ -785,51 +834,78 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 order.facilitiesArray.push(selectedFacility._id);
             })
 
-            if (edit && $scope.saveState != state) {
+            if (edit && !$scope.sale && $scope.saveState != $scope.state) {
                 order.state = $scope.saveState;
+            } else if (edit && $scope.sale && $scope.saleSaveState != $scope.state) {
+                order.state = $scope.saleSaveState;
             } else {
-                order.state = state;
+                order.state = $scope.state;
             }
-
             var help = new Date();
 
             date = new Date(Date.UTC(help.getUTCFullYear(), help.getUTCMonth(), help.getUTCDate(), help.getUTCHours() + 1, help.getUTCMinutes(), help.getUTCSeconds()));
 
-            console.log("state to save", order.state, edit, $scope.changedState);
+            console.log("state to save", order.state, edit);
 
             if (edit) {
 
-                var timezoneOffset = $scope.child.arrivedDate.getTimezoneOffset() * 60000;
-                order.arriveDate = new Date($scope.child.arrivedDate.getTime() - timezoneOffset);
+                if (!$scope.sale) {
 
-                if (order.state === STATE.working ||
-                    order.state === STATE.done ||
-                    order.state === STATE.pickUp) {
+                    var timezoneOffset = $scope.stateChild.arrivedDate.getTimezoneOffset() * 60000;
+                    order.arriveDate = new Date($scope.stateChild.arrivedDate.getTime() - timezoneOffset);
 
-                    var timezoneOffset = $scope.child.startDate.getTimezoneOffset() * 60000;
-                    order.startDate = new Date($scope.child.startDate.getTime() - timezoneOffset);
+                    if (order.state === STATE.working ||
+                        order.state === STATE.done ||
+                        order.state === STATE.pickUp) {
 
-                }
-                if (order.state === STATE.done ||
-                    order.state === STATE.pickUp) {
+                        var timezoneOffset = $scope.stateChild.startDate.getTimezoneOffset() * 60000;
+                        order.startDate = new Date($scope.stateChild.startDate.getTime() - timezoneOffset);
+                    }
+                    if (order.state === STATE.done ||
+                        order.state === STATE.pickUp) {
 
-                    var timezoneOffset = $scope.child.endDate.getTimezoneOffset() * 60000;
-                    order.endDate = new Date($scope.child.endDate.getTime() - timezoneOffset);
-                }
-                if (order.state === STATE.pickUp) {
+                        var timezoneOffset = $scope.stateChild.endDate.getTimezoneOffset() * 60000;
+                        order.endDate = new Date($scope.stateChild.endDate.getTime() - timezoneOffset);
+                    }
+                    if (order.state === STATE.pickUp) {
 
-                    var timezoneOffset = $scope.child.pickupDate.getTimezoneOffset() * 60000;
-                    order.pickDate = new Date($scope.child.pickupDate.getTime() - timezoneOffset);
-                }
+                        var timezoneOffset = $scope.stateChild.pickupDate.getTimezoneOffset() * 60000;
+                        order.pickDate = new Date($scope.stateChild.pickupDate.getTime() - timezoneOffset);
+                    }
 
-                var isDateCorrect = $scope.child.checkDates(order);
+                    var isDateCorrect = $scope.stateChild.checkDates(order);
 
-                if (!isDateCorrect.check) {
-                    console.log("Incorrect dates", isDateCorrect);
-                    $("#state-selector-span").removeClass('hide');
-                    $("#state-selector-span").text(isDateCorrect.text);
+                    if (!isDateCorrect.check) {
+                        console.log("Incorrect dates", isDateCorrect);
+                        $("#state-selector-span").removeClass('hide');
+                        $("#state-selector-span").text(isDateCorrect.text);
+                        return;
+                    }
 
-                    return;
+                } else {
+                    var timezoneOffset = $scope.saleChild.orderedDate.getTimezoneOffset() * 60000;
+                    order.orderedDate = new Date($scope.saleChild.orderedDate.getTime() - timezoneOffset);
+
+                    if (order.state === STATE.saleObtained ||
+                        order.state === STATE.saleLeaved) {
+
+                        var timezoneOffset = $scope.saleChild.obtainedDate.getTimezoneOffset() * 60000;
+                        order.obtainedDate = new Date($scope.saleChild.obtainedDate.getTime() - timezoneOffset);
+                    }
+                    if (order.state === STATE.saleLeaved) {
+
+                        var timezoneOffset = $scope.saleChild.leavedDate.getTimezoneOffset() * 60000;
+                        order.leavedDate = new Date($scope.saleChild.leavedDate.getTime() - timezoneOffset);
+                    }
+
+                    var isDateCorrect = $scope.saleChild.checkDates(order);
+
+                    if (!isDateCorrect.check) {
+                        console.log("Incorrect dates", isDateCorrect);
+                        $("#state-selector-span").removeClass('hide');
+                        $("#state-selector-span").text(isDateCorrect.text);
+                        return;
+                    }
                 }
             }
 
@@ -843,18 +919,22 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     order
                 }
             }
-
             if (e.target.id === 'create') {
 
+                var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+                var createDate = new Date(utcDate.getTime() - userTimezoneOffset);
+
                 if ($scope.sale) {
-                    order.state = STATE.pickUp;
 
-                    if (order.orderType) delete order.orderType;
-                    if (order.workType) delete order.workType;
+                    if (options.data.order.orderType) delete options.data.order.orderType;
+                    if (options.data.order.workType) delete options.data.order.workType;
 
-                    order.sale = true;
-                    order.state = STATE.pickUp;
-                    order.pickDate = utcDate;
+                    options.data.order.sale = true;
+                    options.data.order.state = STATE.saleOrdered;
+                    options.data.order.orderedDate = createDate;
+                } else {
+                    //options.data.order.arriveDate = utcDate;
+                    options.data.order.arriveDate = createDate;
                 }
 
                 options.method = 'post';
@@ -863,21 +943,13 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     calendar.setGoogleApi(GoogleApi);
                     calendar.insertEvent(order, selectedCustomer);
                 });
-
-                var userTimezoneOffset = date.getTimezoneOffset() * 60000;
-
-                //options.data.order.arriveDate = utcDate;
-                options.data.order.arriveDate = new Date(utcDate.getTime() - userTimezoneOffset);
-
                 preloader.open('Vytvára sa zákazka ...');
             }
             else {
-
                 var pathname = window.location.pathname.split("/");
                 var id = pathname[pathname.length - 1];
                 options.method = 'put';
                 options.url = '/order/' + id;
-
                 preloader.open('Edituje sa zákazka ...');
             }
 
@@ -888,7 +960,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 if (err) console.log("error", err);
                 else if (response) {
                     if (response.data.id) {
-                       location.href = "/order/" + response.data.id;
+                        location.href = "/order/" + response.data.id;
                     } else {
                         var pathname = window.location.pathname.split("/");
                         var id = pathname[pathname.length - 1];
@@ -896,27 +968,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     }
                 }
             })
-        })
-
-        $('.start-state').click(function () {
-            $scope.changedState = true;
-            $('.start-state').removeClass('light-blue');
-            $('.start-state').addClass('light-green');
-            state = STATE.working;
-        })
-
-        $('.end-state').click(function () {
-            $scope.changedState = true;
-            $('.end-state').removeClass('light-blue');
-            $('.end-state').addClass('light-green');
-            state = STATE.done;
-        })
-
-        $('.pickup-state').click(function () {
-            $scope.changedState = true;
-            $('.pickup-state').removeClass('light-blue');
-            $('.pickup-state').addClass('light-green');
-            state = STATE.pickUp;
         })
 
         preloader.close();
@@ -931,7 +982,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#company-form").show();
             }
         });
-
         $('#show-company').prop('checked', true);
         $("#person-form").hide();
         $("#company-form").show();
@@ -951,7 +1001,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     $('#name-label').addClass('active');
                     return;
                 }
-
                 var firstName = $("#contact-first").val();
                 var lastName = $("#contact-last").val();
                 var email = $("#contact-email").val();
@@ -981,7 +1030,6 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     $('#last-label').addClass('active');
                     return;
                 }
-
                 var email = $("#customer-email").val();
                 var phone = $("#customer-phone").val();
 
@@ -1012,9 +1060,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     //location.href = '/customer/' + response.data.id;
                     data._id = response.data.id;
                     selectedCustomer = data;
-
                     fillCustomerData();
-
                     $('#order-tab-container').tabs('select', 'assign-customer');
                 }
             })

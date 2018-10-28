@@ -10,7 +10,7 @@ var app = angular.module('Orders', ['angularUtils.directives.dirPagination']);
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     $scope.today = false;
-    
+
     $scope.orders;
 
     $scope.orderByDate = 'arriveDate';
@@ -86,7 +86,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             stateType: stateType
         })
             .success(function (data) {
-                
+
                 console.log('collection', data.orders.length, data.orders);
 
                 $scope.orders = data.orders;
@@ -108,17 +108,17 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
                 preloader.close();
             })
 
-            $scope.userSettings.orders.dateType = dateType;
+        $scope.userSettings.orders.dateType = dateType;
 
-            $scope.userSettings.orders.stateType = stateType;
+        $scope.userSettings.orders.stateType = stateType;
 
-            $http.post('/user-settings', $scope.userSettings)
-                    .success(function (data) {
-                        console.log('user setting saved', data);
-                    })
-                    .error(function (data) {
-                        console.log('error', data);
-                    })
+        $http.post('/user-settings', $scope.userSettings)
+            .success(function (data) {
+                console.log('user setting saved', data);
+            })
+            .error(function (data) {
+                console.log('error', data);
+            })
     }
 
     console.log('user settings from window', window.userSettings);
@@ -136,7 +136,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     } else if ($scope.userSettings.orders.dateType == "pickDate") {
         $scope.dateSelect.value = $scope.dateSelect.choices[3];
-        
+
     }
 
     if ($scope.userSettings.orders.stateType == STATE.arrived) {
@@ -161,7 +161,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     var dateToParts = $scope.userSettings.orders.dateTo.split('.');
 
     $scope.from = new Date(parseInt(dateFromParts[2]), parseInt(dateFromParts[1] - 1), parseInt(dateFromParts[0]), 1, 1);
-    
+
     $scope.to = new Date(parseInt(dateToParts[2]), parseInt(dateToParts[1] - 1), parseInt(dateToParts[0]), 24, 59);
 
     setTimeout(function () {

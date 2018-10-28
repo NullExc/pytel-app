@@ -210,6 +210,9 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
+    saleOrdered: 'saleOrdered',
+    saleObtained: 'saleObtained',
+    saleLeaved: 'saleLeaved',
     arrived: 'arrived',
     working: 'working',
     done: 'done',

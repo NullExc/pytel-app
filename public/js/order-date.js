@@ -58,23 +58,6 @@ app.controller('DateInputCtrl', function ($scope) {
         return dateObject;
     }
 
-    $scope.currentInputData = function (dateInputId, timeInputId) {
-
-        var date = new Date();
-
-        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
-
-        $(dateInputId).val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
-            + '.' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
-            + '.' + utcDate.getFullYear());
-
-        $(timeInputId).val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
-            + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
-
-        console.log("current", utcDate);
-
-    }
-
     $scope.inputDate = function (dateText, dateInputId, timeInputId) {
 
         var date = new Date(dateText);
@@ -92,7 +75,7 @@ app.controller('DateInputCtrl', function ($scope) {
 
     var parentScope = $scope.$parent;
 
-    parentScope.child = $scope;
+    parentScope.stateChild = $scope;
 
     $(document).ready(function () {
 
@@ -104,11 +87,6 @@ app.controller('DateInputCtrl', function ($scope) {
                 $("#arrived-label").addClass('active');
                 $scope.arrivedDate = $scope.parseDate($scope.arrivedDate, dateText);
                 $scope.$apply();
-
-                /*console.log("arrivedDate", $scope.arrivedDate);
-                console.log("startDate", $scope.startDate);
-                console.log("endDate", $scope.endDate);
-                console.log("pickupDate", $scope.pickupDate);*/
             }
         });
         $("#arrived-date").datepicker($.datepicker.regional["sk"]);
@@ -225,10 +203,10 @@ app.controller('DateInputCtrl', function ($scope) {
             $scope.inputDate($scope.$parent.order.pickDate, "#pickup-date", "#pickup-time");
         }
 
-        console.log("arrivedDate", $scope.arrivedDate);
+        /*console.log("arrivedDate", $scope.arrivedDate);
         console.log("startDate", $scope.startDate);
         console.log("endDate", $scope.endDate);
-        console.log("pickupDate", $scope.pickupDate);
+        console.log("pickupDate", $scope.pickupDate);*/
 
         $("#arrived-label").addClass('active');
         $("#start-label").addClass('active');
@@ -239,3 +217,177 @@ app.controller('DateInputCtrl', function ($scope) {
 
     })
 })
+
+
+app.controller('SaleDateInputCtrl', function ($scope) {
+
+    $scope.orderedDate = new Date();
+    $scope.obtainedDate = new Date();
+    $scope.leavedDate = new Date();
+
+    $("#sale-selector").css({display: "block", height: 0, padding: 0, width: 0, position: 'absolute'});
+
+    $scope.checkDates = function (order) {
+
+        var result = {
+            check: true
+        }
+
+        if (order.state === STATE.saleObtained ||
+            order.state === STATE.saleLeaved) {
+            if (order.orderedDate > order.obtainedDate) {
+                result.check = false;
+                result.text = "Dátum objednania musí byť menší."
+            }
+        }
+        if (order.state === STATE.saleLeaved) {
+            if (order.obtainedDate > order.leavedDate) {
+                result.check = false;
+                result.text = "Dátum vyzdvihnutia zákazníkom musí byť menší."
+            }
+        }
+        return result;
+    }
+
+    $scope.parseDate = function (dateObject, dateText) {
+
+        var dateParts = dateText.split('.');
+
+        dateObject.setFullYear(parseInt(dateParts[2]));
+        dateObject.setMonth(parseInt(dateParts[1] - 1));
+        dateObject.setDate(parseInt(dateParts[0]));
+
+        //var parsedDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
+
+        return dateObject;
+    }
+
+    $scope.inputDate = function (dateText, dateInputId, timeInputId) {
+
+        var date = new Date(dateText);
+
+        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+        $(dateInputId).val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+            + '.' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+            + '.' + utcDate.getFullYear());
+
+        $(timeInputId).val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+            + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+
+    }
+
+    var parentScope = $scope.$parent;
+
+    parentScope.saleChild = $scope;
+
+    $(document).ready(function () {
+
+        $.datepicker.regional['sk'] = calendar.calendarSettings;
+        $.datepicker.setDefaults($.datepicker.regional['sk']);
+
+        console.log("****Preco nejde datepicker???? :() ****");
+
+        $("#saleordered-date").datepicker({
+            onSelect: function (dateText) {
+                $("#saleOrdered-label").addClass('active');
+                $scope.orderedDate = $scope.parseDate($scope.orderedDate, dateText);
+                $scope.$apply();
+            }
+        });
+        $("#saleordered-date").datepicker($.datepicker.regional["sk"]);
+
+        $scope.$parent.jquery('#saleOrdered-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                //time.setUTCHours(time.getUTCHours() + 1);
+                $scope.orderedDate.setHours(time.getHours());
+                $scope.orderedDate.setMinutes(time.getMinutes());
+
+                console.log("arrived time change", $scope.orderedDate);
+            }
+        });
+
+        $("#saleObtained-date").datepicker({
+            onSelect: function (dateText) {
+                $("#saleObtained-label").addClass('active');
+                $scope.obtainedDate = $scope.parseDate($scope.obtainedDate, dateText);
+                $scope.$apply();
+            }
+        });
+
+        $("#saleObtained-date").datepicker($.datepicker.regional["sk"]);
+
+        $scope.$parent.jquery('#saleObtained-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                $scope.obtainedDate.setHours(time.getHours());
+                $scope.obtainedDate.setMinutes(time.getMinutes());
+
+                console.log('jquery start-time', $scope.obtainedDate);
+            }
+        });
+
+        $("#saleLeaved-date").datepicker({
+            onSelect: function (dateText) {
+                $("#saleLeaved-label").addClass('active');
+                $scope.leavedDate = $scope.parseDate($scope.leavedDate, dateText);
+                $scope.$apply();
+            }
+        });
+
+        $("#saleLeaved-date").datepicker($.datepicker.regional["sk"]);
+
+        $scope.$parent.jquery('#saleLeaved-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                $scope.leavedDate.setHours(time.getHours());
+                $scope.leavedDate.setMinutes(time.getMinutes());
+
+                console.log('jquery end-time', $scope.leavedDate);
+            }
+        });
+
+        var orderedDateHelp = new Date($scope.$parent.order.orderedDate);
+        $scope.orderedDate = new Date(orderedDateHelp.getUTCFullYear(), orderedDateHelp.getUTCMonth(), orderedDateHelp.getUTCDate(), orderedDateHelp.getUTCHours(), orderedDateHelp.getUTCMinutes(), orderedDateHelp.getUTCSeconds());
+        $scope.inputDate($scope.$parent.order.orderedDate, "#saleordered-date", "#saleOrdered-time");
+
+        if ($scope.$parent.order.state === STATE.saleObtained ||
+            $scope.$parent.order.state === STATE.saleLeaved) {
+
+            var obtainedDateHelp = new Date($scope.$parent.order.obtainedDate);
+            $scope.obtainedDate = new Date(obtainedDateHelp.getUTCFullYear(), obtainedDateHelp.getUTCMonth(), obtainedDateHelp.getUTCDate(), obtainedDateHelp.getUTCHours(), obtainedDateHelp.getUTCMinutes(), obtainedDateHelp.getUTCSeconds());
+            $scope.inputDate($scope.$parent.order.obtainedDate, "#saleObtained-date", "#saleObtained-time");
+        }
+
+        if ($scope.$parent.order.state === STATE.saleLeaved) {
+
+            var leavedDateHelp = new Date($scope.$parent.order.leavedDate);
+            $scope.leavedDate = new Date(leavedDateHelp.getUTCFullYear(), leavedDateHelp.getUTCMonth(), leavedDateHelp.getUTCDate(), leavedDateHelp.getUTCHours(), leavedDateHelp.getUTCMinutes(), leavedDateHelp.getUTCSeconds());
+            $scope.inputDate($scope.$parent.order.leavedDate, "#saleLeaved-date", "#saleLeaved-time");
+        }
+
+        /*console.log("arrivedDate", $scope.orderedDate);
+        console.log("startDate", $scope.obtainedDate);
+        console.log("endDate", $scope.leavedDate);*/
+
+        $("#saleOrdered-label").addClass('active');
+        $("#saleObtained-label").addClass('active');
+        $("#saleLeaved-label").addClass('active');
+
+        $(".time-label").addClass('active');
+
+    })
+
+
+
+});

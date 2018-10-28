@@ -1911,7 +1911,7 @@ function loadLocale(name) {
         try {
             oldLocale = globalLocale._abbr;
             var aliasedRequire = require;
-            __webpack_require__(155)("./" + name);
+            __webpack_require__(153)("./" + name);
             getSetGlobalLocale(oldLocale);
         } catch (e) {}
     }
@@ -4583,7 +4583,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(154)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(152)(module)))
 
 /***/ }),
 /* 1 */,
@@ -4595,6 +4595,9 @@ return hooks;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
+    saleOrdered: 'saleOrdered',
+    saleObtained: 'saleObtained',
+    saleLeaved: 'saleLeaved',
     arrived: 'arrived',
     working: 'working',
     done: 'done',
@@ -16043,9 +16046,7 @@ return zhTw;
 
 
 /***/ }),
-/* 152 */,
-/* 153 */,
-/* 154 */
+/* 152 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -16073,7 +16074,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 155 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -16328,9 +16329,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 155;
+webpackContext.id = 153;
 
 /***/ }),
+/* 154 */,
+/* 155 */,
 /* 156 */,
 /* 157 */,
 /* 158 */,
@@ -16351,41 +16354,73 @@ $(document).ready(function () {
 
     if (order) {
 
-        //var arriveDate = moment.utc(order.arriveDate).add(1, "hours");
-        var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate);
-
         var id;
 
-        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
+        if (order.sale) {
 
-        if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+            var orderedDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.orderedDate);
 
-            console.log("start date", order.startDate, order.state);
+            $('#ordered-date').text(orderedDate.format('DD.MM.YYYY k:mm:ss'));
 
-            //$("#start-date").text(moment.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
-            $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
-        }
+            if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].saleObtained || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].saleLeaved) {
+                $("#obtained-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.obtainedDate).format('DD.MM.YYYY k:mm:ss'));
+            }
 
-        if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
-            $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
-            //$("#end-date").text(moment.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
-            $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
+        } else {
+
+            //var arriveDate = moment.utc(order.arriveDate).add(1, "hours");
+            var arriveDate = __WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.arriveDate);
+
+            $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
+
+            if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].working || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+
+                console.log("start date", order.startDate, order.state);
+
+                //$("#start-date").text(moment.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+                $("#start-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
+            }
+
+            if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].done || order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].pickUp) {
+                $("#work-progress").text("Práca na zákazke je ukončená.");
+                $("#end-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
+                //$("#end-date").text(moment.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+                $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
+            }
         }
 
         if (order.sale) {
 
-            $("#sale-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
-            //$("#sale-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+            if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].saleOrdered) {
+
+                id = "#ordered-body";
+
+                $("#saleLeaved-option").attr("disabled", true);
+
+                $('#obtained-body').addClass('hide');
+                $('#released-body').addClass('hide');
+
+                $('#saleObtained-date-div').addClass('hide');
+                $('#saleLeaved-date-div').addClass('hide');
+
+            } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].saleObtained) {
+                id = "#obtained-body";
+
+                $('#released-body').addClass('hide');
+
+                $('#saleLeaved-date-div').addClass('hide');
+
+            } else if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].saleLeaved) {
+                id = "#released-body";
+
+                $("#released-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.leavedDate).format('DD.MM.YYYY k:mm:ss'));
+            }
 
         } else {
 
             if (order.state === __WEBPACK_IMPORTED_MODULE_0__state_js__["default"].arrived) {
 
                 id = "#arrive-body";
-
-                $('.end-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
 
                 $("#end-option").attr("disabled", true);
                 $("#pickup-option").attr("disabled", true);
@@ -16402,9 +16437,6 @@ $(document).ready(function () {
 
                 id = "#start-body";
 
-                $('.start-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
-
                 $("#pickup-option").attr("disabled", true);
 
                 $('#end-date-div').addClass('hide');
@@ -16420,9 +16452,6 @@ $(document).ready(function () {
 
                 id = "#end-body";
 
-                $('.start-state').addClass('disabled');
-                $('.end-state').addClass('disabled');
-
                 $('#pickup-date-div').addClass('hide');
 
                 $('#pick-body').addClass('hide');
@@ -16430,20 +16459,14 @@ $(document).ready(function () {
 
                 id = "#pick-body";
 
-                $('.start-state').addClass('disabled');
-                $('.end-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
-
                 //$("#pickup-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
                 $("#pickup-date").text(__WEBPACK_IMPORTED_MODULE_1_moment___default.a.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
             }
-
-            $(id).removeClass("grey");
-            $(id).removeClass("lighten-2");
-            $(id).addClass("green");
-            $(id).addClass("lighten-1");
-
         }
+        $(id).removeClass("grey");
+        $(id).removeClass("lighten-2");
+        $(id).addClass("green");
+        $(id).addClass("lighten-1");
     }
 });
 

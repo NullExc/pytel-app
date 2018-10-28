@@ -583,7 +583,7 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ 152:
+/***/ 154:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -703,7 +703,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_http_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_google_auth__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_calendar_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_picker_js__ = __webpack_require__(154);
 
 
 
@@ -820,6 +820,14 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
    $(document).ready(function () {
 
         console.log("jquery loaded", facilities);
+
+        /*if ($scope.sale) {
+            $("#regular-order-state").addClass("hide");
+            $("#sale-order-state").removeClass("hide");
+        } else {
+            $("#regular-order-state").removeClass("hide");
+            $("#sale-order-state").addClass("hide");
+        }*/
 
         $('.carousel').carousel({indicators: true});
         $('.materialboxed').materialbox();
@@ -1914,6 +1922,9 @@ module.exports = function spread(callback) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
+    saleOrdered: 'saleOrdered',
+    saleObtained: 'saleObtained',
+    saleLeaved: 'saleLeaved',
     arrived: 'arrived',
     working: 'working',
     done: 'done',

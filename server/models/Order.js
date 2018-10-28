@@ -83,6 +83,15 @@ var OrderSchema = new mongoose.Schema({
     sale: {
         type: Boolean,
         default: false
+    },
+    orderedDate: {
+        type: Date
+    },
+    obtainedDate: {
+        type: Date
+    },
+    leavedDate: {
+        type: Date
     }
 });
 

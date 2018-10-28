@@ -115,6 +115,14 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
         console.log("jquery loaded", facilities);
 
+        /*if ($scope.sale) {
+            $("#regular-order-state").addClass("hide");
+            $("#sale-order-state").removeClass("hide");
+        } else {
+            $("#regular-order-state").removeClass("hide");
+            $("#sale-order-state").addClass("hide");
+        }*/
+
         $('.carousel').carousel({indicators: true});
         $('.materialboxed').materialbox();
 

@@ -132,7 +132,7 @@ var calendarSettings = {
 
 /***/ }),
 
-/***/ 153:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! jQuery UI - v1.11.4 - 2016-06-28
@@ -2529,7 +2529,7 @@ var datepicker = $.datepicker;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_calendar_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state_js__ = __webpack_require__(4);
@@ -2593,23 +2593,6 @@ app.controller('DateInputCtrl', function ($scope) {
         return dateObject;
     }
 
-    $scope.currentInputData = function (dateInputId, timeInputId) {
-
-        var date = new Date();
-
-        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(dateInputId).val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
-            + '.' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
-            + '.' + utcDate.getFullYear());
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(timeInputId).val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
-            + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
-
-        console.log("current", utcDate);
-
-    }
-
     $scope.inputDate = function (dateText, dateInputId, timeInputId) {
 
         var date = new Date(dateText);
@@ -2627,7 +2610,7 @@ app.controller('DateInputCtrl', function ($scope) {
 
     var parentScope = $scope.$parent;
 
-    parentScope.child = $scope;
+    parentScope.stateChild = $scope;
 
     __WEBPACK_IMPORTED_MODULE_0_jquery__(document).ready(function () {
 
@@ -2639,11 +2622,6 @@ app.controller('DateInputCtrl', function ($scope) {
                 __WEBPACK_IMPORTED_MODULE_0_jquery__("#arrived-label").addClass('active');
                 $scope.arrivedDate = $scope.parseDate($scope.arrivedDate, dateText);
                 $scope.$apply();
-
-                /*console.log("arrivedDate", $scope.arrivedDate);
-                console.log("startDate", $scope.startDate);
-                console.log("endDate", $scope.endDate);
-                console.log("pickupDate", $scope.pickupDate);*/
             }
         });
         __WEBPACK_IMPORTED_MODULE_0_jquery__("#arrived-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional["sk"]);
@@ -2760,10 +2738,10 @@ app.controller('DateInputCtrl', function ($scope) {
             $scope.inputDate($scope.$parent.order.pickDate, "#pickup-date", "#pickup-time");
         }
 
-        console.log("arrivedDate", $scope.arrivedDate);
+        /*console.log("arrivedDate", $scope.arrivedDate);
         console.log("startDate", $scope.startDate);
         console.log("endDate", $scope.endDate);
-        console.log("pickupDate", $scope.pickupDate);
+        console.log("pickupDate", $scope.pickupDate);*/
 
         __WEBPACK_IMPORTED_MODULE_0_jquery__("#arrived-label").addClass('active');
         __WEBPACK_IMPORTED_MODULE_0_jquery__("#start-label").addClass('active');
@@ -2774,6 +2752,180 @@ app.controller('DateInputCtrl', function ($scope) {
 
     })
 })
+
+
+app.controller('SaleDateInputCtrl', function ($scope) {
+
+    $scope.orderedDate = new Date();
+    $scope.obtainedDate = new Date();
+    $scope.leavedDate = new Date();
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__("#sale-selector").css({display: "block", height: 0, padding: 0, width: 0, position: 'absolute'});
+
+    $scope.checkDates = function (order) {
+
+        var result = {
+            check: true
+        }
+
+        if (order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleObtained ||
+            order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleLeaved) {
+            if (order.orderedDate > order.obtainedDate) {
+                result.check = false;
+                result.text = "Dátum objednania musí byť menší."
+            }
+        }
+        if (order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleLeaved) {
+            if (order.obtainedDate > order.leavedDate) {
+                result.check = false;
+                result.text = "Dátum vyzdvihnutia zákazníkom musí byť menší."
+            }
+        }
+        return result;
+    }
+
+    $scope.parseDate = function (dateObject, dateText) {
+
+        var dateParts = dateText.split('.');
+
+        dateObject.setFullYear(parseInt(dateParts[2]));
+        dateObject.setMonth(parseInt(dateParts[1] - 1));
+        dateObject.setDate(parseInt(dateParts[0]));
+
+        //var parsedDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
+
+        return dateObject;
+    }
+
+    $scope.inputDate = function (dateText, dateInputId, timeInputId) {
+
+        var date = new Date(dateText);
+
+        var utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(dateInputId).val((utcDate.getDate() >= 10 ? utcDate.getDate() : ('0' + (utcDate.getDate())))
+            + '.' + (utcDate.getMonth() + 1 >= 10 ? utcDate.getMonth() + 1 : ('0' + (utcDate.getMonth() + 1)))
+            + '.' + utcDate.getFullYear());
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(timeInputId).val((utcDate.getHours() >= 10 ? utcDate.getHours() : ('0' + utcDate.getHours()))
+            + ':' + (utcDate.getMinutes() >= 10 ? utcDate.getMinutes() : ('0' + utcDate.getMinutes())));
+
+    }
+
+    var parentScope = $scope.$parent;
+
+    parentScope.saleChild = $scope;
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(document).ready(function () {
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional['sk'] = __WEBPACK_IMPORTED_MODULE_2__lib_calendar_js__["a" /* default */].calendarSettings;
+        __WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].setDefaults(__WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional['sk']);
+
+        console.log("****Preco nejde datepicker???? :() ****");
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleordered-date").datepicker({
+            onSelect: function (dateText) {
+                __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleOrdered-label").addClass('active');
+                $scope.orderedDate = $scope.parseDate($scope.orderedDate, dateText);
+                $scope.$apply();
+            }
+        });
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleordered-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional["sk"]);
+
+        $scope.$parent.jquery('#saleOrdered-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                //time.setUTCHours(time.getUTCHours() + 1);
+                $scope.orderedDate.setHours(time.getHours());
+                $scope.orderedDate.setMinutes(time.getMinutes());
+
+                console.log("arrived time change", $scope.orderedDate);
+            }
+        });
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleObtained-date").datepicker({
+            onSelect: function (dateText) {
+                __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleObtained-label").addClass('active');
+                $scope.obtainedDate = $scope.parseDate($scope.obtainedDate, dateText);
+                $scope.$apply();
+            }
+        });
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleObtained-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional["sk"]);
+
+        $scope.$parent.jquery('#saleObtained-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                $scope.obtainedDate.setHours(time.getHours());
+                $scope.obtainedDate.setMinutes(time.getMinutes());
+
+                console.log('jquery start-time', $scope.obtainedDate);
+            }
+        });
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleLeaved-date").datepicker({
+            onSelect: function (dateText) {
+                __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleLeaved-label").addClass('active');
+                $scope.leavedDate = $scope.parseDate($scope.leavedDate, dateText);
+                $scope.$apply();
+            }
+        });
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleLeaved-date").datepicker(__WEBPACK_IMPORTED_MODULE_0_jquery__["datepicker"].regional["sk"]);
+
+        $scope.$parent.jquery('#saleLeaved-time').timepicker({
+            timeFormat: 'HH:mm',
+            defaultTime: 'now',
+            interval: 15,
+            change: function (time) {
+
+                $scope.leavedDate.setHours(time.getHours());
+                $scope.leavedDate.setMinutes(time.getMinutes());
+
+                console.log('jquery end-time', $scope.leavedDate);
+            }
+        });
+
+        var orderedDateHelp = new Date($scope.$parent.order.orderedDate);
+        $scope.orderedDate = new Date(orderedDateHelp.getUTCFullYear(), orderedDateHelp.getUTCMonth(), orderedDateHelp.getUTCDate(), orderedDateHelp.getUTCHours(), orderedDateHelp.getUTCMinutes(), orderedDateHelp.getUTCSeconds());
+        $scope.inputDate($scope.$parent.order.orderedDate, "#saleordered-date", "#saleOrdered-time");
+
+        if ($scope.$parent.order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleObtained ||
+            $scope.$parent.order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleLeaved) {
+
+            var obtainedDateHelp = new Date($scope.$parent.order.obtainedDate);
+            $scope.obtainedDate = new Date(obtainedDateHelp.getUTCFullYear(), obtainedDateHelp.getUTCMonth(), obtainedDateHelp.getUTCDate(), obtainedDateHelp.getUTCHours(), obtainedDateHelp.getUTCMinutes(), obtainedDateHelp.getUTCSeconds());
+            $scope.inputDate($scope.$parent.order.obtainedDate, "#saleObtained-date", "#saleObtained-time");
+        }
+
+        if ($scope.$parent.order.state === __WEBPACK_IMPORTED_MODULE_3__state_js__["default"].saleLeaved) {
+
+            var leavedDateHelp = new Date($scope.$parent.order.leavedDate);
+            $scope.leavedDate = new Date(leavedDateHelp.getUTCFullYear(), leavedDateHelp.getUTCMonth(), leavedDateHelp.getUTCDate(), leavedDateHelp.getUTCHours(), leavedDateHelp.getUTCMinutes(), leavedDateHelp.getUTCSeconds());
+            $scope.inputDate($scope.$parent.order.leavedDate, "#saleLeaved-date", "#saleLeaved-time");
+        }
+
+        /*console.log("arrivedDate", $scope.orderedDate);
+        console.log("startDate", $scope.obtainedDate);
+        console.log("endDate", $scope.leavedDate);*/
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleOrdered-label").addClass('active');
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleObtained-label").addClass('active');
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#saleLeaved-label").addClass('active');
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(".time-label").addClass('active');
+
+    })
+
+
+
+});
 
 /***/ }),
 
@@ -2927,6 +3079,9 @@ function isClientLogged() {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
+    saleOrdered: 'saleOrdered',
+    saleObtained: 'saleObtained',
+    saleLeaved: 'saleLeaved',
     arrived: 'arrived',
     working: 'working',
     done: 'done',

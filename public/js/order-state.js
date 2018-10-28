@@ -6,41 +6,73 @@ $(document).ready(function () {
 
     if (order) {
 
-        //var arriveDate = moment.utc(order.arriveDate).add(1, "hours");
-        var arriveDate = moment.utc(order.arriveDate);
-
         var id;
 
-        $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
+        if (order.sale) {
 
-        if (order.state === STATE.working || order.state === STATE.done || order.state === STATE.pickUp) {
+            var orderedDate = moment.utc(order.orderedDate);
 
-            console.log("start date", order.startDate, order.state);
+            $('#ordered-date').text(orderedDate.format('DD.MM.YYYY k:mm:ss'));
 
-            //$("#start-date").text(moment.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
-            $("#start-date").text(moment.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
-        }
+            if (order.state === STATE.saleObtained || order.state === STATE.saleLeaved) {
+                $("#obtained-date").text(moment.utc(order.obtainedDate).format('DD.MM.YYYY k:mm:ss'));
+            }
 
-        if (order.state === STATE.done || order.state === STATE.pickUp) {
-            $("#work-progress").text("Práca na zákazke je ukončená.");
-            $("#end-date").text(moment.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
-            //$("#end-date").text(moment.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
-            $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
+        } else {
+
+            //var arriveDate = moment.utc(order.arriveDate).add(1, "hours");
+            var arriveDate = moment.utc(order.arriveDate);
+
+            $('#arrive-date').text(arriveDate.format('DD.MM.YYYY k:mm:ss'));
+
+            if (order.state === STATE.working || order.state === STATE.done || order.state === STATE.pickUp) {
+
+                console.log("start date", order.startDate, order.state);
+
+                //$("#start-date").text(moment.utc(order.startDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+                $("#start-date").text(moment.utc(order.startDate).format('DD.MM.YYYY k:mm:ss'));
+            }
+
+            if (order.state === STATE.done || order.state === STATE.pickUp) {
+                $("#work-progress").text("Práca na zákazke je ukončená.");
+                $("#end-date").text(moment.utc(order.endDate).format('DD.MM.YYYY k:mm:ss'));
+                //$("#end-date").text(moment.utc(order.endDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+                $("#diff-time").text(getDiffTime(order.startDate, order.endDate));
+            }
         }
 
         if (order.sale) {
 
-            $("#sale-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
-            //$("#sale-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
+            if (order.state === STATE.saleOrdered) {
+
+                id = "#ordered-body";
+
+                $("#saleLeaved-option").attr("disabled", true);
+
+                $('#obtained-body').addClass('hide');
+                $('#released-body').addClass('hide');
+
+                $('#saleObtained-date-div').addClass('hide');
+                $('#saleLeaved-date-div').addClass('hide');
+
+            } else if (order.state === STATE.saleObtained) {
+                id = "#obtained-body";
+
+                $('#released-body').addClass('hide');
+
+                $('#saleLeaved-date-div').addClass('hide');
+
+            } else if (order.state === STATE.saleLeaved) {
+                id = "#released-body";
+
+                $("#released-date").text(moment.utc(order.leavedDate).format('DD.MM.YYYY k:mm:ss'));
+            }
 
         } else {
 
             if (order.state === STATE.arrived) {
 
                 id = "#arrive-body";
-
-                $('.end-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
 
                 $("#end-option").attr("disabled", true);
                 $("#pickup-option").attr("disabled", true);
@@ -57,9 +89,6 @@ $(document).ready(function () {
 
                 id = "#start-body";
 
-                $('.start-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
-
                 $("#pickup-option").attr("disabled", true);
 
                 $('#end-date-div').addClass('hide');
@@ -75,9 +104,6 @@ $(document).ready(function () {
 
                 id = "#end-body";
 
-                $('.start-state').addClass('disabled');
-                $('.end-state').addClass('disabled');
-
                 $('#pickup-date-div').addClass('hide');
 
                 $('#pick-body').addClass('hide');
@@ -85,20 +111,14 @@ $(document).ready(function () {
 
                 id = "#pick-body";
 
-                $('.start-state').addClass('disabled');
-                $('.end-state').addClass('disabled');
-                $('.pickup-state').addClass('disabled');
-
                 //$("#pickup-date").text(moment.utc(order.pickDate).add(1, "hours").format('DD.MM.YYYY k:mm:ss'));
                 $("#pickup-date").text(moment.utc(order.pickDate).format('DD.MM.YYYY k:mm:ss'));
             }
-
-            $(id).removeClass("grey");
-            $(id).removeClass("lighten-2");
-            $(id).addClass("green");
-            $(id).addClass("lighten-1");
-
         }
+        $(id).removeClass("grey");
+        $(id).removeClass("lighten-2");
+        $(id).addClass("green");
+        $(id).addClass("lighten-1");
     }
 });
 

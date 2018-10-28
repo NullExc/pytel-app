@@ -53,86 +53,9 @@
 
     <div class="row">
 
-        <div id="state-div" class="col s12 l6 offset-l3">
-            <div class="col s12 panel z-depth-2">
-                <div class="col s12">
-                    <h5>
-                        Aktuálny stav zákazky
-                    </h5>
-                    <h4>
-                        <span id="state-info-span" class="label label-primary green lighten-3">{{stateName}}</span>
-                    </h4>
-                </div>
-                <div id="state-select-div" class="input-field col s12">
-                    <select id="state-selector" required="required" class="validate" ng-change="stateSelectChange()"
-                        ng-model="stateSelect.value" style="color:black !important">
-                        <option value="Vybrať nový stav" disabled selected>Vybrať nový stav</option>
-                        <option id="arrived-option" value="Prijať">Prijať</option>
-                        <option id="start-option" value="Začať">Začať</option>
-                        <option id="end-option" value="Dokončiť">Dokončiť</option>
-                        <option id="pickup-option" value="Odovzdať">Odovzdať</option>
-                    </select>
-                    <label>Vybrať stav zákazky</label>
-                    <span id="state-selector-span" class="helper-text red-text hide"></span>
-                </div>
+        <% include ./order-state-change.ejs %>
 
-                <div id="state-date-div" class="col s12" ng-controller="DateInputCtrl">
-                    <div id="arrived-date-div" class="row date-row">
-                        <div input-field class="col s6">
-                            <label id="arrived-label" for="arrived-date">Dátum prijatia</label>
-                            <input id="arrived-date" type="text" readonly>
-                        </div>
-                        <div class="input-field col s6">
-                            <input type="text" class="timepicker" id="arrived-time" readonly>
-                            <label class="time-label" for="arrived-time">Čas prijatia</label>
-                        </div>
-                    </div>
-                    <div id="start-date-div" class="row date-row">
-                        <div input-field class="col s6">
-                            <label id="start-label" for="start-date">Dátum začatia</label>
-                            <input id="start-date" type="text" readonly>
-                        </div>
-                        <div class="input-field col s6">
-                            <input type="text" class="timepicker" id="start-time" readonly>
-                            <label class="time-label" for="start-time">Čas začatia</label>
-                        </div>
-                    </div>
-                    <div id="end-date-div" class="row date-row">
-                        <div input-field class="col s6">
-                            <label id="end-label" for="end-date">Dátum ukončenia</label>
-                            <input id="end-date" type="text" readonly>
-                        </div>
-                        <div class="input-field col s6">
-                            <input type="text" class="timepicker" id="end-time" readonly>
-                            <label class="time-label" for="end-time">Čas ukončenia</label>
-                        </div>
-                    </div>
-                    <div id="pickup-date-div" class="row date-row">
-                        <div input-field class="col s6">
-                            <label id="pickup-label" for="pickup-date">Dátum vyzdvihnutia</label>
-                            <input id="pickup-date" type="text" readonly>
-                        </div>
-                        <div class="input-field col s6">
-                            <input type="text" class="timepicker" id="pickup-time" readonly>
-                            <label class="time-label" for="pickup-time">Čas vyzdvihnutia</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--<div class="white-text">
-                <a style="margin: 5px;" class="col l3 s12 start-state light-blue darken-4 btn state-btn">
-                    <i class="material-icons left">build</i>Začať</a>
-
-
-                <a style="margin: 5px;" class="col l3 s12 end-state light-blue darken-4 btn state-btn">
-                    <i class="material-icons left">done</i>Dokončiť</a>
-
-
-                <a style="margin: 5px;" class="col l3 s12 pickup-state light-blue darken-4 btn state-btn">
-                    <i class="material-icons left">send</i>Odovzdať</a>
-            </div>-->
-
-        </div>
+        <% include ./order-sale-change.ejs %>
 
         <% include ./order-input.ejs %>
 
