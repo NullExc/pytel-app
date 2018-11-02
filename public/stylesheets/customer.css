@@ -1,0 +1,37 @@
+
+.divider {
+    margin: 10px 0 10px 0;
+}
+
+.section {
+    padding-bottom: 0rem !important;
+}
+
+.collection a.collection-item {
+    color: #01579b;
+}
+
+.input-search label {
+    color: rgb(255, 255, 255);
+}
+
+.input-search input[type=text] {
+    border-bottom: 1px solid rgb(255, 255, 255) !important;
+    box-shadow: 0 1px 0 0 rgb(255, 255, 255) !important;
+}
+
+.input-search input[type=text]:focus + label {
+    color: rgb(255, 255, 255) !important;
+    outline: none;
+}
+
+.input-search input[type=text]:focus {
+    border-bottom: 1px solid rgb(255, 255, 255) !important;
+    box-shadow: 0 1px 0 0 rgb(255, 255, 255) !important;
+}
+
+/*.collapsible-body {
+    overflow-y: scroll;
+    max-height: 50px;
+}*/
+

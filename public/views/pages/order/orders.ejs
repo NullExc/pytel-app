@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript">
+            window.userSettings = JSON.parse('<%- JSON.stringify(userSettings) %>');
+        </script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
+</head>
+
+<body ng-app="Orders" ng-controller="OrdersCtrl">
+    <% include ../../partials/nav-in.ejs %>
+    <% include ../../partials/loader.ejs %>
+
+        <div class="row section">
+            <div class="col l8 m8 s12 offset-l2 panel z-depth-4">
+                <div class="col s12 input-field">
+                    <select id="stateSelector" ng-model="typeSelect.value" ng-change="typeChange()">
+                        <option value="Všetky" selected>Všetky</option>
+                        <option value="Prijaté">Prijaté</option>
+                        <option value="Prebiehajúce">Prebiehajúce</option>
+                        <option value="Čakajúce na vyzdvihnutie">Čakajúce na vyzdvihnutie</option>
+                        <option value="Vyzdvihnuté">Vyzdvihnuté</option>
+                    </select>
+                    <label>Filtrovať podľa zákazky.</label>
+                </div>
+                <div class="col s12 input-field">
+                    <select id="dateSelector" ng-model="dateSelect.value" ng-change="dateChange()">
+                        <option value="Dátum prijatia">Dátum prijatia</option>
+                        <option value="Dátum začatia">Dátum začatia</option>
+                        <option value="Dátum ukončenia">Dátum ukončenia</option>
+                        <option value="Dátum vyzvihnutia">Dátum vyzvihnutia</option>
+                    </select>
+                    <label>Filtrovať podľa datumu</label>
+                </div>
+                <div input-field class="col s6 l2 m2">
+                    <label id="from-label" for="from-date">Od</label>
+                    <input id="from-date" type="text" readonly>
+                </div>
+                <div input-field class="col s6 l2 m2">
+                    <label id="to-label" for="to-date">Do</label>
+                    <input id="to-date" type="text" readonly>
+                </div>
+                <div class="col s12">
+                    <form>
+                        <p>
+                            <label>
+                                <input type="checkbox" class="filled-in checkbox-blue" id="today" ng-checked="today" ng-model="today" ng-change="todayChange()" />
+                                <span>Len dnes</span>
+                            </label>
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+
+            <div id="list-container" class="col l8 m8 s12 offset-l2 panel z-depth-4">
+                <ul id="list" class="collection with-header">
+                    <li class="collection-header light-blue darken-4 white-text">
+                        <h5>Zákazky</h5>
+                    </li>
+                    <li class="item collection-item avatar black-text" dir-paginate="order in orders | itemsPerPage: 20" pagination-id="orders"
+                        ng-click="clickOrder(order._id)">
+
+                        <p class="item-description">
+                            {{order.description}}
+                        </p>
+                        <span class="item-state" ng-if="orderByDate === 'arriveDate'"> Prijatá : {{formatDate(order.arriveDate)}}</span>
+                        <span class="item-state" ng-if="orderByDate === 'startDate'">Začatá : {{formatDate(order.startDate)}}</span>
+                        <span class="item-state" ng-if="orderByDate === 'endDate'">Ukončená : {{formatDate(order.endDate)}}</span>
+                        <span class="item-state" ng-if="orderByDate === 'pickDate'">Vyzdvihnutá : {{formatDate(order.pickDate)}}</span>
+                        <br>
+                        <span class="item-customer">{{order.contact.customerName}}</span>
+
+                        <div class="secondary-content">
+                            <span ng-if="order.state === 'arrived'" class="new badge grey" data-badge-caption="">Prijatá</span>
+                            <span ng-if="order.state === 'working'" class="new badge blue" data-badge-caption="">Pracuje sa</span>
+                            <span ng-if="order.state === 'done'" class="new badge red" data-badge-caption="">Čaká na vyzdvihnutie</span>
+                            <span ng-if="order.state === 'pickUp'  && !order.sale" class="new badge green" data-badge-caption="">Vyzdvihnutá</span>
+                            <span ng-if="order.state === 'pickUp' && order.sale" class="new badge green" data-badge-caption="">Vyzdvihnutá (Predaj)</span>
+
+                            <a href="/order-edit/{{order._id}}" class="btn-floating right hide-on-small-only green lighten-1" style="margin-right: 20px;">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
+                                <i class="material-icons">visibility</i>
+                            </a>
+                        </div>
+
+                    </li>
+                </ul>
+                <dir-pagination-controls pagination-id="orders" max-size="20" direction-links="true" boundary-links="true">
+                </dir-pagination-controls>
+            </div>
+        </div>
+        <div class="fixed-action-btn">
+            <a id="add" ng-click="newOrder()" class="btn-floating btn-large light-blue darken-4">
+                <i class="large material-icons">note_add</i>
+            </a>
+        </div>
+        <script>
+            window.updateSelectors = function () {
+                console.log("updating all selectors ....");
+                $('select').formSelect();
+            }
+        </script>
+        <script type="text/javascript" src="/dist/orders.js"></script>
+</body>
+
+</html>

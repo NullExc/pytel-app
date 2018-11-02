@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript">
+
+            var order = JSON.parse('<%- JSON.stringify(detail.order) %>');
+            var customer = JSON.parse('<%- JSON.stringify(detail.customer) %>');
+            var workType = JSON.parse('<%- JSON.stringify(detail.workType) %>');
+            var orderType = JSON.parse('<%- JSON.stringify(detail.orderType) %>');
+
+            var edit = true;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-state.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" media="all" />
+        <style>
+            @media print {
+                #print-header {
+                    text-align: center;
+                }
+                #print-footer {
+                    margin-top: 50px;
+                }
+                .print-panel {
+                    border: 2px solid black;
+                }
+                #sign-line {
+                    border-top: dotted;
+                    text-align: center;
+                }
+                .print-image {
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 30%;
+                }
+                .grey-text {
+                    font-size: 15px;
+                }
+                p {
+                    font-size: 18px;
+                }
+                .divider {
+                    height: 1px;
+                    overflow: hidden;
+                    background-color: #e0e0e0 !important;
+                    margin: 5px 0 5px 0 !important;
+                }
+                .section-header {
+                    background-color: #757575 !important;
+                }
+                body {
+                    -webkit-print-color-adjust: exact !important;
+                    color-adjust: exact;
+                }
+            }
+        </style>
+</head>
+
+<body ng-app="Order" ng-controller="OrderCtrl">
+
+    <!--<div class="row">-->
+
+    <div class="row col s12 panel">
+        <div class="col s12">
+            <div>
+                <img src="/pap_logo_black.png" width="100" height="60" class="print-image">
+            </div>
+        </div>
+        <div class="col s12">
+            <h2 id="print-header">Zákazkový list</h5>
+        </div>
+    </div>
+
+    <div class="row col s12">
+        <div class="col s12">
+            <div class="section-header col s12">
+                <h5 class="white-text">Informácie</h5>
+            </div>
+            <div class="col s12">
+                <div class="section">
+                    <h6 class="grey-text">Cena</h6>
+                    <div class="divider" style="width: 50%;"></div>
+                    <p>{{order.price}}&ensp;€</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Typ práce</h6>
+                    <div class="divider"></div>
+                    <p>{{workType.name}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Typ zákazky</h6>
+                    <div class="divider"></div>
+                    <p>{{orderType.name}}</p>
+                </div>
+            </div>
+            <div class="col s12">
+                <div class="section">
+                    <h6 class="grey-text">Poznámky</h6>
+                    <div class="divider"></div>
+                    <p>{{order.notes}}</p>
+                </div>
+            </div>
+            <div class="col s12">
+                <div class="section">
+                    <h6 class="grey-text">Pracovné pomôcky</h6>
+                    <div class="divider"></div>
+                    <p>{{order.facilities}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s12">
+            <div class="section-header col s12">
+                <h5 class="white-text">Zákazník</h5>
+            </div>
+            <div class="col s12">
+                <div class="section">
+                    <h6 class="grey-text">Meno</h6>
+                    <div class="divider" style="width: 50%;"></div>
+                    <p>{{customer.fullName}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Mobil</h6>
+                    <div class="divider"></div>
+                    <p>{{order.contact.phone}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">E-mail</h6>
+                    <div class="divider"></div>
+                    <p>{{order.contact.email}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Ulica</h6>
+                    <div class="divider"></div>
+                    <p>{{order.address.street}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Číslo ulice</h6>
+                    <div class="divider"></div>
+                    <p>{{order.address.streetNumber}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">Mesto</h6>
+                    <div class="divider"></div>
+                    <p>{{order.address.city}}</p>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="section">
+                    <h6 class="grey-text">PSČ</h6>
+                    <div class="divider"></div>
+                    <p>{{order.address.zipCode}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="print-footer" class="row col s12">
+        <div class="col s3">
+            <div>
+                <p>Dátum vyhotovenia</p>
+                <p>{{date | date:'dd.MM.yyyy'}}</p>
+            </div>
+        </div>
+        <div class="col s3 offset-s6">
+            <div id="sign-line">
+                <p>Podpis zákazníka</p>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+</body>
+
+</html>

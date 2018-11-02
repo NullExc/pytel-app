@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <% include ../partials/header.ejs %>
+        <script type="text/javascript" src="/dist/stats.js"></script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/collection.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+
+    <% include ../partials/nav-in.ejs %>
+
+        <div class="row header-row">
+            <div class="col s12 light-blue darken-4 white-text header-layer">
+                <h5>Prehľad</h5>
+            </div>
+        </div>
+
+        <% include ../partials/loader.ejs %>
+
+            <div class="row">
+
+                <div class="col s12 l8 offset-l2 panel z-depth-4">
+                    <div input-field class="col l2 s6">
+                        <input id="from-date" type="text" readonly>
+                        <label id="from-label" for="from-date">Od</label>
+                    </div>
+                    <div input-field class="col l2 s6">
+                        <input id="to-date" type="text" readonly>
+                        <label id="to-label" for="to-date">Do</label>
+                    </div>
+                </div>
+
+                <div class="col s12 l8 offset-l2 panel z-depth-4">
+                    <div class="col s6">
+                        <h5>Počet zákaziek</h5>
+                        <p>{{totalCount}}</p>
+                    </div>
+                    <div class="col s6">
+                        <h5>Prijatá suma</h5>
+                        <p>{{totalSum}}</p>
+                    </div>
+                    <div class="col s6">
+                        <h5>Čas práce</h5>
+                        <p>{{parseDate(totalTime)}}</p>
+                    </div>
+
+                    <div class="col s12">
+                        <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ zákazky</h5>
+                        <table class="tablesorter bordered responsive-table">
+                            <thead>
+                                <tr>
+                                    <th ng-click="orderSort('name')">
+                                        Názov
+                                    </th>
+                                    <th ng-click="orderSort('count')">
+                                        Počet
+                                    </th>
+                                    <th ng-click="orderSort('sum')">
+                                        Suma (€)
+                                    </th>
+                                    <th ng-click="orderSort('time')">
+                                        Čas
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="order in orderSum | orderBy:orderPredicate:orderReverse | itemsPerPage:5" pagination-id="work">
+                                    <td>{{order.name}}</td>
+                                    <td>{{order.count}}&emsp;({{countPercentage(order.count)}}%)</td>
+                                    <td>{{order.sum}}&emsp;({{pricePercentage(order.sum)}}%)</td>
+                                    <td>{{parseDate(order.time)}}&emsp;({{timePercentage(order.time)}}%)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls pagination-id="work" max-size="5" direction-links="true" boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+
+                    <div class="col s12">
+                        <h5 class="light-blue darken-4 white-text" style="padding: 20px;">Typ práce</h5>
+                        <table class="tablesorter bordered responsive-table" style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th ng-click="workSort('name')">
+                                        Názov
+                                    </th>
+                                    <th ng-click="workSort('count')">
+                                        Počet
+                                    </th>
+                                    <th ng-click="workSort('sum')">
+                                        Suma (€)
+                                    </th>
+                                    <th ng-click="workSort('time')">
+                                        Čas
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="work in workSum | orderBy:workPredicate:workReverse | itemsPerPage:5" pagination-id="order">
+                                    <td>{{work.name}}</td>
+                                    <td>{{work.count}}&emsp;({{countPercentage(work.count)}}%)</td>
+                                    <td>{{work.sum}}&emsp;({{pricePercentage(work.sum)}}%)</td>
+                                    <td>{{parseDate(work.time)}}&emsp;({{timePercentage(work.time)}}%)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls pagination-id="order" max-size="5" direction-links="true" boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+
+                <div class="col s12 l8 offset-l2 panel z-depth-4" id="list-container">
+                    <ul id="list" class="collection with-header">
+                        <li class="collection-header light-blue darken-4 white-text">
+                            <h5>Zákazky</h5>
+                        </li>
+                        <li class="item collection-item avatar black-text" ng-repeat="order in orders">
+                            <div ng-click="clickOrder(order.order._id)">
+                                <p class="title">
+                                    {{order.order.description}}
+                                </p>
+                                <span>
+                                    {{order.order.price}}
+                                </span>
+                                <span>
+                                    €
+                                </span>
+
+                                <a href="/order-edit/{{order.order._id}}" class="btn-floating right hide-on-small-only green lighten-1" style="margin-right: 20px;">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <a href="/order/{{order.order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
+                                    <i class="material-icons">visibility</i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+</body>
+
+</html>

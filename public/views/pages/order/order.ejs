@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript">
+
+            var order = JSON.parse('<%- JSON.stringify(detail.order) %>');
+            var customer = JSON.parse('<%- JSON.stringify(detail.customer) %>');
+            var workType = JSON.parse('<%- JSON.stringify(detail.workType) %>');
+            var orderType = JSON.parse('<%- JSON.stringify(detail.orderType) %>');
+            var facilities = JSON.parse('<%- JSON.stringify(detail.customerFacilities) %>');
+
+            var edit = true;
+        </script>
+        <script type="text/javascript" src="/dist/order.js"></script>
+        <script type="text/javascript" src="/dist/order-state.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" media="all" />
+</head>
+
+<body ng-app="Order" ng-controller="OrderCtrl">
+
+    <% include ../../partials/nav-in.ejs %>
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text header-layer">
+                <h5 class="col s3">
+                    <%= detail.order.description %>
+                </h5>
+            </div>
+
+            <div class="row col s12 l6 m8 offset-l3 offset-m2">
+
+                <div class="state-body black-text">
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="arrive-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Prijatie</span>
+                                <br>
+                                <span id="arrive-date"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="start-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Začatie</span>
+                                <p id="work-progress">Na zákazke sa pracuje.</p>
+                                <span id="start-date"></span>
+                                <h5 id="diff-time"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m12 s12 l6" ng-show="!sale">
+                        <div id="end-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Ukončenie</span>
+                                <br>
+                                <span id="end-date"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m12 l6" ng-show="!sale">
+                        <div id="pick-body" class="card grey lighten-2 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Vyzdvihnutie</span>
+                                <br>
+                                <span id="pickup-date"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m12 s12 l6" ng-show="sale">
+                        <div id="sale-body" class="card green lighten-1 z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Predaj</span>
+                                <br>
+                                <span id="sale-date"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="hasPhotos" id="photos-container" class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Fotky</h5>
+                </div>
+                <div class="carousel col s12 hide-on-small-only">
+                    <a class="carousel-item" href="#" ng-repeat="photo in order.photoUrls">
+                            <img ng-src="{{photo.url}}">
+                    </a>
+                </div>
+                <div class="col s12 hide-on-med-and-up">
+                    <div id="photo-chips" class="chips chips-autocomplete" style="border: 0;">
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="informations" class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Informácie</h5>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Cena</h6>
+                        <div class="divider" style="width: 50%;"></div>
+                        <p>{{order.price}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Typ práce</h6>
+                        <div class="divider"></div>
+                        <p>{{workType.name}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Typ zákazky</h6>
+                        <div class="divider"></div>
+                        <p>{{orderType.name}}</p>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Poznámky</h6>
+                        <div class="divider"></div>
+                        <p>{{order.notes}}</p>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Príslušenstvo</h6>
+                        <div class="divider"></div>
+                        <div id="facility-chips" class="chips chips-initial" style="border: 0;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+                <div class="col s12">
+                    <h5>Zákazník</h5>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Meno</h6>
+                        <div class="divider" style="width: 50%;"></div>
+                        <p>{{customer.fullName}}</p>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <div class="section">
+                        <h6 class="grey-text">Mobil</h6>
+                        <div class="divider"></div>
+                        <p>{{contact.phone}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">E-mail</h6>
+                        <div class="divider"></div>
+                        <p>{{contact.email}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Ulica</h6>
+                        <div class="divider"></div>
+                        <p>{{address.street}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Číslo ulice</h6>
+                        <div class="divider"></div>
+                        <p>{{address.streetNumber}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">Mesto</h6>
+                        <div class="divider"></div>
+                        <p>{{address.city}}</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="section">
+                        <h6 class="grey-text">PSČ</h6>
+                        <div class="divider"></div>
+                        <p>{{address.zipCode}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="photo-modal" class="modal" style="overflow-y: scroll;">
+            <div class="modal-content">
+                <img id="photo-pic" src="" style="max-width: 100%; max-height: 100%;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 24px; height: 70px;">
+            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px; margin-bottom:70px;">
+                <a class="btn-floating btn-large light-blue darken-4">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    <li>
+                        <a id="edit" ng-click="editOrder()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="edit" ng-click="showCustomer()" class="btn-floating blue" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">person</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large light-blue darken-4" ng-click="printOrder()">
+                    <i id="print" class="large material-icons">print</i>
+                </a>
+            </div>
+        </div>
+
+        <div style="height: 35%;" id="modal1" class="modal">
+            <div style="margin: 20px;">
+                <h5>Vymazať zákazku</h5>
+                <p>Potvrdením natrvalo vymažete zákazku zo systému.</p>
+            </div>
+            <div style="float: right;">
+                <a id="deleteOrder" ng-click="deleteOrder()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+                <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+            </div>
+        </div>
+
+        <script>
+            $('.modal').modal();
+        </script>
+</body>
+
+</html>

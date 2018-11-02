@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/customer-new.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text">
+                <h5>Upraviť zákazníka</h5>
+            </div>
+            <% include ./customer-input.ejs %>
+        </div>
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+                <i id="update" class="large material-icons">save</i>
+            </a>
+        </div>
+
+        <script>
+            window.onload = function () {
+
+                window.customer = JSON.parse('<%- JSON.stringify(customer) %>');
+
+                localStorage.setItem('updateId', customer._id);
+
+                if (customer.company) {
+                    $("#person-form").hide();
+                    $("#company-form").show();
+
+                    var company = customer.company;
+                    if (company.name) {
+                        $("#name").val(company.name);
+                        $("#name-label").addClass("active");
+                    }
+                    if (company.address) {
+                        var address = company.address;
+                        if (address.street) {
+                            $("#company-street").val(address.street);
+                            $("#company-street-label").addClass("active");
+                        }
+                        if (address.streetNumber) {
+                            $("#company-num").val(address.streetNumber);
+                            $("#company-num-label").addClass("active");
+                        }
+                        if (address.city) {
+                            $("#company-city").val(address.city);
+                            $("#company-city-label").addClass("active");
+                        }
+                        if (address.zipCode) {
+                            $("#company-zip").val(address.zipCode);
+                            $("#company-zip-label").addClass("active");
+                        }
+                    }
+                    if (company.billData) {
+                        var billData = company.billData;
+                        if (billData.ICO) {
+                            $("#ico").val(billData.ICO);
+                            $("#ico-label").addClass("active");
+                        }
+                        if (billData.ICDPH) {
+                            $("#icdph").val(billData.ICDPH);
+                            $("#icdph-label").addClass("active");
+                        }
+                        if (billData.DIC) {
+                            $("#dic").val(billData.DIC);
+                            $("#dic-label").addClass("active");
+                        }
+                    }
+                    if (company.contactPerson) {
+                        var contactPerson = company.contactPerson;
+                        if (contactPerson.firstName) {
+                            $("#contact-first").val(contactPerson.firstName);
+                            $("#contact-first-label").addClass("active");
+                        }
+                        if (contactPerson.lastName) {
+                            $("#contact-last").val(contactPerson.lastName);
+                            $("#contact-last-label").addClass("active");
+                        }
+                        if (contactPerson.phone) {
+                            $("#contact-phone").val(contactPerson.phone);
+                            $("#contact-phone-label").addClass("active");
+                        }
+                        if (contactPerson.email) {
+                            $("#contact-email").val(contactPerson.email);
+                            $("#contact-email-label").addClass("active");
+                        }
+                    }
+
+
+                } else if (customer.person) {
+                    $("#person-form").show();
+                    $("#company-form").hide();
+
+                    var person = customer.person;
+
+                    $("#first").val(person.firstName);
+                    $("#first-label").addClass("active");
+                    $("#last").val(person.lastName);
+                    $("#last-label").addClass("active");
+
+                    if (person.phone) {
+                        $("#phone").val(person.phone);
+                        $("#phone-label").addClass("active");
+                    }
+                    if (person.email) {
+                        $("#email").val(person.email);
+                        $("#email-label").addClass("active");
+                    }
+
+                    if (person.address) {
+                        var address = person.address;
+                        if (address.street) {
+                            $("#person-street").val(address.street);
+                            $("#person-street-label").addClass("active");
+                        }
+                        if (address.streetNumber) {
+                            $("#person-num").val(address.streetNumber);
+                            $("#person-num-label").addClass("active");
+                        }
+                        if (address.city) {
+                            $("#person-city").val(address.city);
+                            $("#person-city-label").addClass("active");
+                        }
+                        if (address.zipCode) {
+                            $("#person-zip").val(address.zipCode);
+                            $("#person-zip-label").addClass("active");
+                        }
+                    }
+                }
+            }
+        </script>
+        <script type="text/javascript" src="/dist/customer-input.js"></script>
+
+</body>
+
+</html>

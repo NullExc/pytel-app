@@ -1,0 +1,336 @@
+<div class="row">
+    <div class="col s12 l6 offset-l3">
+        <div class="col s12 panel z-depth-2">
+            <div class="col s12" style="margin-top: 10px;">
+                <a id="load-photo" class="waves-effect waves-light btn light-blue darken-4">
+                    <i class="material-icons left">add_a_photo</i>nahrať
+                </a>
+            </div>
+            <div class="col s12">
+                <div id="photo-chips" class="chips chips-autocomplete">
+
+                </div>
+            </div>
+        </div>
+        <div class="col s12 panel z-depth-2">
+            <div class="col s12">
+                <ul id="order-tab-container" class="tabs">
+                    <li id="assign-tab" class="tab col s6">
+                        <a href="#assign-customer">Priradiť zákazníka</a>
+                    </li>
+                    <li id="create-tab" class="tab col s6">
+                        <a id="create-link" href="#create-customer">Vytvoriť zákazníka</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="assign-customer" class="col s12">
+
+                <h4 style="margin-top: 40px;">
+                    <span id="done-customer" class="label label-primary orange lighten-3">Zákazník nie je vybraný</span>
+                </h4>
+
+                <div id="find-customer" class="input-field">
+                    <input type="text" id="customer-search" class="autocomplete" style="margin-top: 10px;">
+                    <label for="customer-search" style="margin-top: 10px;">
+                        <i class="material-icons prefix" style="top: 0;">search</i>
+                    </label>
+                </div>
+
+                <ul id="select-customer" class="collapsible panel panel-primary" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons grey-text">people</i>Vybrať v zozname
+                        </div>
+                        <div class="collapsible-body">
+                            <ul class="collection" style="margin-top: 0px;">
+                                <li style="cursor:pointer; color:#01579b !important;" href="#" ng-click="pickCustomer($event)" id="{{customer._id}}" class="selected collection-item black-text"
+                                    dir-paginate="customer in customers | itemsPerPage: 5" pagination-id="customers">
+                                    {{customer.fullName}}
+                                </li>
+                            </ul>
+                            <dir-pagination-controls pagination-id="customers" max-size="5" direction-links="true" boundary-links="true">
+                            </dir-pagination-controls>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul id="address-data" class="collapsible panel panel-primary" data-collapsible="accordion" style="margin-left: 10px; margin-right: 10px;">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons grey-text">arrow_drop_down</i>Adresa a kontakt
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="email" class="customer-input" type="text">
+                                    <label id="email-label" class="customer-label" for="email">E-mail</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="phone" class="customer-input" type="text">
+                                    <label id="phone-label" class="customer-label" for="phone">Tel. číslo</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s9">
+                                    <input id="street" class="customer-input" type="text">
+                                    <label id="street-label" class="customer-label" for="street">Ulica</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input id="num" class="customer-input" type="text">
+                                    <label id="num-label" class="customer-label" for="num">Číslo</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s9">
+                                    <input id="city" class="customer-input" type="text">
+                                    <label id="city-label" class="customer-label" for="city">Mesto</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input id="zip" class="customer-input" type="text">
+                                    <label id="zip-label" class="customer-label" for="zip">PSČ</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="ico" class="customer-input" type="text">
+                                    <label id="ico-label" class="customer-label" for="ico">IČO</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="icdph" class="customer-input" type="text">
+                                    <label id="icdph-label" class="customer-label" for="icdph">IČ DPH</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="dic" class="customer-input" type="text">
+                                    <label id="dic-label" class="customer-label" for="dic">DIČ</label>
+                                </div>
+                            </div>
+                            <div id="drop-up" class="row" style="cursor: pointer; cursor: hand;">
+                                <div class="col-sm-12" style="text-align:center;">
+                                    <i class="material-icons grey-text" style="font-size: 40px;">arrow_drop_up</i>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="create-customer" class="col s12" style="margin-top: 40px;">
+                <div class="row">
+                    <div class="col s12">
+                        <form id="customer-form">
+                            <p class="col l4 s6">
+                                <label>
+                                    <input class="with-gap" name="legal-form" type="radio" value="company" id="show-company" />
+                                    <span>Právnická osoba</span>
+                                </label>
+                            </p>
+                            <p class="col l4 s6">
+                                <label>
+                                    <input class="with-gap" name="legal-form" type="radio" value="person" id="show-person" />
+                                    <span>Fyzická osoba</span>
+                                </label>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="col s12">
+                        <form id="person-form" style="margin-top: 20px;">
+                            <div class="row col s12">
+                                <div class="col s12 panel tab-panel">
+                                    <p class="customer-panel-title">Názov fyzickej osoby</p>
+                                    <div class="input-field">
+                                        <input id="first" type="text">
+                                        <label id="first-label" for="first">Meno</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <input id="last" type="text" class="validate">
+                                        <label id="last-label" for="last">Priezvisko</label>
+                                        <span class="helper-text" data-error="Je potrebné zadať priezvisko"></span>
+                                    </div>
+                                </div>
+                                <div class="col s12 panel tab-panel">
+                                    <p class="customer-panel-title">Kontakt</p>
+                                    <div class="input-field">
+                                        <input id="customer-email" type="text">
+                                        <label id="email-label" for="customer-email">E-mail</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <input id="customer-phone" type="text">
+                                        <label id="phone-label" for="customer-phone">Mobil</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form id="company-form" style="margin-top: 20px;">
+                            <div class="row col s12">
+                                <div class="col s12 panel tab-panel">
+                                    <p class="customer-panel-title">Názov právnickej osoby</p>
+                                    <div class="input-field">
+                                        <input id="name" type="text" class="validate">
+                                        <label id="name-label" for="name">Názov</label>
+                                        <span class="helper-text" data-error="Je potrebné zadať názov"></span>
+                                    </div>
+                                </div>
+                                <div class="col s12 panel tab-panel">
+                                    <p class="customer-panel-title">Kontaktná osoba</p>
+                                    <div class="input-field col s6">
+                                        <input id="contact-first" type="text">
+                                        <label id="contact-first-label" for="contact-first">Meno</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <input id="contact-last" type="text">
+                                        <label id="contact-last-label" for="contact-last">Priezvisko</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <input id="contact-email" type="text">
+                                        <label id="contact-email-label" for="contact-email">E-mail</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <input id="contact-phone" type="text">
+                                        <label id="contact-phone-label" for="contact-phone">Mobil</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="col s12">
+                            <a id="create-customer-btn" class="waves-effect waves-light btn light-blue darken-4">
+                                vytvoriť
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 l6 offset-l3">
+        <div class="col s12 panel z-depth-2">
+
+            <div class="input-field col s12">
+                <input id="description" class="order-input validate" type="text">
+                <label id="description-label" for="description" data-error="Je potrebné zadať popis">Popis</label>
+            </div>
+
+            <div class="col s12">
+                <form>
+                    <p>
+                        <label>
+                            <input type="checkbox" class="filled-in checkbox-blue" id="check-sale" ng-checked="sale" ng-model="sale" />
+                            <span>Predaj</span>
+                        </label>
+                    </p>
+                </form>
+            </div>
+
+
+            <div class="col s12">
+                <div class="card blue lighten-5">
+                    <div class="card-content gray-text">
+                        <span class="card-title">Typ práce</span>
+                        <div class="input-field">
+                            <input id="work" class="order-input autocomplete" type="text" ng-disabled="sale" style="margin: 0px;">
+                            <label id="work-label" for="work">
+                                <i class="material-icons">search</i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-action" style="padding: 0px 12px 1px 12px;">
+                        <div class="input-field" style="margin-top:0px;">
+                            <div style="margin-left: 0px;">
+                                <a ng-show="!newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a ng-show="newWork" ng-click="workInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newWorkName.length < 1) ? 'disabled' : ''"
+                                    ng-disabled="sale">
+                                    <i class="material-icons">save</i>
+                                </a>
+                                <input style="padding-left: 5px;" ng-model="newWorkName" ng-disabled="!newWork" id="new-work" class="order-input" type="text"
+                                    ng-disabled="sale">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12" style="margin-bottom: 10px;">
+                <div class="card blue lighten-5">
+                    <div class="card-content gray-text">
+                        <span class="card-title">Typ zákazky</span>
+                        <div class="input-field">
+                            <input id="order" class="order-input autocomplete" type="text" ng-disabled="sale" style="margin: 0px;">
+                            <label id="order-label" for="order">
+                                <i class="material-icons">search</i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-action" style="padding: 0px 12px 1px 12px;">
+                        <div class="input-field" style="margin-top:0px;">
+                            <div style="margin-left: 0px;">
+                                <a ng-show="!newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a ng-show="newType" ng-click="typeInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newOrderName.length < 1) ? 'disabled' : ''"
+                                    ng-disabled="sale">
+                                    <i class="material-icons">save</i>
+                                </a>
+                                <input style="padding-left: 5px;" ng-model="newOrderName" ng-disabled="!newType" id="new-type" class="order-input" type="text"
+                                    ng-disabled="sale">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-field col s6" id="input-date">
+                <i class="material-icons prefix grey-text">event</i>
+                <input type="text" class="datepicker order-input" id="date" readonly>
+                <label id="date-label" for="date">Dátum</label>
+            </div>
+            <div class="input-field col s6" id="input-time">
+                <i class="material-icons prefix grey-text">schedule</i>
+                <input type="text" class="timepicker" id="time" readonly>
+                <label id="time-label" for="time">Čas</label>
+            </div>
+
+            <div id="price-div" class="input-field col s4">
+                <input value="0" id="price" class="order-input validate" type="text">
+                <label id="price-label" for="price" data-error="Chybne zadaná cena.">Cena</label>
+            </div>
+        </div>
+        <div class="col s12 panel z-depth-2">
+            <div class="col s12">
+                <div id="facility-chips" class="chips chips-autocomplete">
+
+                </div>
+            </div>
+            <div class="input-field col s12">
+                <div>
+                    <a ng-show="!newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix" ng-disabled="sale">
+                        <i class="material-icons">add</i>
+                    </a>
+                    <a ng-show="newFacility" ng-click="facilityInput()" class="btn-floating light-blue darken-4 prefix" ng-class="(newFacilityName.length < 1) ? 'disabled' : ''"
+                        ng-disabled="sale">
+                        <i class="material-icons">save</i>
+                    </a>
+                    <input placeholder="Vytvoriť príslušenstvo" style="padding-left: 5px;" ng-model="newFacilityName" ng-disabled="!newFacility"
+                        id="new-facility" class="order-input" type="text" ng-disabled="sale">
+                </div>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="notes" class="materialize-textarea" style="overflow-y: scroll;"></textarea>
+                <label id="notes-label" for="notes">Poznámky</label>
+            </div>
+        </div>
+    </div>
+    <div id="photo-modal" class="modal" style="overflow-y: scroll;">
+        <div class="modal-content">
+            <img id="photo-pic" src="" style="max-width: 100%; max-height: 100%;">
+        </div>
+    </div>
+    <script>$('.modal').modal();</script>
+</div>

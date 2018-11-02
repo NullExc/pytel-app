@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <% include ../partials/header.ejs %>
+
+    <script> var error = JSON.parse('<%- JSON.stringify(error) %>'); console.log(error) </script>
+
+</head>
+
+<body>
+
+    <% include ../partials/nav-in.ejs %>
+
+        <div class="row">
+            <div class="row col s12 light-blue darken-4 white-text">
+                <h5>Vyskytla sa chyba</h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <%= error %>
+        </div>
+
+</body>
+
+</html>

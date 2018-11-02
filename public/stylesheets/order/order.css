@@ -1,0 +1,79 @@
+.divider {
+    margin: 10px 0 10px 0;
+}
+
+.section {
+    padding-bottom: 0rem !important;
+}
+
+#find-customer {
+    margin: 20px 10px 10px 10px;
+}
+
+#done-customer {
+    margin: 10px;
+}
+
+#done-span {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+#select-customer {
+    margin: 10px;
+}
+
+.customer-input {
+    margin: 0 !important;
+}
+
+.state-btn {
+    width: 20%;
+}
+
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid rgb(223, 10, 10) !important;
+    box-shadow: 0 1px 0 0 rgb(238, 8, 8) !important;
+  }
+
+  .modal {
+      overflow: hidden;
+      max-height: 65%;
+  }
+
+  .card {
+      margin: 5px !important;
+  }
+
+  .card .card-content {
+    padding: 10px !important;
+}
+
+.carousel .carousel-item {
+    width: 400px;
+    height: 400px;
+}
+
+.customer-panel-title {
+    font-size: 20px;
+}
+
+.tab-panel {
+    border: 1px solid gray;
+}
+
+@media only screen and (max-device-width: 480px) {
+
+    #price-div {
+        width: 50%;
+    }
+
+    .label {
+        font-size: 50%;
+    }
+
+    .modal {
+        max-height: 40%;
+    }
+}
+
