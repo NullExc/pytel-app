@@ -10,16 +10,13 @@ var app = angular.module('Orders', ['angularUtils.directives.dirPagination']);
 app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     $scope.today = false;
-
     $scope.orders;
-
     $scope.orderByDate = 'arriveDate';
 
     $scope.typeSelect = {
         value: 'Všetky',
         choices: ['Všetky', 'Prijaté', 'Prebiehajúce', 'Čakajúce na vyzdvihnutie', 'Vyzdvihnuté']
     }
-
     $scope.dateSelect = {
         value: 'Dátum prijatia',
         choices: ['Dátum prijatia', 'Dátum začatia', 'Dátum ukončenia', 'Dátum vyzvihnutia']
@@ -27,10 +24,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     var filter = function (jquery) {
 
-        console.log("filtering");
-
         var dateType = "";
-
         var stateType = "";
 
         if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
@@ -70,11 +64,8 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             var now = new Date();
 
             from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 1, 1);
-
             to = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 59);
-
             console.log('today', from, to);
-
         }
 
         preloader.open("Načítavajú sa zákazky ...");
@@ -87,7 +78,7 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
         })
             .success(function (data) {
 
-                console.log('collection', data.orders.length, data.orders);
+                console.log('nonsale collection', data.orders.length, data.orders);
 
                 $scope.orders = data.orders;
 
@@ -109,7 +100,6 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
             })
 
         $scope.userSettings.orders.dateType = dateType;
-
         $scope.userSettings.orders.stateType = stateType;
 
         $http.post('/user-settings', $scope.userSettings)
@@ -120,8 +110,6 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
                 console.log('error', data);
             })
     }
-
-    console.log('user settings from window', window.userSettings);
 
     $scope.userSettings = window.userSettings;
 
@@ -170,27 +158,12 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
 
     filter(false);
 
-    $scope.newOrder = function () {
-        location.href = '/order-new';
-    }
-
     $scope.formatDate = function (val) {
-
         var date = new Date(val);
-
-        //date = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getHours(), date.getUTCMinutes(), date.getUTCSeconds());
-
-        /*var string = (date.getDate() >= 10 ? date.getDate() : ('0' + (date.getDate())))
-            + '.' + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : ('0' + (date.getMonth() + 1)))
-            + '.' + date.getFullYear() + ' '
-            + (date.getHours() >= 10 ? date.getHours() : ('0' + (date.getHours()))) + ':'
-            + (date.getMinutes() >= 10 ? date.getMinutes() : ('0' + (date.getMinutes())));*/
-
         var string = moment.utc(date).format('DD.MM.YYYY k:mm');
 
         return string;
     }
-
     $scope.todayChange = function () {
         filter(false);
     }
@@ -198,42 +171,23 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
     $scope.typeChange = function () {
         filter(false);
     }
-
     $scope.dateChange = function () {
         filter(false);
     }
-
     $scope.clickOrder = function (id) {
         if (screen.width < 600) {
             location.href = '/order/' + id;
         }
     }
 
-    /*var date = new Date();
-
-    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-
-    var firstDayDate = new Date(date.getFullYear(), date.getMonth(), 1, 1, 1);
-
-    var lastDayDate = new Date(date.getFullYear(), date.getMonth(), lastDay, 24, 59);
-
-    $scope.from = firstDayDate;
-    $scope.to = lastDayDate;
-
-    $scope.fromString = $filter('date')(lastDayDate, 'yyyy-MM-dd');*/
-
     $(document).ready(function () {
 
         $.datepicker.regional['sk'] = calendar.calendarSettings;
-
         $.datepicker.setDefaults($.datepicker.regional['sk']);
 
         $("#from-label").addClass("active");
-
         $("#from-date").val(($scope.from.getDate()) + '.' + ($scope.from.getMonth() + 1) + '.' + $scope.from.getFullYear());
-
         $("#to-label").addClass("active");
-
         $("#to-date").val(($scope.to.getUTCDate()) + '.' + ($scope.to.getUTCMonth() + 1) + '.' + $scope.to.getUTCFullYear());
 
         $("#from-date").datepicker({
@@ -242,37 +196,215 @@ app.controller('OrdersCtrl', function ($scope, $http, $filter) {
                 var dateParts = dateText.split('.');
 
                 $scope.from = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
-
                 $scope.$apply();
-
                 filter(true);
-
                 $scope.userSettings.orders.dateFrom = dateText;
             }
         });
-
         $("#to-date").datepicker({
             onSelect: function (dateText) {
 
                 var dateParts = dateText.split('.');
 
                 $scope.to = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 24, 59);
-
                 $scope.$apply();
-
                 filter(true);
-
                 $scope.userSettings.orders.dateTo = dateText;
             }
         });
-
         $("#from-date").datepicker($.datepicker.regional["sk"]);
-
         $("#to-date").datepicker($.datepicker.regional["sk"]);
+    })
+})
 
+app.controller('SaleOrdersCtrl', function ($scope, $http, $filter) {
+
+    $scope.today = false;
+    $scope.orders;
+    $scope.orderByDate = 'arriveDate';
+
+    $scope.typeSelect = {
+        value: 'Všetky',
+        choices: ['Všetky', 'Objednané', 'Obdržané', 'Vydané zákazníkovi']
+    }
+    $scope.dateSelect = {
+        value: 'Dátum objednania',
+        choices: ['Dátum objednania', 'Dátum obdržania', 'Dátum vyzdvihnutia zákazníkom']
+    }
+
+    var filter = function (jquery) {
+
+        var dateType = "";
+        var stateType = "";
+
+        if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+            dateType = "orderedDate";
+
+        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
+            dateType = "obtainedDate"
+
+        } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
+            dateType = "leavedDate"
+        }
+
+        if ($scope.typeSelect.value == $scope.typeSelect.choices[1]) {
+            stateType = STATE.saleOrdered;
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[2]) {
+            stateType = STATE.saleObtained;
+
+        } else if ($scope.typeSelect.value == $scope.typeSelect.choices[3]) {
+            stateType = STATE.saleLeaved;
+
+        } else {
+            stateType = "all";
+        }
+
+        var from = $scope.from;
+        var to = $scope.to;
+
+        if ($scope.today) {
+
+            var now = new Date();
+
+            from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 1, 1);
+            to = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 59);
+            console.log('today', from, to);
+        }
+
+        preloader.open("Načítavajú sa zákazky ...");
+
+        $http.post('/order/date', {
+            from: from,
+            to: to,
+            dateType: dateType,
+            stateType: stateType
+        })
+            .success(function (data) {
+
+                console.log('sale collection', data.orders.length, data.orders);
+
+                $scope.orders = data.orders;
+
+                if ($scope.dateSelect.value == $scope.dateSelect.choices[0]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'orderedDate', false); $scope.orderByDate = 'orderedDate';
+                } else if ($scope.dateSelect.value == $scope.dateSelect.choices[1]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'obtainedDate', false); $scope.orderByDate = 'obtainedDate';
+                } else if ($scope.dateSelect.value == $scope.dateSelect.choices[2]) {
+                    $scope.orders = $filter('orderBy')($scope.orders, 'leavedDate', false); $scope.orderByDate = 'leavedDate';
+                }
+                preloader.close();
+            })
+            .error(function (data) {
+                console.log('error', data);
+                preloader.close();
+            })
+
+        $scope.userSettings.saleOrders.dateType = dateType;
+        $scope.userSettings.saleOrders.stateType = stateType;
+
+        $http.post('/user-settings', $scope.userSettings)
+            .success(function (data) {
+                console.log('user setting saved', data);
+            })
+            .error(function (data) {
+                console.log('error', data);
+            })
+    }
+
+    $scope.userSettings = window.userSettings;
+
+    console.log("userSettings new", $scope.userSettings);
+
+    if ($scope.userSettings.saleOrders.dateType == "orderedDate") {
+        $scope.dateSelect.value = $scope.dateSelect.choices[0];
+
+    } else if ($scope.userSettings.saleOrders.dateType == "obtainedDate") {
+        $scope.dateSelect.value = $scope.dateSelect.choices[1];
+
+    } else if ($scope.userSettings.saleOrders.dateType == "leavedDate") {
+        $scope.dateSelect.value = $scope.dateSelect.choices[2];
+    } 
+
+    if ($scope.userSettings.saleOrders.stateType == STATE.saleOrdered) {
+        $scope.typeSelect.value = $scope.typeSelect.choices[1];
+
+    } else if ($scope.userSettings.saleOrders.stateType == STATE.saleObtained) {
+        $scope.typeSelect.value = $scope.typeSelect.choices[2];
+
+    } else if ($scope.userSettings.saleOrders.stateType == STATE.saleLeaved) {
+        $scope.typeSelect.value = $scope.typeSelect.choices[3];
+
+    } else if ($scope.userSettings.saleOrders.stateType == STATE.all) {
+        $scope.typeSelect.value = $scope.typeSelect.choices[0];
+    }
+
+    var dateFromParts = $scope.userSettings.saleOrders.dateFrom.split('.');
+
+    var dateToParts = $scope.userSettings.saleOrders.dateTo.split('.');
+
+    $scope.from = new Date(parseInt(dateFromParts[2]), parseInt(dateFromParts[1] - 1), parseInt(dateFromParts[0]), 1, 1);
+
+    $scope.to = new Date(parseInt(dateToParts[2]), parseInt(dateToParts[1] - 1), parseInt(dateToParts[0]), 24, 59);
+
+    filter(false);
+
+    $scope.formatDate = function (val) {
+        var date = new Date(val);
+        var string = moment.utc(date).format('DD.MM.YYYY k:mm');
+
+        return string;
+    }
+    $scope.todayChange = function () {
+        filter(false);
+    }
+
+    $scope.typeChange = function () {
+        filter(false);
+    }
+    $scope.dateChange = function () {
+        filter(false);
+    }
+    $scope.clickOrder = function (id) {
+        if (screen.width < 600) {
+            location.href = '/order/' + id;
+        }
+    }
+
+    $(document).ready(function () {
+
+        $.datepicker.regional['sk'] = calendar.calendarSettings;
+        $.datepicker.setDefaults($.datepicker.regional['sk']);
+
+        $("#sale-from-label").addClass("active");
+        $("#sale-from-date").val(($scope.from.getDate()) + '.' + ($scope.from.getMonth() + 1) + '.' + $scope.from.getFullYear());
+        $("#sale-to-label").addClass("active");
+        $("#sale-to-date").val(($scope.to.getUTCDate()) + '.' + ($scope.to.getUTCMonth() + 1) + '.' + $scope.to.getUTCFullYear());
+
+        $("#sale-from-date").datepicker({
+            onSelect: function (dateText) {
+
+                var dateParts = dateText.split('.');
+
+                $scope.from = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 1, 1);
+                $scope.$apply();
+                filter(true);
+                $scope.userSettings.saleOrders.dateFrom = dateText;
+            }
+        });
+        $("#sale-to-date").datepicker({
+            onSelect: function (dateText) {
+
+                var dateParts = dateText.split('.');
+
+                $scope.to = new Date(parseInt(dateParts[2]), parseInt(dateParts[1] - 1), parseInt(dateParts[0]), 24, 59);
+                $scope.$apply();
+                filter(true);
+                $scope.userSettings.saleOrders.dateTo = dateText;
+            }
+        });
+        $("#sale-from-date").datepicker($.datepicker.regional["sk"]);
+        $("#sale-to-date").datepicker($.datepicker.regional["sk"]);
     })
 
-    var getByDate = function () {
-
-    }
 })

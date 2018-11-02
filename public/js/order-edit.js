@@ -902,8 +902,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
 
                     if (!isDateCorrect.check) {
                         console.log("Incorrect dates", isDateCorrect);
-                        $("#state-selector-span").removeClass('hide');
-                        $("#state-selector-span").text(isDateCorrect.text);
+                        $("#sale-selector-span").removeClass('hide');
+                        $("#sale-selector-span").text(isDateCorrect.text);
                         return;
                     }
                 }

@@ -1,1 +1,1 @@
-{"orders":{"dateType":"arriveDate","stateType":"all","dateFrom":"1.8.2018","dateTo":"31.10.2018"}}
+{"orders":{"dateType":"arriveDate","stateType":"pickUp","dateFrom":"1.10.2018","dateTo":"31.10.2018"},"saleOrders":{"dateType":"obtainedDate","stateType":"all","dateFrom":"1.10.2018","dateTo":"31.10.2018"}}
