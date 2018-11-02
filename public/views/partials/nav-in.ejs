@@ -35,7 +35,7 @@
             
             <a href="#" data-target="mobile-demo" class="sidenav-trigger hide-on-med-and-up"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-small-only">
-                < %if (isLoggedIn) { %>
+                <% if (isLoggedIn) { %>
                     <li><a href="/order-new" class="white-text">Pridať zákazku</a></li>
                     <li><a href="/order/all" class="white-text">Zákazky</a></li>
                     <li><a href="/customer-new" class="white-text">Pridať zákazníka</a></li>
@@ -48,7 +48,7 @@
                 <% } %>
             </ul>
             <ul class="sidenav light-blue darken-4 hide-on-med-and-up" id="mobile-demo" style="width: 200px;">
-                    <%if (isLoggedIn) { %>
+                    <% if (isLoggedIn) { %>
                         <div class="divider" style="margin-top: 50px;"></div>
                         <li><a href="/order-new" class="white-text">Pridať zákazku</a></li>
                         <div class="divider"></div>

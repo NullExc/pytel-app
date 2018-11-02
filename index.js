@@ -30,6 +30,7 @@ require('./server/models/Facility.js');
 var config = require('./config/config.js');
 
 var app = express();
+var isLoggedIn = false;
 
 mongoose.connect(config.url, {
 
@@ -60,6 +61,14 @@ app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
 
+app.use(function (req, res, next) {
+  res.locals = {
+    isLoggedIn
+  }
+  
+  next();
+});
+
 //user routes
 app.post('/register', userApi.register);
 app.post('/login', userApi.login);
@@ -83,13 +92,13 @@ app.use(function (req, res, next) {
     jwt.verify(token, app.get('secret'), function (err, decoded) {
 
       if (err) {
-
+        isLoggedIn = false;
         if (req.path === '/') return next();
 
         return res.redirect('/');
 
       } else {
-
+        isLoggedIn = true;
         req.decoded = decoded;
 
         var now = Math.floor(Date.now() / 1000);
@@ -182,20 +191,20 @@ app.get('/settings', settingsApi.get);
 app.post('/user-settings', userSettingsApi.saveUserSettings);
 
 app.get('/stats', function (req, res, next) {
-  res.render('pages/stats');
+  res.render('pages/stats', { isLoggedIn: req.cookies.token ? true : false });
 })
 app.post('/stats', orderApi.getStats);
 app.post('/order/date', orderApi.getByDate);
 
 app.use(function (req, res, next) {
-  res.render('pages/not-found', { status: 404, url: req.url });
+  res.render('pages/not-found', { isLoggedIn: req.cookies.token ? true : false, status: 404, url: req.url });
 });
 
 app.use(function (err, req, res, next) {
   if (err) {
     console.info('error handler', err);
   }
-  res.status(500).render('pages/error', { error: err });
+  res.status(500).render('pages/error', { isLoggedIn: req.cookies.token ? true : false, error: err });
 })
 
 
