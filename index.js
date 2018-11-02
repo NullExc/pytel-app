@@ -122,7 +122,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', function (req, res) {
-  res.render('pages/index');
+  res.render('pages/index', { isLoggedIn: req.cookies.token ? true : false });
 });
 
 //work type routes
