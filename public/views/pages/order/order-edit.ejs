@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+    <script type="text/javascript">
+        var customers = JSON.parse('<%- JSON.stringify(result.form.customers) %>');
+        var workTypes = JSON.parse('<%- JSON.stringify(result.form.worktypes) %>');
+        var orderTypes = JSON.parse('<%- JSON.stringify(result.form.ordertypes) %>');
+        var facilities = JSON.parse('<%- JSON.stringify(result.form.facilities) %>');
+
+        var order = JSON.parse('<%- JSON.stringify(result.detail.order) %>');
+        var customer = JSON.parse('<%- JSON.stringify(result.detail.customer) %>');
+        var workType = JSON.parse('<%- JSON.stringify(result.detail.workType) %>');
+        var orderType = JSON.parse('<%- JSON.stringify(result.detail.orderType) %>');
+        var customerFacilities = JSON.parse('<%- JSON.stringify(result.detail.customerFacilities) %>');
+
+        var edit = true;
+    </script>
+    <script type="text/javascript" src="/dist/order-edit.js"></script>
+    <script type="text/javascript" src="/dist/order-date.js"></script>
+    <script type="text/javascript" src="/dist/order-crud.js"></script>
+    <script type="text/javascript" src="/dist/order-state.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/order/order.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/datepicker.css" />
+    <style>
+
+        .date-row {
+            margin-bottom: 0px !important;
+            padding-top: 15px;
+        }
+
+        .date-row-active {
+            border: green solid 2px;
+            border-radius: 15px;
+        }
+
+    </style>
+</head>
+
+<body ng-app="OrderInput" ng-controller="OrderInputCtrl">
+
+    <% include ../../partials/nav-in.ejs %>
+
+    <% include ../../partials/loader.ejs %>
+
+    <div class="row">
+
+        <% include ./order-state-change.ejs %>
+
+        <% include ./order-sale-change.ejs %>
+
+        <% include ./order-input.ejs %>
+
+    </div>
+
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large light-blue darken-4">
+            <i id="update" class="large material-icons">save</i>
+        </a>
+    </div>
+</body>
+
+</html>

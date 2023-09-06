@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript" src="/dist/customer-input.js"></script>
+        <script type="text/javascript">
+            var edit = false;
+        </script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/customer-new.css" />
+</head>
+
+<body>
+
+    <% include ../../partials/nav-in.ejs %>
+
+        <div class="row">
+            <div class="col l6 s12 offset-l3" style="margin-top: 15px;">
+                <form id="customer-form">
+                    <p class="col l4 s6">
+                        <label>
+                            <input class="with-gap" name="legal-form" type="radio" value="company" id="show-company" />
+                            <span>Právnická osoba</span>
+                        </label>
+                    </p>
+                    <p class="col l4 s6">
+                        <label>
+                            <input class="with-gap" name="legal-form" type="radio" value="person" id="show-person" />
+                            <span>Fyzická osoba</span>
+                        </label>
+                    </p>
+                </form>
+            </div>
+
+            <% include ./customer-input.ejs %>
+        </div>
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large light-blue darken-4">
+                <i id="create" class="large material-icons">save</i>
+            </a>
+        </div>
+
+</body>
+
+</html>

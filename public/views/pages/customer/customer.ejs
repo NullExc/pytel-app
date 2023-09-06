@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../../partials/header.ejs %>
+        <script type="text/javascript"> 
+            var customer = JSON.parse('<%- JSON.stringify(customer) %>');
+            var orders = JSON.parse('<%- JSON.stringify(orders) %>');
+            var totalSum = JSON.parse('<%- JSON.stringify(totalSum) %>');
+            var orderCount = JSON.parse('<%- JSON.stringify(orderCount) %>');
+
+            //console.log(JSON.stringify(orders));
+
+            $(document).ready(function () {
+                $('.modal').modal();
+            })
+        </script>
+        <script type="text/javascript" src="/dist/customer.js"></script>
+        <script type="text/javascript" src="/scripts/angular-utils-pagination/dirPagination.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/customer.css" />
+</head>
+
+<body ng-app="Customer" ng-controller="CustomerCtrl">
+
+    <% include ../../partials/nav-in.ejs %>
+
+        <section class="row">
+            <div class="row">
+                <div class="col l6 offset-l3 s12">
+                    <div class="col s12">
+                        <div class="input-field">
+                            <input type="text" id="autocomplete-input" class="autocomplete">
+                            <label for="autocomplete-input">Hľadať zákazníka</label>
+                        </div>
+                    </div>
+                    <div ng-show="person">
+                        <div class="col s12 panel z-depth-4">
+                            <div class="col s12">
+                                <h5>Informácie</h5>
+                            </div>
+                            <div class="col s12 l6">
+                                <h6 class="grey-text">E-mail</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.email}}</p>
+                            </div>
+                            <div class="col s12 l6">
+                                <h6 class="grey-text">Tel. číslo</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.phone}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Počet zákaziek</h6>
+                                <div class="divider"></div>
+                                <p>{{orderCount}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Prijatá suma</h6>
+                                <div class="divider"></div>
+                                <p>{{totalSum}}</p>
+                            </div>
+                            <div class="col s6 l6">
+                                <h6 class="grey-text">Pridaný</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.date | date: 'd.M.yyyy'}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col s12 panel z-depth-4">
+                            <div class="col s12" style="margin-top: 20px;">
+                                <h5>Adresa</h5>
+                            </div>
+
+                            <div class="col s9">
+                                <h6 class="grey-text">Ulica</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.address.street}}</p>
+                            </div>
+                            <div class="col s3">
+                                <h6 class="grey-text">Číslo</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.address.streetNumber}}</p>
+                            </div>
+
+                            <div class="col s9">
+                                <h6 class="grey-text">Mesto</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.address.city}}</p>
+                            </div>
+                            <div class="col s3">
+                                <h6 class="grey-text">PSČ</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.person.address.zipCode}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="!person">
+
+                        <div class="col s12 panel z-depth-4">
+                            <div class="col s12" style="margin-top: 20px;">
+                                <h5>Adresa</h5>
+                            </div>
+
+                            <div class="col s9">
+                                <h6 class="grey-text">Ulica</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.address.street}}</p>
+                            </div>
+                            <div class="col s3">
+                                <h6 class="grey-text">Číslo</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.address.streetNumber}}</p>
+                            </div>
+
+                            <div class="col s9">
+                                <h6 class="grey-text">Mesto</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.address.city}}</p>
+                            </div>
+                            <div class="col s3">
+                                <h6 class="grey-text">PSČ</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.address.zipCode}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col s12 panel z-depth-4">
+                            <div class="col s12" style="margin-top: 20px;">
+                                <h5>Informácie</h5>
+                            </div>
+                            <div class="col s12" style="">
+                                <h6 class="grey-text">Pridaný</h6>
+                                <div class="divider" style="width: 50% !important"></div>
+                                <p>{{customer.date | date: 'd.M.yyyy'}}</p>
+                            </div>
+
+                            <div class="col s6">
+                                <h6 class="grey-text">Počet zákaziek</h6>
+                                <div class="divider"></div>
+                                <p>{{orderCount}}</p>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">Prijatá suma</h6>
+                                <div class="divider"></div>
+                                <p>{{totalSum}}</p>
+                            </div>
+                            <div class="col s12">
+                                <h6 class="grey-text">IČO</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.billData.ICO}}</p>
+                            </div>
+
+                            <div class="col s12">
+                                <h6 class="grey-text">IČ DPH</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.billData.ICDPH}}</p>
+                            </div>
+
+                            <div class="col s12">
+                                <h6 class="grey-text">DIČ</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.billData.DIC}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col s12 panel z-depth-4">
+                            <div class="col s12">
+                                <h5>Kontaktná osoba</h5>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">Meno</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.contactPerson.firstName}}</p>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">Priezvisko</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.contactPerson.lastName}}</p>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">E-mail</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.contactPerson.email}}</p>
+                            </div>
+                            <div class="col s6">
+                                <h6 class="grey-text">Mobil</h6>
+                                <div class="divider"></div>
+                                <p>{{customer.company.contactPerson.phone}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="col l6 offset-l3 s12">
+
+                    <ul class="collapsible panel panel-primary" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons grey-text">get_app</i> Prijaté zákazky
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="collection">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.arrived} | itemsPerPage:5" pagination-id="arrived-pagination"
+                                        ng-href="/order/{{order._id}}">
+                                        <p>{{order.description}}</p>
+                                    </a>
+                                </div>
+                                <dir-pagination-controls pagination-id="arrived-pagination" max-size="5" direction-links="true" boundary-links="true">
+                                </dir-pagination-controls>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons grey-text">build</i> Prebiehajúce zákazky
+                            </div>
+                            <div class="collapsible-body">
+
+                                <div class="collection">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.working} | itemsPerPage:5" pagination-id="working-pagination"
+                                        ng-href="/order/{{order._id}}">
+                                        <p>{{order.description}}</p>
+                                    </a>
+                                </div>
+                                <dir-pagination-controls pagination-id="working-pagination" max-size="5" direction-links="true" boundary-links="true">
+                                </dir-pagination-controls>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons green-text">done</i> Dokončené zákazky
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="collection">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.done} | itemsPerPage:5" pagination-id="done-pagination"
+                                        ng-href="/order/{{order._id}}">
+                                        <p>{{order.description}}</p>
+                                    </a>
+                                </div>
+                                <dir-pagination-controls pagination-id="done-pagination" max-size="5" direction-links="true" boundary-links="true">
+                                </dir-pagination-controls>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons green-text">done_all</i> Vyzdvihnuté zákazky
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="collection">
+                                    <a class="collection-item" dir-paginate="order in orders | filter:{state:STATE.pickUp} | itemsPerPage:5" pagination-id="pickup-pagination"
+                                        ng-href="/order/{{order._id}}">
+                                        <p>{{order.description}}</p>
+                                    </a>
+                                </div>
+                                <dir-pagination-controls pagination-id="pickup-pagination" max-size="5" direction-links="true" boundary-links="true">
+                                </dir-pagination-controls>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </section>
+
+        <div style="margin-bottom: 24px; height: 70px;">
+            <div class="fixed-action-btn vertical click-to-toggle" style="right: 24px;">
+                <a class="btn-floating btn-large light-blue darken-4">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    <li>
+                        <a id="edit" ng-click="editCustomer()" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="delete" href="#modal1" class="btn-floating red modal-trigger" style="transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(40px); opacity: 0;">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--<a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>-->
+
+        <!-- Modal Structure -->
+        <div style="height: 35%;" id="modal1" class="modal">
+            <div style="margin: 20px;">
+                <h5>Vymazať zákazníka</h5>
+                <p>Potvrdením natrvalo vymažete zákazníka zo systému.</p>
+            </div>
+            <div style="float: right;">
+                <a id="deleteCustomer" ng-click="deleteCustomer()" class="modal-action modal-close waves-effect waves-green btn-flat">Potvrdiť</a>
+                <a class="modal-action modal-close waves-effect waves-red btn-flat">Zrušiť</a>
+            </div>
+        </div>
+</body>
+
+</html>

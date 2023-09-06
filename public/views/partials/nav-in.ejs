@@ -1,0 +1,103 @@
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="/customer-new" class="black-text">Pridať</a></li>
+  <li class="divider"></li>
+  <li><a href="/customer/all" class="black-text">Zoznam</a></li>
+</ul>
+
+<ul id="dropdown2" class="dropdown-content">
+  <li><a href="/customer-new" class="black-text">Pridať</a></li>
+  <li class="divider"></li>
+  <li><a href="/customer/all" class="black-text">Zoznam</a></li>
+</ul>
+
+<ul id="dropdown3" class="dropdown-content">
+    <li><a href="/order-new" class="black-text">Pridať</a></li>
+    <li class="divider"></li>
+    <li><a href="/order/all" class="black-text">Zoznam</a></li>
+</ul>
+
+<ul id="dropdown4" class="dropdown-content">
+    <li><a href="/order-new" class="black-text">Pridať</a></li>
+    <li class="divider"></li>
+    <li><a href="/order/all?sort=ascending" class="black-text">Zoznam</a></li>
+</ul>
+
+
+<!--<div class="navbar-fixed">-->
+    <nav class="light-blue darken-4">
+        <div class="nav-wrapper">
+            
+           
+            <a href="#!" class="brand-logo hide-on-med-and-up" ><img width="120px" height="40px" src="/pap_logo_white.png"></a>
+            <a href="#!" class="brand-logo left hide-on-small-only" ><img width="120px" height="40px" src="/pap_logo_white.png"></a>
+    
+            <!--<img src="/pap_logo_white.png">-->
+            
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger hide-on-med-and-up"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-small-only">
+                <% if (isLoggedIn) { %>
+                    <li><a href="/order-new" class="white-text">Pridať zákazku</a></li>
+                    <li><a href="/order/all" class="white-text">Zákazky</a></li>
+                    <li><a href="/customer-new" class="white-text">Pridať zákazníka</a></li>
+                    <li><a href="/customer/all" class="white-text">Zákazníci</a></li>
+                    <li><a class="white-text" href="/settings">Nastavenia</a></li>
+                    <li><a href="/stats" class="white-text">Prehľad</a></li>
+                    <li><a class="white-text" href="/logout">Odhlásiť sa</a></li>
+                <% } else { %>
+                    <li><a class="white-text" href="/login">Prihlásiť sa</a></li>
+                <% } %>
+            </ul>
+            <ul class="sidenav light-blue darken-4 hide-on-med-and-up" id="mobile-demo" style="width: 200px;">
+                    <% if (isLoggedIn) { %>
+                        <div class="divider" style="margin-top: 50px;"></div>
+                        <li><a href="/order-new" class="white-text">Pridať zákazku</a></li>
+                        <div class="divider"></div>
+                        <li><a href="/order/all" class="white-text">Zákazky</a></li>
+                        <div class="divider"></div>
+                        <li><a href="/customer-new" class="white-text">Pridať zákazníka</a></li>
+                        <div class="divider"></div>
+                        <li><a href="/customer/all" class="white-text">Zákazníci</a></li>
+                        <div class="divider"></div>
+                        <li><a href="/settings" class="white-text">Nastavenia</a></li>
+                        <div class="divider"></div>
+                        <li><a href="/stats" class="white-text">Prehľad</a></li>
+                        <div class="divider"></div>
+                        <li><a class="white-text" href="/logout" class="white-text">Odhlásiť sa</a></li>
+                        <div class="divider"></div>
+                <% } else { %>
+                    <li><a class="white-text" href="/login" class="white-text">Prihlásiť sa</a></li>
+                    <div class="divider"></div>
+                <% } %>
+            </ul>
+        </div>
+        <div class="row light-blue darken-4 header-layer">
+            <div id="navDiv" class="col m6 s12">
+                <h5 id="navText" style="margin-left: 10px;">{{navName}}</h5>
+            </div>
+            <div class="col m6 s12 right-align hide-on-small-only">
+                <div class="btn white darken-4" onclick="googleSignIn()">
+                    <a href="#" style="text-transform:none; color: black;">
+                        <div class="left" style="margin-right: 5px;">
+                            <img width="20px" alt="Google &quot;G&quot; Logo" src="/icons8-google-48.png"/>
+                        </div>
+                        <span class="google-login-text">
+                                Prihlásiť sa s Google
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="col s12 hide-on-med-and-up">
+                <div class="btn white darken-4" onclick="googleSignIn()">
+                    <a href="#" style="text-transform:none; color: black;">
+                        <div class="left" style="margin-right: 5px;">
+                            <img width="20px" alt="Google &quot;G&quot; Logo" src="/icons8-google-48.png"/>
+                        </div>
+                        <span class="google-login-text">
+                                Prihlásiť sa s Google
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+<!--</div>-->

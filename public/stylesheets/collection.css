@@ -1,0 +1,54 @@
+@media only screen and (max-width: 600px) {
+
+    .item:hover {
+        background-color: #efebe9;
+        cursor: pointer;
+    }
+
+    .item.collection-item {
+        font-size: 11px;
+    }
+}
+
+.collection.with-header .collection-item.avatar {
+    padding-left: 20px;
+}
+
+
+.caret {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+th:hover {
+    color: #01579b;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.selected:hover {
+    background-color:#01579b
+}
+
+.collection .collection-item {
+    border-bottom: 3px solid #e0e0e0 !important;
+}
+
+.collection {
+    border: 3px solid #e0e0e0 !important;
+}
+
+.item-description {
+    font-size: 15px;
+}
+
+.item-state {
+    font-style: italic;
+}
+
+.item-customer {
+    font-weight: bold;
+    font-size: 18px;
+    font-style: italic;
+}
