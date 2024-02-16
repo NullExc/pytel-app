@@ -52,14 +52,14 @@ function pickerCallback(data) {
 
         console.log("urls", data.docs);
 
-        photoUrl = 'https://docs.google.com/uc?id=' + fileId;
+        photoUrl = 'https://lh3.googleusercontent.com/d/' + fileId; //'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&key=' + googleAuth.API_KEY;
 
         data.docs.forEach(function (doc) {
             var id = doc.id;
 
             photoUrls.push({
                 name: doc.name,
-                url: 'https://docs.google.com/uc?id=' + id
+                url: 'https://lh3.googleusercontent.com/d/' + fileId //'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&key=' + googleAuth.API_KEY
             });
         })
 

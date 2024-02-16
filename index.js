@@ -91,7 +91,7 @@ app.use(function (req, res, next) {
 
   var token = req.body.token || req.query.token || req.headers['authorization'] || req.cookies.token;
 
-  console.log("token ::: " + token);
+  //console.log("token ::: " + token);
   
   if (token) {
 
