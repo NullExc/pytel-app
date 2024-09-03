@@ -66,6 +66,7 @@ app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
 
 app.use(function (req, res, next) {
+  isLoggedIn = req.cookies.token ? true : false;
   res.locals = {
     isLoggedIn
   }
@@ -136,8 +137,19 @@ app.use(function (req, res, next) {
   }
 });
 
+/*var render = express.response.render;
+express.response.render = function(view, options, callback) {
+   
+    if (!options) {
+      options = {};
+    }
+    options.isLoggedIn = this.req.cookies.token ? true : false;
+    console.log("render options :: ", options);
+    render.apply(this, arguments);
+};*/
+
 app.get('/', function (req, res) {
-  res.render('pages/index', { isLoggedIn: req.cookies.token ? true : false });
+  res.render('pages/index');
 });
 
 app.get('/ping', function (req, res) {
@@ -201,20 +213,20 @@ app.get('/settings', settingsApi.get);
 app.post('/user-settings', userSettingsApi.saveUserSettings);
 
 app.get('/stats', function (req, res, next) {
-  res.render('pages/stats', { isLoggedIn: req.cookies.token ? true : false });
+  res.render('pages/stats');
 })
 app.post('/stats', orderApi.getStats);
 app.post('/order/date', orderApi.getByDate);
 
 app.use(function (req, res, next) {
-  res.render('pages/not-found', { isLoggedIn: req.cookies.token ? true : false, status: 404, url: req.url });
+  res.render('pages/not-found', { status: 404, url: req.url });
 });
 
 app.use(function (err, req, res, next) {
   if (err) {
     console.info('error handler', err);
   }
-  res.status(500).render('pages/error', { isLoggedIn: req.cookies.token ? true : false, error: err });
+  res.status(500).render('pages/error', { error: err });
 })
 
 

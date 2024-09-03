@@ -51,7 +51,7 @@
 
 .carousel .carousel-item {
     width: 400px;
-    height: 400px;
+    height: 600px !important;
 }
 
 .customer-panel-title {

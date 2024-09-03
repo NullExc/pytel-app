@@ -92,6 +92,9 @@ var OrderSchema = new mongoose.Schema({
     },
     leavedDate: {
         type: Date
+    },
+    signatureImage: {
+        type: String
     }
 });
 

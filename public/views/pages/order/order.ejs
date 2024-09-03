@@ -100,6 +100,11 @@
             <div class="col s12">
                 <h5>Fotky</h5>
             </div>
+            <!--<div class="carousel carousel-slider col s12 hide-on-small-only">
+                <a class="carousel-item" href="{{photo.url}}" target="_blank" ng-repeat="photo in order.photoUrls">
+                    <img ng-src="{{photo.url}}">
+                </a>
+            </div>-->
             <div class="carousel col s12 hide-on-small-only">
                 <a class="carousel-item" href="#" ng-repeat="photo in order.photoUrls">
                     <img ng-src="{{photo.url}}">
@@ -208,6 +213,18 @@
                 </div>
             </div>
 
+        </div>
+        <div class="col l6 s12 m8 offset-l3 offset-m2 panel z-depth-4">
+            <div class="col s12">
+                <h5>Podpis</h5>
+            </div>
+            <div class="col s12">
+                <div class="section" style="margin-bottom: 20px;">
+                    <div id="signature-div">
+                        <img id="signature-image" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div id="photo-modal" class="modal" style="overflow-y: scroll;">

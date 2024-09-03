@@ -123,3 +123,7 @@
 .dropdown-content li > span {
   color: #01579b;
 }
+
+#signature-pad canvas {
+  border: dashed;
+}

@@ -44,6 +44,17 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     $scope.saleChild = {};
     $scope.jquery = $;
 
+    $scope.signatureComponent = null;
+
+    $scope.initSignature = function () {
+        console.log("init Signature component ...");
+        $scope.signatureComponent = Signature(document.getElementById("signature-pad"), {
+            width: 300,
+            height: 100,
+            name: "papdpzak-signature",
+        });
+    };
+
     console.log("$scope.order", $scope.order);
 
     if (!selectedPhotoUrls) selectedPhotoUrls = [];
@@ -562,6 +573,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
         }
 
+        $scope.initSignature();
+
         /*var date1 = new Date();
         var utcDate = Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), date1.getUTCDate(),
         date1.getUTCHours(), date1.getUTCMinutes(), date1.getUTCSeconds());*/
@@ -801,8 +814,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
             }
         })
 
-        $('#create, #update').click(function (e) {
-
+        $scope.createOrUpdateOrder = function (e) {
             var order = {};
 
             order.description = $("#description").val();
@@ -815,6 +827,8 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 $("#done-customer").removeClass('orange');
                 $("#done-customer").addClass('red');
             }
+
+            order.signatureImage = $scope.signatureComponent.getImage();
 
             var email = $("#email").val();
             var phone = $("#phone").val();
@@ -974,7 +988,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     order
                 }
             }
-            if (e.target.id === 'create') {
+            if (e === 'create' || (e.target && e.target.id === 'create' )) {
 
                 var userTimezoneOffset = date.getTimezoneOffset() * 60000;
                 var createDate = new Date(utcDate.getTime() - userTimezoneOffset);
@@ -1010,7 +1024,7 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                 preloader.close();
                 if (err) console.log("error", err);
                 else if (response) {
-                    if (response.data.id && e.target.id === 'create') {
+                    if (response.data.id && (e === 'create' || (e.target && e.target.id === 'create'))) {
                         if (gapi && gapi.auth2.getAuthInstance() && gapi.auth2.getAuthInstance().isSignedIn.get()) {
                             calendar.setGoogleApi(gapi);
                             calendar.insertEvent(order, response.data.id, selectedCustomer);
@@ -1019,6 +1033,16 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
                     location.href = "/order/all";
                 }
             })
+        }
+
+        $('#create, #update').click(function (e) {
+
+            if ($scope.saveState === STATE.pickUp) {
+                $('#signature-modal').modal('open');
+            } else {
+                $scope.createOrUpdateOrder(e);
+            }
+            
         })
 
         preloader.close();

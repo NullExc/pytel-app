@@ -129,7 +129,10 @@ app.controller('OrderCtrl', function ($scope, $http, $filter) {
 
    $(document).ready(function () {
 
-        console.log("jquery loaded", facilities);
+        console.log("jquery loaded!", facilities);
+
+        console.log("init signature image");
+        $('#signature-image').attr("src", $scope.order.signatureImage);
 
         /*if ($scope.sale) {
             $("#regular-order-state").addClass("hide");

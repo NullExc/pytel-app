@@ -2,7 +2,6 @@ import googleAuth from './google-auth.js';
 
 var GoogleApi;
 var TOKEN;
-var photoUrl;
 var pickerApiLoaded = false;
 
 var photoUrls = [];
@@ -48,14 +47,13 @@ function createPicker() {
 
 function pickerCallback(data) {
     if (data.action == google.picker.Action.PICKED) {
-        var fileId = data.docs[0].id;
 
         console.log("urls", data.docs);
 
-        photoUrl = 'https://lh3.googleusercontent.com/d/' + fileId; //'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&key=' + googleAuth.API_KEY;
+        //photoUrl = 'https://lh3.googleusercontent.com/d/' + fileId; //'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&key=' + googleAuth.API_KEY;
 
         data.docs.forEach(function (doc) {
-            var id = doc.id;
+            var fileId = doc.id;
 
             photoUrls.push({
                 name: doc.name,
