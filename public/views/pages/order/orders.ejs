@@ -108,6 +108,10 @@
                         <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
                             <i class="material-icons">visibility</i>
                         </a>
+
+                        <a ng-if="order.photoUrls && order.photoUrls.length > 0" class="btn-floating right hide-on-small-only grey" style="margin-right: 20px;">
+                            <i class="material-icons">photo_camera</i>
+                        </a>
                     </div>
 
                 </li>
@@ -185,6 +189,9 @@
                         </a>
                         <a href="/order/{{order._id}}" class="btn-floating right hide-on-small-only blue" style="margin-right: 20px;">
                             <i class="material-icons">visibility</i>
+                        </a>
+                        <a ng-if="order.photoUrls && order.photoUrls.length > 0" class="btn-floating right hide-on-small-only grey" style="margin-right: 20px;">
+                            <i class="material-icons">photo_camera</i>
                         </a>
                     </div>
                 </li>

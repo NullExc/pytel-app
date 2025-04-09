@@ -112,6 +112,12 @@ app.controller('CustomerCtrl', function ($scope, $http, $filter) {
         location.href = '/customer-edit/' + id;
     }
 
+    $scope.addOrder = function () {
+        var pathname = window.location.pathname.split("/");
+        var customerId = pathname[pathname.length - 1];
+        location.href = '/order-new?customerId=' + customerId;
+    };
+
     $(document).ready(function () {
 
         var options = {

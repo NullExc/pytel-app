@@ -280,6 +280,16 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
         fillCustomerData();
         $('#select-customer').collapsible('close', 0);
     }
+    $scope.pickDefaultCustomer = function (id) {
+        console.log("customer id", id);
+        for (var i = 0; i < $scope.customers.length; i++) {
+            if (id === $scope.customers[i]._id) {
+                selectedCustomer = $scope.customers[i];
+                break;
+            }
+        }
+        fillCustomerData();
+    }
     $scope.workInput = function () {
         if ($scope.newWork === true) {
             createWorkType();
@@ -455,6 +465,15 @@ app.controller('OrderInputCtrl', function ($scope, $http, $filter) {
     }
 
     $(document).ready(function () {
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var customerId = urlParams.get('customerId');
+
+        console.log("test passing of customerId", customerId);
+
+        if (customerId && customerId.length > 0) {
+            $scope.pickDefaultCustomer(customerId);
+        }
 
         $("#price").focus(function () {
             $(this).val('');
